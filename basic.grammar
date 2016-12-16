@@ -1,5 +1,5 @@
 ### Auxiliary tokens ###
-(def @prep "(prep.)")
+(def @prep (string "(prep.)"))
 (rule $Prep (on) (ConstantFn @prep))
 (rule $Prep (in) (ConstantFn @prep))
 (rule $Prep (with) (ConstantFn @prep))
@@ -9,19 +9,19 @@
 (rule $Time ($PHRASE) (DateFn))
 (rule $Number ($PHRASE) (NumberFn))
 
-(def @def "(def.)")
+(def @def (string "(def.)"))
 (rule $Def (a) (ConstantFn @def))
 (rule $Def (an) (ConstantFn @def))
 (rule $Def (the) (ConstantFn @def))
 
-(def @verb "(verb.)")
-(def @dim_1 "<dim_1>")
-(def @dim_2 "<dim_2>")
-(def @dim_3 "<dim_3>")
-(def @dim_list "<dim_list>")
-(rule $Dim (@dim_1) (ConstantFn @dim_1))
+(def @verb (string "(verb.)"))
+(def @dim_1 (string "<dim_1>"))
+(def @dim_2 (string "<dim_2>"))
+(def @dim_3 (string "<dim_3>"))
+(def @dim_list (string "<dim_list>"))
+(rule $Dim (<dim_1>) (ConstantFn @dim_1))
 
-(def @passive_object "(object.)")
+(def @passive_object (string "(object.)"))
 (rule $PassiveObject (me) (ConstantFn @passive_object))
 (rule $PassiveObject (us) (ConstantFn @passive_object))
 
@@ -35,6 +35,9 @@
 (rule $StopWord (when) (ConstantFn null))
 (rule $StopWord (please) (ConstantFn null))
 (rule $StopWord ($StopWord $StopWord) (ConcatFn " "))
+
+(rule $StopNoun (data) (ConstantFn null))
+(rule $StopNoun (data point) (ConstantFn null))
 
 (rule $NumberString ($Number) (lambda x (call .toString (var x))))
 
@@ -54,6 +57,7 @@
 (rule $ShowVerb (draw) (ConstantFn @show))
 (rule $ShowVerb (render) (ConstantFn @show))
 (rule $ShowVerb (present) (ConstantFn @show))
+(rule $ShowVerb (visualize) (ConstantFn @show))
 (rule $Show ($ShowVerb ($PassiveObject optional)) (IdentityFn)) 
 
 (def @chart "chart")
@@ -95,17 +99,17 @@
 (rule $Border ($BorderSetter $ColorValue) (JoinFn forward))
 (rule $Border ($ColorValue $BorderSetter) (JoinFn backward))
 
-(rule $OpacitySetter (opacity) (ConstantFn (lambda x (call + (string "opacity=") (var x)))))
+(rule $OpacitySetter (($Assign optional) opacity) (ConstantFn (lambda x (call + (string "opacity=") (var x)))))
 (rule $Opacity ($OpacitySetter $ToNumber) (JoinFn forward))
 (rule $Opacity ($NumberString $OpacitySetter) (JoinFn backward))
 
-(rule $SizeSetter (opacity) (ConstantFn (lambda x (call + (string "size=") (var x)))))
-(rule $Size ($OpacitySetter $ToNumber) (JoinFn forward))
-(rule $Size ($NumberString $OpacitySetter) (JoinFn backward))
+(rule $SizeSetter (($Assign optional) size) (ConstantFn (lambda x (call + (string "size=") (var x)))))
+(rule $Size ($SizeSetter $ToNumber) (JoinFn forward))
+(rule $Size ($NumberString $SizeSetter) (JoinFn backward))
 
-(rule $WidthSetter (opacity) (ConstantFn (lambda x (call + (string "width=") (var x)))))
-(rule $Width ($OpacitySetter $ToNumber) (JoinFn forward))
-(rule $Width ($NumberString $OpacitySetter) (JoinFn backward))
+(rule $WidthSetter (($Assign optional) width) (ConstantFn (lambda x (call + (string "width=") (var x)))))
+(rule $Width ($WidthSetter $ToNumber) (JoinFn forward))
+(rule $Width ($NumberString $WidthSetter) (JoinFn backward))
 
 (rule $Command ($Color) (IdentityFn)) 
 (rule $Command ($Border) (IdentityFn)) 
@@ -114,17 +118,20 @@
 (rule $Command ($Width) (IdentityFn))
 
 ### Selection and highlighting ###
-(def @highlight "highlight")
-(def @selection "selection")
+(def @highlight (string "highlight"))
+(def @selection (string "selection"))
 
-(rule $Selection (($Def optional) select) (ConstantFn @selection))
-(rule $Selection (($Def optional) selected) (ConstantFn @selection))
+(rule $HighlightVerb (highlight) (ConstantFn @highlight))
+(rule $HighlightVerb ((make optional) prominent) (ConstantFn @highlight))
+
+(rule $Selection (($Def optional) select ($StopNoun optional)) (ConstantFn @selection))
+(rule $Selection (($Def optional) selected ($StopNoun optional)) (ConstantFn @selection))
 (rule $Selection (($Def optional) selection) (ConstantFn @selection))
 
-(def @highlight_selection "highlight selection")
+(def @highlight_selection (string "highlight selection"))
 
-(rule $Highlight (@highlight $Selection) (ConstantFn @highlight_selection))
-(rule $Highlight (@highlight $Selection $Prep $Plot) (ConstantFn @highlight_selection))
+(rule $Highlight ($HighlightVerb $Selection) (ConstantFn @highlight_selection))
+(rule $Highlight ($HighlightVerb $Selection $Prep $Plot) (ConstantFn @highlight_selection))
 
 (rule $Command ($Highlight) (IdentityFn)) 
 
