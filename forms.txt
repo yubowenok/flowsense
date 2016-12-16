@@ -17,10 +17,10 @@ parallel_coordinates(<all_dims>)
 
 
 
-### Highlighting and rendering properties ###
+### Rendering properties, highlighting, and selection ###
 
-highlight the selection in <color>
-<rendering_property_setter>(<color>)
+highlight the selection
+<highlight>()
 
 make the selection transparent
 <rendering_property_setter>(<opacity=>)
@@ -34,6 +34,9 @@ width_setter(<width> + 1)
 # default color transform
 darken the selection
 color_setter(darker(<color>))
+
+highlight the selection in <color>
+<rendering_property_setter>(<color>)
 
 # <rendering_property> includes width, size, color, border color, opacity
 # e.g. set opacity to 0.3
@@ -124,18 +127,18 @@ anything interesting in this data?
 <recommended_plot>()
 
 
-
-
 # * Notes:
 # - <X> is placeholder variable for X, e.g. <plot> could be scatterplot, heatmap, etc.
 # - <X=> is placeholder variable for X, with X's default value set.
-# - targeted data and node are most of the implicit. we assume user clicks on a node or a port,
+# - Targeted data and node are most of the implicit. we assume user clicks on a node or a port,
 #   and the target subset of the action is thus known.
-# - punctuations are useless, e.g. "?", "!"
-# - verbs like "show" can be paraphrased to "draw", "present", etc
-# - articles "a/an/the" are not important and can be added/omitted arbitrarily
-# - nouns after verbs are typically useless, e.g. show (me) a plot of...
-# - prepositions "of", "with", "on" are often exchangeable
-# - plural forms of nouns are likely to be useless, e.g. extreme is the same as extremes
-# - comparative terms, "bold", "bolder", "boldest" might be mapped to default values
-# - adverbs, "slightly", "mostly" might be mapped to default values
+# - Punctuations are useless, e.g. "?", "!".
+# - Verbs like "show" can be paraphrased to "draw", "present", etc.
+# - Articles "a/an/the" are not important and can be added/omitted arbitrarily.
+# - Nouns after verbs are typically useless, e.g. show (me) a plot of...
+# - Prepositions "of", "with", "on" are often exchangeable.
+# - Plural forms of nouns are likely to be useless, e.g. extreme is the same as extremes.
+# - Comparative terms, "bold", "bolder", "boldest" might be mapped to default value.s
+# - Adverbs, "slightly", "mostly" might be mapped to default value.s
+# - Inside VisFlow before queries are parsed, dimension names will be mapped to <dim_*> and
+#   plot names will be mapped to <plot>. Sempre only needs to parse these placeholders.

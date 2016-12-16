@@ -1,0 +1,134 @@
+### Auxiliary tokens ###
+(def @prep "(prep.)")
+(rule $Prep (on) (ConstantFn @prep))
+(rule $Prep (in) (ConstantFn @prep))
+(rule $Prep (with) (ConstantFn @prep))
+(rule $Prep (of) (ConstantFn @prep))
+(rule $Prep (to) (ConstantFn @prep))
+
+(rule $Time ($PHRASE) (DateFn))
+(rule $Number ($PHRASE) (NumberFn))
+
+(def @def "(def.)")
+(rule $Def (a) (ConstantFn @def))
+(rule $Def (an) (ConstantFn @def))
+(rule $Def (the) (ConstantFn @def))
+
+(def @verb "(verb.)")
+(def @dim_1 "<dim_1>")
+(def @dim_2 "<dim_2>")
+(def @dim_3 "<dim_3>")
+(def @dim_list "<dim_list>")
+(rule $Dim (@dim_1) (ConstantFn @dim_1))
+
+(def @passive_object "(object.)")
+(rule $PassiveObject (me) (ConstantFn @passive_object))
+(rule $PassiveObject (us) (ConstantFn @passive_object))
+
+(rule $Assign (set) (ConstantFn null))
+(rule $Assign (make) (ConstantFn null))
+(rule $Assign (change) (ConstantFn null))
+
+(rule $StopWord (what) (ConstantFn null))
+(rule $StopWord (why) (ConstantFn null))
+(rule $StopWord (how) (ConstantFn null))
+(rule $StopWord (when) (ConstantFn null))
+(rule $StopWord (please) (ConstantFn null))
+(rule $StopWord ($StopWord $StopWord) (ConcatFn " "))
+
+(rule $NumberString ($Number) (lambda x (call .toString (var x))))
+
+### Testing only ###
+(rule $T_Dim (mpg) (ConstantFn @dim_1)) 
+(rule $T_Dim (horsepower) (ConstantFn @dim_2)) 
+(rule $T_Dim (mpg, horsepower, and cylinder) (ConstantFn @dim_list))
+(rule $T_PlotType (scatterplot) (ConstantFn @chart))
+(rule $T_PlotType (histogram) (ConstantFn @chart))
+(rule $Dim ($T_Dim) (IdentityFn))
+(rule $Chart ($T_PlotType) (IdentityFn))
+
+
+### Plot ###
+(def @show @verb)
+(rule $ShowVerb (show) (ConstantFn @show))
+(rule $ShowVerb (draw) (ConstantFn @show))
+(rule $ShowVerb (render) (ConstantFn @show))
+(rule $ShowVerb (present) (ConstantFn @show))
+(rule $Show ($ShowVerb ($PassiveObject optional)) (IdentityFn)) 
+
+(def @chart "chart")
+(rule $Chart (($Def optional) plot) (ConstantFn @chart))
+(rule $Chart (($Def optional) chart) (ConstantFn @chart))
+(rule $Chart (($Def optional) visualization) (ConstantFn @chart))
+(rule $Chart (($Def optional) graph) (ConstantFn @chart))
+
+(def @plot (string "<plot>"))
+(rule $PlotPhrase (<plot>) (ConstantFn @plot))
+(rule $PlotPhrase (($Show optional) ($Def optional) $Chart) (ConstantFn @plot))
+
+(rule $Plot ($PlotPhrase) (IdentityFn)) # show a plot -> <plot> 
+(rule $Plot ($PlotPhrase ($Prep optional) $Dim) (ConcatFn " "))  # show a histogram of horsepower -> <plot> <dim_1>
+
+(rule $Command ($Plot) (IdentityFn))
+
+### Rendering properties  ###
+
+(rule $ToValue (to) (ConstantFn (lambda x (call .toString (var x))))) # remove "to"
+(rule $GetColor (color) (ConstantFn (lambda x (call .toString (var x))))) # remove "color"
+(rule $ToNumber ($ToValue $Number) (JoinFn forward))
+(rule $ColorPhrase ($ColorValue) (IdentityFn))
+(rule $ColorPhrase ($GetColor $ColorValue) (JoinFn forward))
+(rule $ColorPhrase ($ColorValue $GetColor) (JoinFn backward))
+(rule $ColorPhrase (to $ColorPhrase) (IdentityFn))
+
+# TODO: import color list or use existing list
+(rule $ColorValue (red) (ConstantFn (string "red")))
+(rule $ColorValue (blue) (ConstantFn (string "blue")))
+
+(def @color_setter (ConstantFn (lambda x (call + (string "color=") (var x)))))
+(rule $ColorSetter (($Assign optional) color) @color_setter)
+(rule $ColorSetter ($Assign) @color_setter)
+(rule $Color ($ColorSetter $ColorPhrase) (JoinFn forward))
+(rule $Color ($ColorPhrase $ColorSetter) (JoinFn backward))
+
+(rule $BorderSetter ($Assign border) (ConstantFn (lambda x (call + (string "border=") (var x)))))
+(rule $Border ($BorderSetter $ColorValue) (JoinFn forward))
+(rule $Border ($ColorValue $BorderSetter) (JoinFn backward))
+
+(rule $OpacitySetter (opacity) (ConstantFn (lambda x (call + (string "opacity=") (var x)))))
+(rule $Opacity ($OpacitySetter $ToNumber) (JoinFn forward))
+(rule $Opacity ($NumberString $OpacitySetter) (JoinFn backward))
+
+(rule $SizeSetter (opacity) (ConstantFn (lambda x (call + (string "size=") (var x)))))
+(rule $Size ($OpacitySetter $ToNumber) (JoinFn forward))
+(rule $Size ($NumberString $OpacitySetter) (JoinFn backward))
+
+(rule $WidthSetter (opacity) (ConstantFn (lambda x (call + (string "width=") (var x)))))
+(rule $Width ($OpacitySetter $ToNumber) (JoinFn forward))
+(rule $Width ($NumberString $OpacitySetter) (JoinFn backward))
+
+(rule $Command ($Color) (IdentityFn)) 
+(rule $Command ($Border) (IdentityFn)) 
+(rule $Command ($Opacity) (IdentityFn))
+(rule $Command ($Size) (IdentityFn))
+(rule $Command ($Width) (IdentityFn))
+
+### Selection and highlighting ###
+(def @highlight "highlight")
+(def @selection "selection")
+
+(rule $Selection (($Def optional) select) (ConstantFn @selection))
+(rule $Selection (($Def optional) selected) (ConstantFn @selection))
+(rule $Selection (($Def optional) selection) (ConstantFn @selection))
+
+(def @highlight_selection "highlight selection")
+
+(rule $Highlight (@highlight $Selection) (ConstantFn @highlight_selection))
+(rule $Highlight (@highlight $Selection $Prep $Plot) (ConstantFn @highlight_selection))
+
+(rule $Command ($Highlight) (IdentityFn)) 
+
+
+### Wrap up everything ###
+(rule $ROOT (($StopWord optional) $Command (? optional)) (IdentityFn))
+
