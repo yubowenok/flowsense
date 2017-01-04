@@ -15,15 +15,19 @@
 (rule $Def (the) (ConstantFn @def))
 
 (def @verb (string "(verb.)"))
-(def @dim_1 (string "<dim_1>"))
-(def @dim_2 (string "<dim_2>"))
-(def @dim_3 (string "<dim_3>"))
-(def @dim_list (string "<dim_list>"))
-(rule $Dim (<dim_1>) (ConstantFn @dim_1))
 
 (def @passive_object (string "(object.)"))
 (rule $PassiveObject (me) (ConstantFn @passive_object))
 (rule $PassiveObject (us) (ConstantFn @passive_object))
+
+(def @quant_one (string "(one)"))
+(def @quant_all (string "(all)"))
+(rule $QuantAny (a) (ConstantFn @quant_one))
+(rule $QuantAny (an) (ConstantFn @quant_one))
+(rule $QuantAny (one) (ConstantFn @quant_one))
+(rule $QuantAny (any) (ConstantFn @quant_one))
+(rule $QuantAll (every) (ConstantFn @quant_all))
+(rule $QuantAll (all) (ConstantFn @quant_all))
 
 (rule $Assign (set) (ConstantFn null))
 (rule $Assign (make) (ConstantFn null))
@@ -37,9 +41,20 @@
 (rule $StopWord ($StopWord $StopWord) (ConcatFn " "))
 
 (rule $StopNoun (data) (ConstantFn null))
-(rule $StopNoun (data point) (ConstantFn null))
+(rule $StopNoun ((all optional) ($Prep optional) ($Def optional) data $LEMMA_TOKEN) (ConstantFn null))
 
+# Dimension tags
+(def @dim_1 (string "<dim_1>"))
+(def @dim_2 (string "<dim_2>"))
+(def @dim_3 (string "<dim_3>"))
+(def @dim_list (string "<dim_list>"))
+(rule $Dim (<dim_1>) (ConstantFn @dim_1))
+(rule $Dim (<dim_2>) (ConstantFn @dim_1))
+(rule $Dim (<dim_3>) (ConstantFn @dim_1))
+(rule $Dim ($QuantAny dimension) (ConstantFn @dim_1))
+(rule $AllDims (all ($Prep optional) ($Def optional) $LEMMA_TOKEN) (ConstantFn @dim_list))
 (rule $NumberString ($Number) (lambda x (call .toString (var x))))
+
 
 ### Testing only ###
 (rule $T_Dim (mpg) (ConstantFn @dim_1)) 

@@ -1,0 +1,15 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+before_script:
+  - git clone https://github.com/percyliang/sempre
+  - cd sempre
+  - ./pull-dependencies core corenlp
+  - ant core corenlp 
+  - cp ../tester.sh .
+
+# now at smartflow/sempre
+script:
+  - ./tester.sh

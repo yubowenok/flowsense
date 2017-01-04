@@ -2,7 +2,7 @@
 # Run under the sempre directory.
 # Assume smartflow is a sibling directory of sempre.
 
-java -cp libsempre/*:lib/* -ea edu.stanford.nlp.sempre.Main -Grammar.inPaths /Users/bowen/smartflow/basic.grammar -Dataset.inPaths test:../smartflow/test/examples.test > test_result
+java -cp libsempre/*:lib/* -ea edu.stanford.nlp.sempre.Main -Grammar.inPaths ../basic.grammar -Dataset.inPaths test:../test/examples.test > test_result
 verdict=`cat test_result | grep "Stats for .*: correct=1"`
 if [ "$verdict" != "" ]; then
   echo "Correct!"
