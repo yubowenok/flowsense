@@ -1,0 +1,3 @@
+# TODO: complete color list
+(rule $ColorValue (red) (ConstantFn (string "red")))
+(rule $ColorValue (blue) (ConstantFn (string "blue")))

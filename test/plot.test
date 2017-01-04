@@ -15,6 +15,11 @@
   (targetValue (string "opacity=0.5"))
 )
 (example
-  (utterance "please highlight the selected data")
-  (targetValue (string "highlight selection"))
+  (utterance "make border bright")
+  (targetValue (string "border=bright"))
 )
+(example
+  (utterance "set large width")
+  (targetValue (string "width=+"))
+)
+

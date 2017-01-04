@@ -1,0 +1,8 @@
+(include common.grammar)
+(include dimension.grammar)
+(include plot.grammar)
+(include selection.grammar)
+
+### Wrap up everything ###
+(rule $ROOT (($StopWord optional) $Command (? optional)) (IdentityFn))
+

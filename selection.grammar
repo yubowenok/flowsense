@@ -1,0 +1,20 @@
+### Selection and highlighting ###
+(def @highlight (string "highlight"))
+(def @selection (string "selection"))
+
+(rule $HighlightVerb (highlight) (ConstantFn @highlight))
+(rule $HighlightVerb ((make optional) prominent) (ConstantFn @highlight))
+
+(rule $Selection (($Def optional) select ($StopNoun optional)) (ConstantFn @selection))
+(rule $Selection (($Def optional) selected ($StopNoun optional)) (ConstantFn @selection))
+(rule $Selection (($Def optional) selection) (ConstantFn @selection))
+
+(def @highlight_selection (string "highlight selection"))
+
+(rule $Highlight ($HighlightVerb $Selection) (ConstantFn @highlight_selection))
+(rule $Highlight ($HighlightVerb $Selection $Prep $Plot) (ConstantFn @highlight_selection))
+
+(rule $Command ($Highlight) (IdentityFn)) 
+
+
+

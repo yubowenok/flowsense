@@ -1,0 +1,73 @@
+### Plot ###
+(def @show @verb)
+(rule $ShowVerb (show) (ConstantFn @show))
+(rule $ShowVerb (draw) (ConstantFn @show))
+(rule $ShowVerb (render) (ConstantFn @show))
+(rule $ShowVerb (present) (ConstantFn @show))
+(rule $ShowVerb (visualize) (ConstantFn @show))
+(rule $Show ($ShowVerb ($PassiveObject optional)) (IdentityFn)) 
+
+(def @chart "chart")
+(rule $Chart (($Def optional) plot) (ConstantFn @chart))
+(rule $Chart (($Def optional) chart) (ConstantFn @chart))
+(rule $Chart (($Def optional) visualization) (ConstantFn @chart))
+(rule $Chart (($Def optional) graph) (ConstantFn @chart))
+
+(def @plot (string "<plot>"))
+(rule $PlotPhrase (<plot>) (ConstantFn @plot))
+(rule $PlotPhrase (($Show optional) ($Def optional) $Chart) (ConstantFn @plot))
+
+(rule $Plot ($PlotPhrase) (IdentityFn)) # show a plot -> <plot> 
+(rule $Plot ($PlotPhrase ($Prep optional) $Dim) (ConcatFn " "))  # show a histogram of horsepower -> <plot> <dim_1>
+
+(rule $Command ($Plot) (IdentityFn))
+
+### Rendering properties  ###
+
+(rule $ToValue (to) (ConstantFn (lambda x (call .toString (var x))))) # remove "to"
+(rule $GetColor (color) (ConstantFn (lambda x (call .toString (var x))))) # remove "color"
+(rule $ToNumber ($ToValue $Number) (JoinFn forward))
+(rule $ColorPhrase ($ColorValue) (IdentityFn))
+(rule $ColorPhrase ($GetColor $ColorValue) (JoinFn forward))
+(rule $ColorPhrase ($ColorValue $GetColor) (JoinFn backward))
+(rule $ColorPhrase (to $ColorPhrase) (IdentityFn))
+
+(include color.grammar)
+(def @color_setter (ConstantFn (lambda x (call + (string "color=") (var x)))))
+(rule $ColorSetter (($Assign optional) color) @color_setter)
+(rule $ColorSetter ($Assign) @color_setter)
+(rule $Color ($ColorSetter $ColorPhrase) (JoinFn forward))
+(rule $Color ($ColorPhrase $ColorSetter) (JoinFn backward))
+(rule $Color ($ColorSetter $ColorChange) (JoinFn forward))
+(rule $Color (($Assign optional) $ColorChange $ColorSetter) (JoinFn backward))
+
+(rule $BorderSetter ($Assign border) (ConstantFn (lambda x (call + (string "border=") (var x)))))
+(rule $Border ($BorderSetter $ColorValue) (JoinFn forward))
+(rule $Border ($ColorValue $BorderSetter) (JoinFn backward))
+(rule $Border ($BorderSetter $ColorChange) (JoinFn forward))
+(rule $Border (($Assign optional) $ColorChange $BorderSetter) (JoinFn backward))
+
+(rule $OpacitySetter (($Assign optional) opacity) (ConstantFn (lambda x (call + (string "opacity=") (var x)))))
+(rule $Opacity ($OpacitySetter $ToNumber) (JoinFn forward))
+(rule $Opacity ($NumberString $OpacitySetter) (JoinFn backward))
+(rule $Opacity ($OpacitySetter $ValueChange) (JoinFn forward))
+(rule $Opacity (($Assign optional) $ValueChange $OpacitySetter) (JoinFn backward))
+
+(rule $SizeSetter (($Assign optional) size) (ConstantFn (lambda x (call + (string "size=") (var x)))))
+(rule $Size ($SizeSetter $ToNumber) (JoinFn forward))
+(rule $Size ($NumberString $SizeSetter) (JoinFn backward))
+(rule $Size ($SizeSetter $ValueChange) (JoinFn forward))
+(rule $Size (($Assign optional) $ValueChange $SizeSetter) (JoinFn backward))
+
+(rule $WidthSetter (($Assign optional) width) (ConstantFn (lambda x (call + (string "width=") (var x)))))
+(rule $Width ($WidthSetter $ToNumber) (JoinFn forward))
+(rule $Width ($NumberString $WidthSetter) (JoinFn backward))
+(rule $Width ($WidthSetter $ValueChange) (JoinFn forward))
+(rule $Width (($Assign optional) $ValueChange $WidthSetter) (JoinFn backward))
+
+(rule $Command ($Color) (IdentityFn)) 
+(rule $Command ($Border) (IdentityFn)) 
+(rule $Command ($Opacity) (IdentityFn))
+(rule $Command ($Size) (IdentityFn))
+(rule $Command ($Width) (IdentityFn))
+
