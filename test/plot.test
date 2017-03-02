@@ -1,10 +1,10 @@
 (example
   (utterance "show a plot")
-  (targetValue (string "<plot>"))
+  (targetValue (string "chart_type"))
 )
 (example
-  (utterance "draw a plot of <dim_1>")
-  (targetValue (string "<plot> <dim_1>"))
+  (utterance "draw a plot of dim_1")
+  (targetValue (string "chart_type dim_1"))
 )
 (example
   (utterance "set blue color")

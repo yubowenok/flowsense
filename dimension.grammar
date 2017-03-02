@@ -1,13 +1,11 @@
 # Dimension tags
-(def @dim_1 (string "<dim_1>"))
-(def @dim_2 (string "<dim_2>"))
-(def @dim_3 (string "<dim_3>"))
-(def @dim_list (string "<dim_list>"))
-(rule $Dim (<dim_1>) (ConstantFn @dim_1))
-(rule $Dim (<dim_2>) (ConstantFn @dim_1))
-(rule $Dim (<dim_3>) (ConstantFn @dim_1))
+(def @dim_1 (string "dim_1"))
+(def @dim_2 (string "dim_2"))
+(def @dim_3 (string "dim_3"))
+(def @dim_list (string "dim_list"))
+(rule $Dim (dim_1) (ConstantFn @dim_1))
+(rule $Dim (dim_2) (ConstantFn @dim_2))
+(rule $Dim (dim_3) (ConstantFn @dim_3))
 (rule $Dim ($QuantAny dimension) (ConstantFn @dim_1))
-(rule $AllDims (all ($Prep optional) ($Def optional) $LEMMA_TOKEN) (ConstantFn @dim_list))
+(rule $AllDims (all ($Prep optional) ($Det optional) $LEMMA_TOKEN) (ConstantFn @dim_list))
 (rule $NumberString ($Number) (lambda x (call .toString (var x))))
-
-

@@ -4,6 +4,6 @@
 (rule $T_Dim (mpg, horsepower, and cylinder) (ConstantFn @dim_list))
 (rule $T_PlotType (scatterplot) (ConstantFn @chart))
 (rule $T_PlotType (histogram) (ConstantFn @chart))
+
 (rule $Dim ($T_Dim) (IdentityFn))
 (rule $Chart ($T_PlotType) (IdentityFn))
-

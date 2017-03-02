@@ -7,18 +7,18 @@
 (rule $ShowVerb (visualize) (ConstantFn @show))
 (rule $Show ($ShowVerb ($PassiveObject optional)) (IdentityFn)) 
 
-(def @chart "chart")
-(rule $Chart (($Def optional) plot) (ConstantFn @chart))
-(rule $Chart (($Def optional) chart) (ConstantFn @chart))
-(rule $Chart (($Def optional) visualization) (ConstantFn @chart))
-(rule $Chart (($Def optional) graph) (ConstantFn @chart))
+(def @chart (string "chart_type"))
+(rule $Chart (plot) (ConstantFn @chart))
+(rule $Chart (chart) (ConstantFn @chart))
+(rule $Chart (visualization) (ConstantFn @chart))
+(rule $Chart (graph) (ConstantFn @chart))
+(rule $Chart (chart_type) (ConstantFn @chart))
+(rule $Chart ($Det $Chart) (ConstantFn @chart))
 
-(def @plot (string "<plot>"))
-(rule $PlotPhrase (<plot>) (ConstantFn @plot))
-(rule $PlotPhrase (($Show optional) ($Def optional) $Chart) (ConstantFn @plot))
+(rule $PlotPhrase (($Show optional) ($Det optional) $Chart) (ConstantFn @chart))
 
-(rule $Plot ($PlotPhrase) (IdentityFn)) # show a plot -> <plot> 
-(rule $Plot ($PlotPhrase ($Prep optional) $Dim) (ConcatFn " "))  # show a histogram of horsepower -> <plot> <dim_1>
+(rule $Plot ($PlotPhrase) (IdentityFn)) # show a plot -> plot 
+(rule $Plot ($PlotPhrase ($Prep optional) $Dim) (ConcatFn " "))  # show a histogram of horsepower -> plot DIM_1
 
 (rule $Command ($Plot) (IdentityFn))
 

@@ -3,6 +3,8 @@
 (include plot.grammar)
 (include selection.grammar)
 
+### Testing grammar includes constants ###
+(include testing.grammar)
+
 ### Wrap up everything ###
 (rule $ROOT (($StopWord optional) $Command (? optional)) (IdentityFn))
-

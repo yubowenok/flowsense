@@ -9,11 +9,12 @@ fi
 errors=false
 for testfile in ../test/*.test; do
   file=$(basename "$testfile")
-  echo "Testing" $file
   java -cp libsempre/*:lib/* -ea edu.stanford.nlp.sempre.Main\
+       -languageAnalyzer corenlp.CoreNLPAnalyzer\
        -Grammar.inPaths ../main.grammar\
        -Dataset.inPaths test:$testfile > test_result/$file
   verdict=`cat test_result/$file | grep "Stats for .*: correct=1"`
+  echo -n "[$file] "
   if [ "$verdict" != "" ]; then
     echo "Correct!"
   else

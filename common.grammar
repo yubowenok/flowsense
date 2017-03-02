@@ -9,10 +9,10 @@
 (rule $Time ($PHRASE) (DateFn))
 (rule $Number ($PHRASE) (NumberFn))
 
-(def @def (string "(def.)"))
-(rule $Def (a) (ConstantFn @def))
-(rule $Def (an) (ConstantFn @def))
-(rule $Def (the) (ConstantFn @def))
+(def @det (string "(det.)"))
+(rule $Det (a) (ConstantFn @det))
+(rule $Det (an) (ConstantFn @det))
+(rule $Det (the) (ConstantFn @de))
 
 (def @verb (string "(verb.)"))
 
@@ -64,5 +64,5 @@
 (rule $StopWord ($StopWord $StopWord) (ConcatFn " "))
 
 (rule $StopNoun (data) (ConstantFn null))
-(rule $StopNoun ((all optional) ($Prep optional) ($Def optional) data $LEMMA_TOKEN) (ConstantFn null))
+(rule $StopNoun ((all optional) ($Prep optional) ($Det optional) data $LEMMA_TOKEN) (ConstantFn null))
 
