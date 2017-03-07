@@ -1,0 +1,13 @@
+(example
+  (utterance "adjust the diagram layout")
+  (targetValue (string "autolayout"))
+)
+(example
+  (utterance "auto layout")
+  (targetValue (string "autolayout"))
+)
+(example
+  (utterance "layout the graph")
+  (targetValue (string "autolayout"))
+)
+

@@ -31,4 +31,3 @@ done
 if $errors; then
   echo "Some of the tests had errors. See test_result for details."
 fi
-

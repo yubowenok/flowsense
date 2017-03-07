@@ -2,6 +2,7 @@
 (include dimension.grammar)
 (include plot.grammar)
 (include selection.grammar)
+(include utils.grammar)
 
 ### Testing grammar includes constants ###
 (include testing.grammar)
