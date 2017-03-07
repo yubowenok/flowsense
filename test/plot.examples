@@ -1,0 +1,43 @@
+# Plot drawing
+(example
+  (utterance "show a plot")
+  (targetValue (string "chart_type"))
+)
+(example
+  (utterance "draw a plot of mpg")
+  (targetValue (string "chart_type dim"))
+)
+(example
+  (utterance "scatterplot mpg and horsepower")
+  (targetValue (string "chart_type dim dim"))
+)
+(example
+  (utterance "scatterplot of horsepower")
+  (targetValue (string "chart_type dim"))
+)
+
+# Rendering properties
+(example
+  (utterance "set blue color")
+  (targetValue (string "color blue"))
+)
+(example
+  (utterance "change opacity to 0.5")
+  (targetValue (string "opacity 0.5"))
+)
+(example
+  (utterance "make border bright")
+  (targetValue (string "border bright"))
+)
+(example
+  (utterance "set large width")
+  (targetValue (string "width +"))
+)
+(example
+  (utterance "increase width")
+  (targetValue (string "width +"))
+)
+(example
+  (utterance "decrease opacity")
+  (targetValue (string "opacity -"))
+)

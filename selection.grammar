@@ -9,9 +9,15 @@
 (rule $Selection (($Det optional) selected ($StopNoun optional)) (ConstantFn @selection))
 (rule $Selection (($Det optional) selection) (ConstantFn @selection))
 
-(def @highlight_selection (string "highlight selection"))
+# highlight selected
+(rule $HighlightSelection ($HighlightVerb $Selection) (ConcatFn " "))
+# highlight the selected data
+(rule $Highlight ($HighlightSelection) (IdentityFn))
 
-(rule $Highlight ($HighlightVerb $Selection) (ConstantFn @highlight_selection))
-(rule $Highlight ($HighlightVerb $Selection $Prep $Plot) (ConstantFn @highlight_selection))
+# highlight selection of scatterplot
+(rule $Highlight ($HighlightSelection $Prep $Plot) (SelectFn 0))
+
+# highlight
+(rule $Highlight ($HighlightVerb) (IdentityFn))
 
 (rule $Command ($Highlight) (IdentityFn)) 

@@ -2,4 +2,3 @@
   (utterance "please highlight the selected data")
   (targetValue (string "highlight selection"))
 )
-

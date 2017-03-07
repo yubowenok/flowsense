@@ -1,4 +1,5 @@
 ### Plot ###
+
 (def @show @verb)
 (rule $ShowVerb (show) (ConstantFn @show))
 (rule $ShowVerb (draw) (ConstantFn @show))
@@ -15,59 +16,68 @@
 (rule $Chart (chart_type) (ConstantFn @chart))
 (rule $Chart ($Det $Chart) (ConstantFn @chart))
 
+# (show) (a) scatterplot
 (rule $PlotPhrase (($Show optional) ($Det optional) $Chart) (ConstantFn @chart))
+# show
+(rule $PlotPhrase ($Show) (ConstantFn @chart))
 
-(rule $Plot ($PlotPhrase) (IdentityFn)) # show a plot -> plot 
-(rule $Plot ($PlotPhrase ($Prep optional) $Dim) (ConcatFn " "))  # show a histogram of horsepower -> plot DIM_1
+# show a plot
+(rule $Plot ($PlotPhrase) (IdentityFn)) 
+# show a scatterplot (of) mpg
+(rule $Plot ($PlotPhrase ($Prep optional) $Dims) (ConcatFn " "))
 
-(rule $Command ($Plot) (IdentityFn))
+
 
 ### Rendering properties  ###
 
-(rule $ToValue (to) (ConstantFn (lambda x (call .toString (var x))))) # remove "to"
-(rule $GetColor (color) (ConstantFn (lambda x (call .toString (var x))))) # remove "color"
+(include color.grammar)
+
+# remove redundant "to"
+(rule $ToValue (to) (ConstantFn (lambda x (call .toString (var x)))))
 (rule $ToNumber ($ToValue $Number) (JoinFn forward))
+
+# remove redundant "color"
+(rule $GetColor (color) (ConstantFn (lambda x (call .toString (var x)))))
 (rule $ColorPhrase ($ColorValue) (IdentityFn))
 (rule $ColorPhrase ($GetColor $ColorValue) (JoinFn forward))
 (rule $ColorPhrase ($ColorValue $GetColor) (JoinFn backward))
 (rule $ColorPhrase (to $ColorPhrase) (IdentityFn))
 
-(include color.grammar)
-(def @color_setter (ConstantFn (lambda x (call + (string "color=") (var x)))))
-(rule $ColorSetter (($Assign optional) color) @color_setter)
-(rule $ColorSetter ($Assign) @color_setter)
-(rule $Color ($ColorSetter $ColorPhrase) (JoinFn forward))
-(rule $Color ($ColorPhrase $ColorSetter) (JoinFn backward))
-(rule $Color ($ColorSetter $ColorChange) (JoinFn forward))
-(rule $Color (($Assign optional) $ColorChange $ColorSetter) (JoinFn backward))
+(rule $PropertyValue ($TOKEN) (IdentityFn))
+(rule $PropertyValue ($ColorPhrase) (IdentityFn))
+(rule $PropertyValue ($ValueChange) (IdentityFn))
+(rule $PropertyValue ($ToNumber) (IdentityFn))
 
-(rule $BorderSetter ($Assign border) (ConstantFn (lambda x (call + (string "border=") (var x)))))
-(rule $Border ($BorderSetter $ColorValue) (JoinFn forward))
-(rule $Border ($ColorValue $BorderSetter) (JoinFn backward))
-(rule $Border ($BorderSetter $ColorChange) (JoinFn forward))
-(rule $Border (($Assign optional) $ColorChange $BorderSetter) (JoinFn backward))
+# supported rendering properties
+(rule $Property (color) (ConstantFn (string "color")))
+(rule $Property (border) (ConstantFn (string "border")))
+(rule $Property (opacity) (ConstantFn (string "opacity")))
+(rule $Property (size) (ConstantFn (string "size")))
+(rule $Property (width) (ConstantFn (string "width")))
 
-(rule $OpacitySetter (($Assign optional) opacity) (ConstantFn (lambda x (call + (string "opacity=") (var x)))))
-(rule $Opacity ($OpacitySetter $ToNumber) (JoinFn forward))
-(rule $Opacity ($NumberString $OpacitySetter) (JoinFn backward))
-(rule $Opacity ($OpacitySetter $ValueChange) (JoinFn forward))
-(rule $Opacity (($Assign optional) $ValueChange $OpacitySetter) (JoinFn backward))
+# width set 5
+(rule $PropertySetter ($Assign) (ConstantFn (lambda y (lambda x (call + (var x) (call + (string " ") (var y)))))))
+(rule $PropertyPartial ($PropertySetter $PropertyValue) (JoinFn forward))
+(rule $AssignProperty ($Property $PropertyPartial) (JoinFn backward))
+# set width 5
+(rule $PropertySetter2 ($Assign) (ConstantFn (lambda y (lambda x (call + (var y) (call + (string " ") (var x)))))))
+(rule $PropertyPartial2 ($PropertySetter2 $Property) (JoinFn forward))
+(rule $AssignProperty ($PropertyPartial2 $PropertyValue) (JoinFn forward))
+# set 5 width
+(rule $PropertyPartial3 ($PropertySetter $PropertyValue) (JoinFn forward))
+(rule $AssignProperty ($PropertyPartial3 $Property) (JoinFn forward))
 
-(rule $SizeSetter (($Assign optional) size) (ConstantFn (lambda x (call + (string "size=") (var x)))))
-(rule $Size ($SizeSetter $ToNumber) (JoinFn forward))
-(rule $Size ($NumberString $SizeSetter) (JoinFn backward))
-(rule $Size ($SizeSetter $ValueChange) (JoinFn forward))
-(rule $Size (($Assign optional) $ValueChange $SizeSetter) (JoinFn backward))
+# increase width
+(rule $ValueChangeIncreaseSetter ($Increase) (ConstantFn (lambda x (call + (var x) (string " +")))))
+(rule $ValueChangeDecreaseSetter ($Decrease) (ConstantFn (lambda x (call + (var x) (string " -")))))
+(rule $AssignProperty ($ValueChangeIncreaseSetter $Property) (JoinFn forward))
+(rule $AssignProperty ($ValueChangeDecreaseSetter $Property) (JoinFn forward))
 
-(rule $WidthSetter (($Assign optional) width) (ConstantFn (lambda x (call + (string "width=") (var x)))))
-(rule $Width ($WidthSetter $ToNumber) (JoinFn forward))
-(rule $Width ($NumberString $WidthSetter) (JoinFn backward))
-(rule $Width ($WidthSetter $ValueChange) (JoinFn forward))
-(rule $Width (($Assign optional) $ValueChange $WidthSetter) (JoinFn backward))
+# width increase
+(rule $AssignProperty ($Property $ValueChange) (ConcatFn " "))
 
-(rule $Command ($Color) (IdentityFn)) 
-(rule $Command ($Border) (IdentityFn)) 
-(rule $Command ($Opacity) (IdentityFn))
-(rule $Command ($Size) (IdentityFn))
-(rule $Command ($Width) (IdentityFn))
 
+
+### Application ###
+(rule $Command ($Plot) (IdentityFn))
+(rule $Command ($AssignProperty) (IdentityFn))

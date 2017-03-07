@@ -1,7 +1,6 @@
 ### Testing only ###
-(rule $T_Dim (mpg) (ConstantFn @dim_1)) 
-(rule $T_Dim (horsepower) (ConstantFn @dim_2)) 
-(rule $T_Dim (mpg, horsepower, and cylinder) (ConstantFn @dim_list))
+(rule $T_Dim (mpg) (ConstantFn @dim)) 
+(rule $T_Dim (horsepower) (ConstantFn @dim)) 
 (rule $T_PlotType (scatterplot) (ConstantFn @chart))
 (rule $T_PlotType (histogram) (ConstantFn @chart))
 

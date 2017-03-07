@@ -7,18 +7,23 @@ if [ ! -d test_result ]; then
 fi
 
 errors=false
-for testfile in ../test/*.test; do
+for testfile in ../test/*.examples; do
   file=$(basename "$testfile")
   java -cp libsempre/*:lib/* -ea edu.stanford.nlp.sempre.Main\
        -languageAnalyzer corenlp.CoreNLPAnalyzer\
        -Grammar.inPaths ../main.grammar\
-       -Dataset.inPaths test:$testfile > test_result/$file
+       -FeatureExtractor.featureDomains rule\
+       -Learner.maxTrainIters 3\
+       -Dataset.inPaths\
+         train:../data/plot.examples\
+         test:$testfile > test_result/$file
   verdict=`cat test_result/$file | grep "Stats for .*: correct=1"`
   echo -n "[$file] "
   if [ "$verdict" != "" ]; then
     echo "Correct!"
   else
     echo "Incorrect"
+    cat test_result/$file
     errors=true
   fi
 done
