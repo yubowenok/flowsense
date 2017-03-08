@@ -13,3 +13,7 @@ before_script:
 # now at smartflow/sempre
 script:
   - ./tester.sh
+
+cache:
+  directories:
+  - sempre
