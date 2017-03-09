@@ -31,7 +31,10 @@
 (def @det (string "(det)"))
 (rule $Det (a) (ConstantFn @det))
 (rule $Det (an) (ConstantFn @det))
-(rule $Det (the) (ConstantFn @de))
+(rule $Det (the) (ConstantFn @det))
+(rule $Det (my) (ConstantFn @det))
+(rule $Det (our) (ConstantFn @det))
+(rule $Det (your) (ConstantFn @det))
 
 (def @verb (string "(verb)"))
 

@@ -5,10 +5,17 @@
 (rule $HighlightVerb (highlight) (ConstantFn @highlight))
 (rule $HighlightVerb ((make optional) prominent) (ConstantFn @highlight))
 
-(rule $Selection (($Det optional) chosen ($StopNoun optional)) (ConstantFn @selection))
-(rule $Selection (($Det optional) select ($StopNoun optional)) (ConstantFn @selection))
-(rule $Selection (($Det optional) selected ($StopNoun optional)) (ConstantFn @selection))
-(rule $Selection (($Det optional) selection) (ConstantFn @selection))
+(rule $Selection (chosen) (ConstantFn @selection))
+(rule $Selection (select) (ConstantFn @selection))
+(rule $Selection (selected) (ConstantFn @selection))
+(rule $Selection (selection) (ConstantFn @selection))
+(rule $Selection ($Selection $StopNoun) (SelectFn 0))
+(rule $Selection ($Det $Selection) (ConstantFn @selection))
+
+# Selection with dimensions
+(rule $SelectionDimsPartial (($Prep optional) $Selection) (ConstantFn (lambda y (lambda x (call + (var x) (string " selection ") (var y))))))
+(rule $SelectionDims ($Dims $SelectionDimsPartial) (JoinFn backward))
+(rule $SelectionDims ($Selection $Dims) (ConcatFn " "))
 
 # highlight selected
 (rule $HighlightSelection ($HighlightVerb $Selection) (ConcatFn " "))
@@ -25,6 +32,13 @@
 # highlight
 (rule $Highlight ($HighlightVerb) (IdentityFn))
 
+# show a scatterplot (of) selection
+(rule $Plot ($PlotPhrase ($Prep optional) $Selection) (ConcatFn " "))
+# show selection in a parallel coordinates
+(rule $Plot ($PlotPhrase $Selection ($Prep optional) ($Chart optional)) (ConcatFn " "))
+# show mpg of selected cars in a scatterplot
+# Note that ConcatFn is not working here because of an unintuitive behavior: https://github.com/percyliang/sempre/issues/60
+(rule $ROOT ($PlotPhrase $SelectionDims ($Prep optional) ($Chart optional)) (JoinFn backward))
 
 ### Application ###
 (rule $Command ($HighlightFromTo) (IdentityFn)) 

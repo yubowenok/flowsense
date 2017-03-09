@@ -4,7 +4,7 @@
 
 (def @all_dims (string "all_dims"))
 (def @dim (string "dim"))
-(rule $Dim (dim) (ConstantFn @dim))
+(rule $Dim ($DimWord) (ConstantFn @dim))
 (rule $Dim ($QuantAny $DimWord) (ConstantFn @dim))
 
 
