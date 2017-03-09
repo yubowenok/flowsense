@@ -1,10 +1,13 @@
 ### Plot ###
 
 (def @show @verb)
-(rule $ShowVerb (show) (ConstantFn @show))
+(rule $ShowVerb (chart) (ConstantFn @chart))
+(rule $ShowVerb (create) (ConstantFn @chart))
 (rule $ShowVerb (draw) (ConstantFn @show))
-(rule $ShowVerb (render) (ConstantFn @show))
+(rule $ShowVerb (illustrate) (ConstantFn @chart))
 (rule $ShowVerb (present) (ConstantFn @show))
+(rule $ShowVerb (render) (ConstantFn @show))
+(rule $ShowVerb (show) (ConstantFn @show))
 (rule $ShowVerb (visualize) (ConstantFn @show))
 (rule $Show ($ShowVerb ($PassiveObject optional)) (IdentityFn)) 
 
@@ -17,7 +20,7 @@
 (rule $Chart ($Det $Chart) (ConstantFn @chart))
 
 # (show) (a) scatterplot
-(rule $PlotPhrase (($Show optional) ($Det optional) $Chart) (ConstantFn @chart))
+(rule $PlotPhrase (($Show optional) ($Det optional) $Chart (plot optional)) (ConstantFn @chart))
 # show
 (rule $PlotPhrase ($Show) (ConstantFn @chart))
 
@@ -25,6 +28,8 @@
 (rule $Plot ($PlotPhrase) (IdentityFn)) 
 # show a scatterplot (of) mpg
 (rule $Plot ($PlotPhrase ($Prep optional) $Dims) (ConcatFn " "))
+# show all the dimensions in a parallel coordinates
+(rule $Plot ($PlotPhrase $Dims ($Prep optional) ($Det optional) ($Chart optional)) (ConcatFn " "))
 
 
 

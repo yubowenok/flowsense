@@ -7,14 +7,15 @@
 (rule $Dim (dim) (ConstantFn @dim))
 (rule $Dim ($QuantAny $DimWord) (ConstantFn @dim))
 
+
 # Single or multiple dimensions
 (rule $Dims ($Dim) (IdentityFn))
-#(rule $DimConjOperator ($Conj) (ConstantFn (lambda y (lambda x (call + (var x) (call + (string " ") (var y)))))))
-#(rule $DimConjPartial ($DimConjOperator $Dim) (JoinFn forward))
-(rule $Dims ($Dim $Conj $Dim) (ConstantFn (string "dim dim")))
-(rule $Dims ($Dim $Dims) (ConcatFn " "))
+(rule $Dims ($Dim (, optional) ($Conj optional) $Dims) (ConcatFn " "))
+(rule $Dims ($Dim (, optional) $Dims) (ConcatFn " "))
+
 
 # All the dimensions 
 (rule $AllDims (all ($Prep optional) ($Det optional) $LEMMA_TOKEN) (ConstantFn @all_dims))
+(rule $Dims ($AllDims) (IdentityFn))
 
 

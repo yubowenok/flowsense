@@ -5,12 +5,25 @@
 (rule $Conj (or) (ConstantFn @conj_or))
 
 (def @prep (string "(prep)"))
-(rule $Prep (on) (ConstantFn @prep))
-(rule $Prep (in) (ConstantFn @prep))
-(rule $Prep (with) (ConstantFn @prep))
-(rule $Prep (of) (ConstantFn @prep))
-(rule $Prep (to) (ConstantFn @prep))
 (rule $Prep (about) (ConstantFn @prep))
+(rule $Prep (for) (ConstantFn @prep))
+(rule $Prep (from) (ConstantFn @prep))
+(rule $Prep (in) (ConstantFn @prep))
+(rule $Prep (into) (ConstantFn @prep))
+(rule $Prep (of) (ConstantFn @prep))
+(rule $Prep (on) (ConstantFn @prep))
+(rule $Prep (onto) (ConstantFn @prep))
+(rule $Prep (to) (ConstantFn @prep))
+(rule $Prep (with) (ConstantFn @prep))
+(rule $Prep (within) (ConstantFn @prep))
+
+(rule $PrepOf (from) (ConstantFn @prep))
+(rule $PrepOf (in) (ConstantFn @prep))
+(rule $PrepOf (of) (ConstantFn @prep))
+
+(rule $PrepTo (in) (ConstantFn @prep))
+(rule $PrepTo (into) (ConstantFn @prep))
+(rule $PrepTo (onto) (ConstantFn @prep))
 
 (rule $Time ($PHRASE) (DateFn))
 (rule $Number ($PHRASE) (NumberFn))
@@ -87,6 +100,7 @@
 (rule $StopNoun (item) (ConstantFn null))
 (rule $StopNoun (element) (ConstantFn null))
 (rule $StopNoun ((all optional) ($Prep optional) ($Det optional) data $LEMMA_TOKEN) (ConstantFn null))
+(rule $StopNoun ($LEMMA_PHRASE) (ConstantFn null))
 (rule $StopNoun ($LEMMA_TOKEN) (ConstantFn null))
 
 # Utils

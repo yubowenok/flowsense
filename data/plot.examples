@@ -1,3 +1,4 @@
+# Training examples for plotting
 (example
   (utterance "set width to 5")
   (targetValue (string "width 5"))
@@ -5,4 +6,8 @@
 (example
   (utterance "set large size")
   (targetValue (string "size +"))
+)
+(example
+  (utterance "highlight selection from the scatterplot")
+  (targetValue (string "highlight selection"))
 )

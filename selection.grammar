@@ -5,6 +5,7 @@
 (rule $HighlightVerb (highlight) (ConstantFn @highlight))
 (rule $HighlightVerb ((make optional) prominent) (ConstantFn @highlight))
 
+(rule $Selection (($Det optional) chosen ($StopNoun optional)) (ConstantFn @selection))
 (rule $Selection (($Det optional) select ($StopNoun optional)) (ConstantFn @selection))
 (rule $Selection (($Det optional) selected ($StopNoun optional)) (ConstantFn @selection))
 (rule $Selection (($Det optional) selection) (ConstantFn @selection))
@@ -15,9 +16,16 @@
 (rule $Highlight ($HighlightSelection) (IdentityFn))
 
 # highlight selection of scatterplot
-(rule $Highlight ($HighlightSelection $Prep $Plot) (SelectFn 0))
+(rule $SourcePartial ($PrepOf $Plot) (SelectFn 1))
+(rule $Highlight ($HighlightSelection $SourcePartial) (ConcatFn " of "))
+
+# highlight selection in a scatterplot
+(rule $HighlightFromTo ($Highlight ($PrepTo optional) $Plot) (ConcatFn " "))
 
 # highlight
 (rule $Highlight ($HighlightVerb) (IdentityFn))
 
+
+### Application ###
+(rule $Command ($HighlightFromTo) (IdentityFn)) 
 (rule $Command ($Highlight) (IdentityFn)) 
