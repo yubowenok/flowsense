@@ -23,6 +23,15 @@
   (utterance "visualize all the dimensions in a parallel coordinates")
   (targetValue (string "chart_type all_dims"))
 )
+(example
+  (utterance "mpg cylinders scatterplot")
+  (targetValue (string "chart_type dim dim"))
+)
+(example
+  (utterance "mpg distribution")
+  (targetValue (string "chart_type dim"))
+)
+
 
 # Rendering properties
 (example

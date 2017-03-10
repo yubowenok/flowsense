@@ -1,0 +1,23 @@
+(rule $StopCompare (against) (ConstantFn null))
+(rule $StopCompare (exact) (ConstantFn null))
+(rule $StopCompare (exactly) (ConstantFn null))
+(rule $StopCompare (than) (ConstantFn null))
+(rule $StopCompare (that) (ConstantFn null))
+(rule $StopCompare (to) (ConstantFn null))
+
+
+(rule $StopWord (what) (ConstantFn null))
+(rule $StopWord (why) (ConstantFn null))
+(rule $StopWord (how) (ConstantFn null))
+(rule $StopWord (when) (ConstantFn null))
+(rule $StopWord (please) (ConstantFn null))
+(rule $StopWord ($StopWord $StopWord) (ConcatFn " "))
+
+
+(rule $StopNoun (data) (ConstantFn null))
+(rule $StopNoun (subset) (ConstantFn null))
+(rule $StopNoun (item) (ConstantFn null))
+(rule $StopNoun (element) (ConstantFn null))
+(rule $StopNoun ((all optional) ($Prep optional) ($Det optional) data $LEMMA_TOKEN) (ConstantFn null))
+(rule $StopNoun ($LEMMA_PHRASE) (ConstantFn null))
+(rule $StopNoun ($LEMMA_TOKEN) (ConstantFn null))

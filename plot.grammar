@@ -19,6 +19,8 @@
 (rule $Chart (chart_type) (ConstantFn @chart))
 (rule $Chart ($Det $Chart ($Chart optional)) (ConstantFn @chart))
 
+(rule $ChartPartial ($Chart) (ConstantFn (lambda x (call + @chart (string " ")(var x)))))
+
 # (show) (a) scatterplot
 (rule $PlotPhrase (($Show optional) ($Det optional) $Chart (plot optional)) (ConstantFn @chart))
 # show
@@ -31,6 +33,9 @@
 # show all the dimensions in a parallel coordinates
 (rule $Plot ($PlotPhrase $Dims ($Prep optional) ($Det optional) ($Chart optional)) (ConcatFn " "))
 
+# mpg scatterplot
+(rule $PlotPhrasePartial ($PlotPhrase) (ConstantFn (lambda x (call + @chart (string " ") (var x)))))
+(rule $Plot ($Dims $PlotPhrasePartial) (JoinFn backward))
 
 
 ### Rendering properties  ###
@@ -80,8 +85,6 @@
 
 # width increase
 (rule $AssignProperty ($Property $ValueChange) (ConcatFn " "))
-
-
 
 ### Application ###
 (rule $Command ($Plot) (IdentityFn))

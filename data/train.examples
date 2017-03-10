@@ -1,0 +1,32 @@
+# Training examples for plotting
+(example
+  (utterance "set width to 5")
+  (targetValue (string "width 5"))
+)
+(example
+  (utterance "set large size")
+  (targetValue (string "size +"))
+)
+# Guide to recognize "of"
+(example
+  (utterance "highlight selection from the scatterplot")
+  (targetValue (string "highlight selection of chart_type"))
+)
+(example
+  (utterance "highlight selection in a scatterplot")
+  (targetValue (string "highlight selection chart_type"))
+)
+# Handle VBD-AUX
+(example
+  (utterance "find name being buick")
+  (targetValue (string "filter dim = buick"))
+)
+# Handle JJR IN
+(example
+  (utterance "find mpg greater than 15")
+  (targetValue (string "filter dim > 15"))
+)
+(example
+  (utterance "find mpg greater than 15")
+  (targetValue (string "filter dim > 15"))
+)

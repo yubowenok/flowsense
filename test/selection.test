@@ -7,6 +7,10 @@
   (targetValue (string "highlight selection of chart_type"))
 )
 (example
+  (utterance "highlight selection in a histogram")
+  (targetValue (string "highlight selection chart_type"))
+)
+(example # WA
   (utterance "highlight selection from the plot in a parallel coordinates plot")
   (targetValue (string "highlight selection of chart_type chart_type"))
 )
@@ -20,5 +24,17 @@
 )
 (example
   (utterance "show mpg of the selected cars in a histogram")
+  (targetValue (string "chart_type selection dim"))
+)
+(example
+  (utterance "mpg of selection in histogram")
+  (targetValue (string "chart_type selection dim"))
+)
+(example
+  (utterance "selection in histogram")
+  (targetValue (string "chart_type selection"))
+)
+(example
+  (utterance "mpg of selection")
   (targetValue (string "chart_type selection dim"))
 )

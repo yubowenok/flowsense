@@ -5,6 +5,8 @@ jdk:
 
 before_script:
   - git clone https://github.com/percyliang/sempre
+  - if [ -d 'sempre_lib' ]; then mv sempre_lib sempre; fi
+  - if [ -d 'sempre_fig' ]; then mv sempre_fig sempre; fi
   - cd sempre
   - ./pull-dependencies core corenlp
   - ant core corenlp 
@@ -13,7 +15,11 @@ before_script:
 # now at smartflow/sempre
 script:
   - ./tester.sh
+  - mv lib ../sempre_lib
+  - mv fig ../sempre_fig
 
 cache:
   directories:
-  - sempre
+  - sempre_lib
+  - sempre_fig
+

@@ -1,0 +1,81 @@
+(def @gt (string ">"))
+(def @le (string "<"))
+(def @geq (string ">="))
+(def @leq (string "<="))
+(def @eq (string "="))
+
+(rule $CompareValue ($Number) (IdentityFn))
+(rule $CompareValue ($PHRASE) (IdentityFn))
+
+(rule $Strict (strictly) (ConstantFn null))
+ 
+(rule $CompareGreater (after) (ConstantFn @geq))
+(rule $CompareGreater (greater) (ConstantFn @geq))
+(rule $CompareGreater (more) (ConstantFn @geq))
+(rule $CompareGreater (larger) (ConstantFn @geq))
+(rule $CompareGreater (no $CompareLess) (ConstantFn @geq))
+(rule $CompareGreater (>) (ConstantFn @geq))
+(rule $CompareGreater (>=) (ConstantFn @geq))
+(rule $CompareGreater ($Strict $CompareGreater) (ConstantFn @gt))
+
+(rule $CompareLess (before) (ConstantFn @leq))
+(rule $CompareLess (less) (ConstantFn @leq))
+(rule $CompareLess (fewer) (ConstantFn @leq))
+(rule $CompareLess (smaller) (ConstantFn @leq))
+(rule $CompareLess (no $CompareGreater) (ConstantFn @leq))
+(rule $CompareLess (<) (ConstantFn @leq))
+(rule $CompareLess (<=) (ConstantFn @le))
+(rule $CompareLess ($Strict $CompareLess) (ConstantFn @le))
+
+(rule $CompareEqual (are) (ConstantFn @eq))
+(rule $CompareEqual (be) (ConstantFn @eq))
+(rule $CompareEqual (being) (ConstantFn @eq))
+(rule $CompareEqual (equal) (ConstantFn @eq))
+(rule $CompareEqual (equals) (ConstantFn @eq))
+(rule $CompareEqual (is) (ConstantFn @eq))
+(rule $CompareEqual (=) (ConstantFn @eq))
+
+(def @between (string "between"))
+(rule $Between (within) (ConstantFn @between))
+(rule $Between (between) (ConstantFn @between))
+(rule $BetweenPair ($Between) (ConstantFn (lambda x (lambda y (lambda z (call + (var z) (string " >= ") (call .toString (var x)) (string " <= ") (call .toString (var y))))))))
+(rule $BetweenPartial ($BetweenPair $CompareValue) (JoinFn forward))
+(rule $CompareBetween ($BetweenPartial ($Conj optional) $CompareValue) (JoinFn forward))
+
+(rule $Compare ($CompareGreater) (IdentityFn))
+(rule $Compare ($CompareLess) (IdentityFn))
+(rule $Compare ($CompareEqual) (IdentityFn))
+(rule $Compare ($Compare $StopCompare) (SelectFn 0))
+(rule $Compare ($StopCompare $Compare) (SelectFn 1))
+
+# mpg between 13 and 15
+(rule $Condition ($Dim $CompareBetween) (JoinFn backward))
+# mpg greater than 13
+(rule $Condition ($Dim $Compare $CompareValue) (ConcatFn " "))
+# smaller than 15
+(rule $Condition ($Compare $CompareValue) (ConcatFn " "))
+
+(rule $Condition ($Condition ($Conj optional) $Condition) (ConcatFn " "))
+
+(def @filter_word (string "with"))
+(rule $FilterWord (find) (ConstantFn @filter_word))
+(rule $FilterWord (by) (ConstantFn @filter_word))
+(rule $FilterWord (with) (ConstantFn @filter_word))
+(rule $FilterWord (that) (ConstantFn @filter_word))
+(rule $FilterWord (satisfy) (ConstantFn @filter_word))
+
+(rule $FilterPartial ($FilterWord) (ConstantFn (lambda x (call + (string "filter ") (var x)))))
+(rule $FilterPartial2 ($FilterWord) (ConstantFn (lambda y (lambda x (call + (var x) (string " filter ") (var y))))))
+
+# cars with mpg greater than 15
+(rule $Filter (($StopNoun optional) $FilterPartial $Condition) (JoinFn forward))
+
+# show cars with mpg greater than 15
+(rule $Filter2 (($StopNoun optional) $FilterPartial2 $Condition) (JoinFn forward))
+(rule $Plot ($PlotPhrase $Filter2) (JoinFn backward))
+
+# show cars with mpg smaller than 15 in a histogram
+(rule $Plot (($Show optional) $Filter ($Prep optional) $ChartPartial) (JoinFn backward))
+
+### Application ###
+(rule $Command ($Filter) (IdentityFn))
