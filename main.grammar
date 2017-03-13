@@ -1,6 +1,7 @@
 (include common.grammar)
 (include dimension.grammar)
 (include plot.grammar)
+(include property.grammar)
 (include selection.grammar)
 (include filter.grammar)
 (include utils.grammar)

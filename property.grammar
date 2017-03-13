@@ -1,0 +1,101 @@
+### Rendering properties  ###
+
+(include color.grammar)
+
+# remove redundant "color"
+(rule $GetColor (color) (ConstantFn (lambda x (call .toString (var x)))))
+(rule $ColorPhrase ($ColorValue) (IdentityFn))
+(rule $ColorPhrase ($GetColor $ColorValue) (JoinFn forward))
+(rule $ColorPhrase ($ColorValue $GetColor) (JoinFn backward))
+(rule $ColorPhrase (to $ColorPhrase) (IdentityFn))
+
+(rule $PropertyValue ($TOKEN) (IdentityFn))
+(rule $PropertyValue ($ColorPhrase) (IdentityFn))
+(rule $PropertyValue ($ValueChange) (IdentityFn))
+(rule $PropertyValue (to $Number) (IdentityFn))
+
+# supported rendering properties
+(rule $ColorProperty (color) (ConstantFn (string "color")))
+(rule $ColorProperty (border) (ConstantFn (string "border")))
+(rule $ValueProperty (opacity) (ConstantFn (string "opacity")))
+(rule $ValueProperty (size) (ConstantFn (string "size")))
+(rule $ValueProperty (width) (ConstantFn (string "width")))
+
+(rule $Property ($ColorProperty) (IdentityFn))
+(rule $Property ($ValueProperty) (IdentityFn))
+
+# encoding keywords
+(def @encode (string "map"))
+(rule $Encode (map) (ConstantFn @encode))
+(rule $Encode (encode) (ConstantFn @encode))
+
+# width set 5
+(rule $PropertySetter ($Assign) (ConstantFn (lambda y (lambda x (call + (var x) (call + (string " ") (var y)))))))
+(rule $PropertyPartial ($PropertySetter $PropertyValue) (JoinFn forward))
+(rule $AssignProperty ($Property $PropertyPartial) (JoinFn backward))
+# set width 5
+(rule $AssignPropertyOrdered (($Assign optional) $Property $PropertyValue) (ConcatFn " "))
+(rule $AssignProperty ($AssignPropertyOrdered) (ConcatFn " "))
+# set 5 width
+(rule $PropertyPartial3 ($PropertySetter $PropertyValue) (JoinFn forward))
+(rule $AssignProperty ($PropertyPartial3 $Property) (JoinFn forward))
+
+# increase width
+(rule $ValueChangeIncreaseSetter ($Increase) (ConstantFn (lambda x (call + (var x) (string " +")))))
+(rule $ValueChangeDecreaseSetter ($Decrease) (ConstantFn (lambda x (call + (var x) (string " -")))))
+(rule $AssignProperty ($ValueChangeIncreaseSetter $Property) (JoinFn forward))
+(rule $AssignProperty ($ValueChangeDecreaseSetter $Property) (JoinFn forward))
+
+# width increase
+(rule $AssignProperty ($Property $ValueChange) (ConcatFn " "))
+
+# set width 5 and opacity 1
+(rule $AssignProperty ($AssignPropertyOrdered $AssignPropertyOrdered) (ConcatFn " "))
+
+# Color scales
+(def @colorscale_redgreen (string "color redGreen"))
+(rule $ScaleValue (red green) (ConstantFn @colorscale_redgreen))
+(rule $ScaleValue (CWYR) (ConstantFn (string "color CWYR")))
+(rule $ScaleValue (monochrome) (ConstantFn (string "color monochrome")))
+(rule $ScaleValue (red yellow) (ConstantFn (string "color redYellow")))
+(rule $ScaleValue (yellow blue) (ConstantFn (string "color yellowBlue")))
+(rule $ScaleValue (categorical) (ConstantFn (string "color categorical")))
+(rule $ScaleValue ($ScaleValue color (scale optional)) (IdentityFn))
+(rule $ScaleValue ($ScaleValue colorscale) (IdentityFn))
+
+# color from red to green (not yet differentiate different scales here)
+(rule $ScaleValue ($ColorProperty from ($PHRASE optional)) (ConstantFn @colorscale_redgreen))
+
+(rule $ScaleValue (by $ScaleValue) (IdentityFn))
+(rule $ScaleValue ($NumericalScale) (IdentityFn))
+
+# map mpg to size from 5 to 6
+# Strangely, if the phrase is in the form "5 to 6", the CoreNLP parser in sempre fails to parse it with grammar
+# "$Number to $Number". We suspect it is because of the implementation of the sempre CoreNLP class. Further investigation pending.
+# For the moment a get-around is to use $PHRASE. This will not interpret sth like "one billion" of course.
+(rule $ValueRange ($PHRASE to $PHRASE) (ConcatFn " "))
+(rule $ValueRange ($Number ($Conj optional) $Number) (ConcatFn " "))
+(rule $ValueRange (from $ValueRange) (IdentityFn))
+
+(rule $ROOT ($ValueRange) (IdentityFn))
+
+(rule $NumericalScalePhrase ($ValueProperty (from optional) $ValueRange) (ConcatFn " "))
+
+# map mpg to 5 and 6 size
+(rule $ValueRangePartial2 ($PrepBy) (ConstantFn (lambda z (lambda y (lambda x (call + (var y) (string " ") (var z) (string " ") (var x)))))))
+(rule $ValueRangePartial ($ValueRangePartial2 $ValueRange) (JoinFn forward))
+(rule $NumericalScale ($ValueRangePartial $ValueProperty) (JoinFn forward))
+
+(rule $ValueRangePartial3 ($PrepBy) (ConstantFn (lambda y (lambda x (call + (var y) (string " ") (var x))))))
+(rule $NumericalScale ($ValueRangePartial3 $NumericalScalePhrase) (JoinFn forward))
+
+(rule $AssignProperty (($Encode optional) $Dim $NumericalScale) (JoinFn backward))
+
+# encode mpg by red green color scale
+(rule $ScaleValuePartial2 ($PrepBy) (ConstantFn (lambda x (lambda y (call + (var x) (string " ") (var y))))))
+(rule $ScaleValuePartial ($ScaleValuePartial2 $ScaleValue) (JoinFn forward))
+(rule $AssignProperty (($Encode optional) $Dim $ScaleValuePartial) (JoinFn backward))
+
+
+### Application ###
+(rule $Command ($AssignProperty) (IdentityFn))

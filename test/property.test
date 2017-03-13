@@ -1,0 +1,42 @@
+# Rendering properties
+(example
+  (utterance "set blue color")
+  (targetValue (string "color blue"))
+)
+(example
+  (utterance "change opacity to 0.5")
+  (targetValue (string "opacity 0.5"))
+)
+(example
+  (utterance "make border bright")
+  (targetValue (string "border bright"))
+)
+(example
+  (utterance "set large width")
+  (targetValue (string "width +"))
+)
+(example
+  (utterance "increase width")
+  (targetValue (string "width +"))
+)
+(example
+  (utterance "decrease opacity")
+  (targetValue (string "opacity -"))
+)
+(example
+  (utterance "set width 5 and opacity 1")
+  (targetValue (string "width 5 opacity 1"))
+)
+(example
+  (utterance "encode mpg by red green color scale")
+  (targetValue (string "color redGreen dim"))
+)
+# because of the CoreNLP number range problem, we do not get numerical values here
+(example
+  (utterance "map mpg to size from 5 to 6")
+  (targetValue (string "size 5 6 dim"))
+)
+(example
+  (utterance "map mpg to 5 and 6 size")
+  (targetValue (string "size 5.0 6.0 dim"))
+)

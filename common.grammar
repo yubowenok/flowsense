@@ -27,8 +27,21 @@
 (rule $PrepTo (into) (ConstantFn @prep))
 (rule $PrepTo (onto) (ConstantFn @prep))
 
+(rule $PrepBy (by) (ConstantFn @prep))
+(rule $PrepBy (to) (ConstantFn @prep))
+(rule $PrepBy (with) (ConstantFn @prep))
+(rule $PrepBy (via) (ConstantFn @prep))
+
 (rule $Time ($PHRASE) (DateFn))
-(rule $Number ($PHRASE) (NumberFn))
+
+
+#(rule $ToNumberPartial (to) (ConstantFn (lambda y (lambda x (call + (call .toString (var x)) (string " ") (call .toString (var y)))))))
+#(rule $ToNumber ($ToNumberPartial $Number) (JoinFn forward))
+#(rule $Number ($Number $ToNumber) (JoinFn backward))
+(rule $NumberPhrase ($PHRASE) (FilterPosTagFn token CD))
+(rule $NumberToken ($TOKEN) (NumberFn))
+(rule $Number ($NumberPhrase) (NumberFn))
+
 
 (def @det (string "(det)"))
 (rule $Det (a) (ConstantFn @det))

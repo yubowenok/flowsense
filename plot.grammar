@@ -38,54 +38,6 @@
 (rule $Plot ($Dims $PlotPhrasePartial) (JoinFn backward))
 
 
-### Rendering properties  ###
-
-(include color.grammar)
-
-# remove redundant "to"
-(rule $ToValue (to) (ConstantFn (lambda x (call .toString (var x)))))
-(rule $ToNumber ($ToValue $Number) (JoinFn forward))
-
-# remove redundant "color"
-(rule $GetColor (color) (ConstantFn (lambda x (call .toString (var x)))))
-(rule $ColorPhrase ($ColorValue) (IdentityFn))
-(rule $ColorPhrase ($GetColor $ColorValue) (JoinFn forward))
-(rule $ColorPhrase ($ColorValue $GetColor) (JoinFn backward))
-(rule $ColorPhrase (to $ColorPhrase) (IdentityFn))
-
-(rule $PropertyValue ($TOKEN) (IdentityFn))
-(rule $PropertyValue ($ColorPhrase) (IdentityFn))
-(rule $PropertyValue ($ValueChange) (IdentityFn))
-(rule $PropertyValue ($ToNumber) (IdentityFn))
-
-# supported rendering properties
-(rule $Property (color) (ConstantFn (string "color")))
-(rule $Property (border) (ConstantFn (string "border")))
-(rule $Property (opacity) (ConstantFn (string "opacity")))
-(rule $Property (size) (ConstantFn (string "size")))
-(rule $Property (width) (ConstantFn (string "width")))
-
-# width set 5
-(rule $PropertySetter ($Assign) (ConstantFn (lambda y (lambda x (call + (var x) (call + (string " ") (var y)))))))
-(rule $PropertyPartial ($PropertySetter $PropertyValue) (JoinFn forward))
-(rule $AssignProperty ($Property $PropertyPartial) (JoinFn backward))
-# set width 5
-(rule $PropertySetter2 ($Assign) (ConstantFn (lambda y (lambda x (call + (var y) (call + (string " ") (var x)))))))
-(rule $PropertyPartial2 ($PropertySetter2 $Property) (JoinFn forward))
-(rule $AssignProperty ($PropertyPartial2 $PropertyValue) (JoinFn forward))
-# set 5 width
-(rule $PropertyPartial3 ($PropertySetter $PropertyValue) (JoinFn forward))
-(rule $AssignProperty ($PropertyPartial3 $Property) (JoinFn forward))
-
-# increase width
-(rule $ValueChangeIncreaseSetter ($Increase) (ConstantFn (lambda x (call + (var x) (string " +")))))
-(rule $ValueChangeDecreaseSetter ($Decrease) (ConstantFn (lambda x (call + (var x) (string " -")))))
-(rule $AssignProperty ($ValueChangeIncreaseSetter $Property) (JoinFn forward))
-(rule $AssignProperty ($ValueChangeDecreaseSetter $Property) (JoinFn forward))
-
-# width increase
-(rule $AssignProperty ($Property $ValueChange) (ConcatFn " "))
-
 ### Application ###
 (rule $Command ($Plot) (IdentityFn))
-(rule $Command ($AssignProperty) (IdentityFn))
+

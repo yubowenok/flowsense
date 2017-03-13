@@ -31,30 +31,3 @@
   (utterance "mpg distribution")
   (targetValue (string "chart_type dim"))
 )
-
-
-# Rendering properties
-(example
-  (utterance "set blue color")
-  (targetValue (string "color blue"))
-)
-(example
-  (utterance "change opacity to 0.5")
-  (targetValue (string "opacity 0.5"))
-)
-(example
-  (utterance "make border bright")
-  (targetValue (string "border bright"))
-)
-(example
-  (utterance "set large width")
-  (targetValue (string "width +"))
-)
-(example
-  (utterance "increase width")
-  (targetValue (string "width +"))
-)
-(example
-  (utterance "decrease opacity")
-  (targetValue (string "opacity -"))
-)
