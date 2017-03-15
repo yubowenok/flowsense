@@ -4,6 +4,8 @@
 
 if [ ! -d test_result ]; then
   mkdir test_result
+else
+  rm test_result/*
 fi
 
 for testfile in ../test/*.test; do

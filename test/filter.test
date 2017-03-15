@@ -16,13 +16,17 @@
 )
 (example
   (utterance "find name equals buick")
-  (targetValue (string "filter dim = buick"))
+  (targetValue (string "find dim = buick"))
 )
 (example
-  (utterance "find name being buick")
+  (utterance "draw only name being buick")
   (targetValue (string "filter dim = buick"))
 )
 (example
   (utterance "cars with mpg between 10 and 15")
   (targetValue (string "filter dim >= 10 <= 15"))
+)
+(example
+  (utterance "search for cars with mpg between 10 and 15")
+  (targetValue (string "find dim >= 10 <= 15"))
 )

@@ -16,6 +16,7 @@
 (rule $CompareGreater (no $CompareLess) (ConstantFn @geq))
 (rule $CompareGreater (>) (ConstantFn @geq))
 (rule $CompareGreater (>=) (ConstantFn @geq))
+(rule $CompareGreater (> =) (ConstantFn @geq))
 (rule $CompareGreater ($Strict $CompareGreater) (ConstantFn @gt))
 
 (rule $CompareLess (before) (ConstantFn @leq))
@@ -25,6 +26,7 @@
 (rule $CompareLess (no $CompareGreater) (ConstantFn @leq))
 (rule $CompareLess (<) (ConstantFn @leq))
 (rule $CompareLess (<=) (ConstantFn @le))
+(rule $CompareLess (< =) (ConstantFn @le))
 (rule $CompareLess ($Strict $CompareLess) (ConstantFn @le))
 
 (rule $CompareEqual (are) (ConstantFn @eq))
@@ -57,25 +59,51 @@
 
 (rule $Condition ($Condition ($Conj optional) $Condition) (ConcatFn " "))
 
-(def @filter_word (string "with"))
-(rule $FilterWord (find) (ConstantFn @filter_word))
-(rule $FilterWord (by) (ConstantFn @filter_word))
-(rule $FilterWord (with) (ConstantFn @filter_word))
-(rule $FilterWord (that) (ConstantFn @filter_word))
-(rule $FilterWord (satisfy) (ConstantFn @filter_word))
+(def @filter_prep (string "filter"))
+(rule $FilterPrep (by) (ConstantFn @filter_prep))
+(rule $FilterPrep (with) (ConstantFn @filter_prep))
+(rule $FilterPrep (that) (ConstantFn @filter_prep))
+(rule $FilterPrep (satisfy) (ConstantFn @filter_prep))
 
-(rule $FilterPartial ($FilterWord) (ConstantFn (lambda x (call + (string "filter ") (var x)))))
-(rule $FilterPartial2 ($FilterWord) (ConstantFn (lambda y (lambda x (call + (var x) (string " filter ") (var y))))))
+(def @find (string "find"))
+(rule $FindWord (find) (ConstantFn @find))
+(rule $FindWord (search (for optional)) (ConstantFn @find))
+(rule $FindWord (look for) (ConstantFn @find))
+
+(def @filter (string "filter"))
+(rule $FilterWord (filter) (ConstantFn @filter))
+(rule $FilterWord ($ShowVerb ($Only optional)) (ConstantFn @filter))
+
+# with mpg greater than 5
+(rule $FilterCondition ($FilterPrep $Condition) (ConcatFn " "))
+
+(rule $FilterPartial ($FilterPrep) (ConstantFn (lambda x (call + (string "filter ") (var x)))))
+(rule $FilterPartial2 ($FilterPrep) (ConstantFn (lambda y (lambda x (call + (var x) (string " filter ") (var y))))))
+
+(rule $FindPartial ($FilterPrep) (ConstantFn (lambda x (call + (string "find ") (var x)))))
+(rule $FindPartial2 ($FilterPrep) (ConstantFn (lambda y (lambda x (call + (var x) (string " find ") (var y))))))
 
 # cars with mpg greater than 15
 (rule $Filter (($StopNoun optional) $FilterPartial $Condition) (JoinFn forward))
 
-# show cars with mpg greater than 15
+# find cars with mpg greater than 15
+(rule $FindPartial3 (($StopNoun optional) $FindPartial $Condition) (JoinFn forward))
+(rule $Find ($FindWord $FindPartial3) (SelectFn 1))
+
+# show/find cars with mpg greater than 15
 (rule $Filter2 (($StopNoun optional) $FilterPartial2 $Condition) (JoinFn forward))
 (rule $Plot ($PlotPhrase $Filter2) (JoinFn backward))
+(rule $Find2 ($FindWord ($StopNoun optional) $FindPartial2 $Condition) (JoinFn forward))
+(rule $Plot ($PlotPhrase $Find2) (JoinFn backward))
 
-# show cars with mpg smaller than 15 in a histogram
+# show/find cars with mpg smaller than 15 in a histogram
 (rule $Plot (($Show optional) $Filter ($Prep optional) $ChartPartial) (JoinFn backward))
+(rule $Plot (($Show optional) $Find ($Prep optional) $ChartPartial) (JoinFn backward))
+
+# show/find mpg greater than 15
+(rule $Find ($FindWord $Condition) (ConcatFn " "))
+(rule $Filter ($FilterWord $Condition) (ConcatFn " "))
 
 ### Application ###
 (rule $Command ($Filter) (IdentityFn))
+(rule $Command ($Find) (IdentityFn))

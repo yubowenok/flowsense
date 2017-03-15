@@ -14,7 +14,8 @@
 
 # Selection with dimensions
 (rule $SelectionDimsPartial (($Prep optional) $Selection) (ConstantFn (lambda y (lambda x (call + (var x) (string " selection ") (var y))))))
-(rule $SelectionDimsPartial2 (($Prep optional) $Selection) (ConstantFn (lambda x (call + (string "chart_type selection ") (var x)))))
+(rule $SelectionDimsPartial2 (($Prep optional) $Selection) (ConstantFn (lambda x (call + (string "selection ") (var x)))))
+(rule $SelectionDimsPartial3 (($Prep optional) $Selection) (ConstantFn (lambda x (call + (string "chart_type selection ") (var x)))))
 (rule $SelectionDims ($Dims $SelectionDimsPartial) (JoinFn backward))
 (rule $SelectionDims2 ($Dims $SelectionDimsPartial2) (JoinFn backward))
 (rule $SelectionDims ($Selection $Dims) (ConcatFn " "))
@@ -39,16 +40,26 @@
 (rule $Plot ($PlotPhrase ($Prep optional) $Selection) (ConcatFn " "))
 # show selection in a parallel coordinates
 (rule $Plot ($PlotPhrase $Selection ($Prep optional) ($Chart optional)) (ConcatFn " "))
+
 # show mpg of selected cars in a scatterplot
-# Note that ConcatFn is not working here because of an unintuitive behavior: https://github.com/percyliang/sempre/issues/60
-(rule $Plot ($PlotPhrase $SelectionDims ($Prep optional) ($Chart optional)) (JoinFn backward))
+# Note that ConcatFn was initially not working here because of an unintuitive behavior:
+# https://github.com/percyliang/sempre/issues/60
+# We hacked the ConcatFn to handle this special case.
+(rule $Plot ($PlotPhrase $SelectionDims ($Prep optional) ($Chart optional)) (ConcatFn " "))
+
 # mpg of selection in scatterplot
 (rule $Plot ($SelectionDims $Chart) (JoinFn forward))
 # selection in scatterplot
 (rule $Plot ($Selection $ChartPartial) (JoinFn backward))
+
 # selection
 (rule $Plot ($Selection) (ConstantFn (string "chart_type selection")))
-(rule $Plot ($SelectionDims) (IdentityFn))
+
+# mpg of selected (add chart_type in the beginning)
+(rule $Plot ($Dims $SelectionDimsPartial3) (JoinFn backward))
+
+(rule $Plot ($PlotPhrase $Selection ($StopNoun optional) $FilterCondition ($Chart optional)) (ConcatFn " "))
+(rule $Plot ($PlotPhrase $SelectionDims ($StopNoun optional) $FilterCondition ($Prep optional) ($Chart optional)) (ConcatFn " "))
 
 ### Application ###
 (rule $Command ($HighlightFromTo) (IdentityFn)) 

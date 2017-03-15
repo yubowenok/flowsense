@@ -1,11 +1,22 @@
 (include stop.grammar)
 
 ### Auxiliary tokens ###
+
+# Time
+(rule $Time ($PHRASE) (DateFn))
+
+# Number
+(rule $NumberPhrase ($PHRASE) (FilterPosTagFn token CD))
+(rule $NumberToken ($TOKEN) (NumberFn))
+(rule $Number ($NumberPhrase) (NumberFn))
+
+# Conjecture
 (def @conj_and (string "and"))
 (def @conj_or (string "or"))
 (rule $Conj (and) (ConstantFn @conj_and))
 (rule $Conj (or) (ConstantFn @conj_or))
 
+# Preposition
 (def @prep (string "(prep)"))
 (rule $Prep (about) (ConstantFn @prep))
 (rule $Prep (for) (ConstantFn @prep))
@@ -32,17 +43,7 @@
 (rule $PrepBy (with) (ConstantFn @prep))
 (rule $PrepBy (via) (ConstantFn @prep))
 
-(rule $Time ($PHRASE) (DateFn))
-
-
-#(rule $ToNumberPartial (to) (ConstantFn (lambda y (lambda x (call + (call .toString (var x)) (string " ") (call .toString (var y)))))))
-#(rule $ToNumber ($ToNumberPartial $Number) (JoinFn forward))
-#(rule $Number ($Number $ToNumber) (JoinFn backward))
-(rule $NumberPhrase ($PHRASE) (FilterPosTagFn token CD))
-(rule $NumberToken ($TOKEN) (NumberFn))
-(rule $Number ($NumberPhrase) (NumberFn))
-
-
+# Determiner
 (def @det (string "(det)"))
 (rule $Det (a) (ConstantFn @det))
 (rule $Det (an) (ConstantFn @det))
@@ -51,12 +52,7 @@
 (rule $Det (our) (ConstantFn @det))
 (rule $Det (your) (ConstantFn @det))
 
-(def @verb (string "(verb)"))
-
-(def @passive_object (string "(object)"))
-(rule $PassiveObject (me) (ConstantFn @passive_object))
-(rule $PassiveObject (us) (ConstantFn @passive_object))
-
+# Quantifier
 (def @quant_one (string "one"))
 (def @quant_all (string "all"))
 (rule $QuantAny (a) (ConstantFn @quant_one))
@@ -66,8 +62,19 @@
 (rule $QuantAll (every) (ConstantFn @quant_all))
 (rule $QuantAll (all) (ConstantFn @quant_all))
 
-(def @increase (string "+"))
+# Adverb
+(rule $Only (only) (ConstantFn null))
+(rule $Only (just) (ConstantFn null))
 
+# Passive Objects
+(def @passive_object (string "(object)"))
+(rule $PassiveObject (me) (ConstantFn @passive_object))
+(rule $PassiveObject (us) (ConstantFn @passive_object))
+
+
+
+### Value Changes ###
+(def @increase (string "+"))
 (rule $Increase (add) (ConstantFn @increase))
 (rule $Increase (big) (ConstantFn @increase))
 (rule $Increase (bold) (ConstantFn @increase))
@@ -78,6 +85,7 @@
 (rule $Increase (prominent) (ConstantFn @increase))
 (rule $Increase (thick) (ConstantFn @increase))
 (rule $Increase (+) (ConstantFn @increase))
+
 (def @decrease (string "-"))
 (rule $Decrease (decrease) (ConstantFn @increase))
 (rule $Decrease (deduct) (ConstantFn @increase))
@@ -105,6 +113,7 @@
 (rule $Assign (equal) (ConstantFn null))
 (rule $Assign (=) (ConstantFn null))
 (rule $Assign ($LEMMA_TOKEN) (IdentityFn))
+
 
 # Utils
 (rule $NumberToString ($Number) (lambda x (call .toString (var x))))

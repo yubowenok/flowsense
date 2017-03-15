@@ -4,17 +4,16 @@ jdk:
   - oraclejdk8
 
 before_script:
-  - git clone https://github.com/percyliang/sempre
-  - if [ -d 'sempre_lib' ]; then mv sempre_lib sempre; fi
-  - if [ -d 'sempre_fig' ]; then mv sempre_fig sempre; fi
+  - git clone https://github.com/yubowenok/sempre
   - cd sempre
-  - ./pull-dependencies core corenlp
+  - ../sempreCache.sh
   - ant core corenlp 
-  - cp ../tester.sh .
 
-# now at smartflow/sempre
+# now at flowsense/sempre
 script:
-  - ./tester.sh
+  - ../tester.sh
+  - rm -rf ../sempre_lib
+  - rm -rf ../sempre_fig
   - mv lib ../sempre_lib
   - mv fig ../sempre_fig
 

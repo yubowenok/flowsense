@@ -54,6 +54,7 @@
 
 # Color scales
 (def @colorscale_redgreen (string "color redGreen"))
+(rule $ScaleValue (color (scale optional)) (ConstantFn @colorscale_redgreen)) # default color scale
 (rule $ScaleValue (red green) (ConstantFn @colorscale_redgreen))
 (rule $ScaleValue (CWYR) (ConstantFn (string "color CWYR")))
 (rule $ScaleValue (monochrome) (ConstantFn (string "color monochrome")))
@@ -76,8 +77,6 @@
 (rule $ValueRange ($PHRASE to $PHRASE) (ConcatFn " "))
 (rule $ValueRange ($Number ($Conj optional) $Number) (ConcatFn " "))
 (rule $ValueRange (from $ValueRange) (IdentityFn))
-
-(rule $ROOT ($ValueRange) (IdentityFn))
 
 (rule $NumericalScalePhrase ($ValueProperty (from optional) $ValueRange) (ConcatFn " "))
 
