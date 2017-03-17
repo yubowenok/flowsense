@@ -7,7 +7,7 @@
   (utterance "set large size")
   (targetValue (string "size +"))
 )
-# Guide to recognize "of"
+# Guide to recognize "of" relation
 (example
   (utterance "highlight selection from the scatterplot")
   (targetValue (string "highlight selection of chart_type"))
@@ -26,7 +26,28 @@
   (utterance "find mpg greater than 15")
   (targetValue (string "filter dim > 15"))
 )
+# Prefer filter when "only" is present
 (example
-  (utterance "find mpg greater than 15")
-  (targetValue (string "filter dim > 15"))
+  (utterance "show only cars with mpg greater than 15")
+  (targetValue (string "filter dim >= 15.0"))
+)
+(example
+  (utterance "show cars with mpg greater than 15")
+  (targetValue (string "chart_type filter dim >= 15.0"))
+)
+# Handle between X and Y
+(example
+  (utterance "cars with mpg between 5 and 10")
+  (targetValue (string "filter dim >= 5 <= 10"))
+)
+# Suffix plot is closer associated with leading plot
+# parallel coordinates plot -> chart_type
+(example
+  (utterance "highlight selected in a parallel coordinates plot")
+  (targetValue (string "highlight selection chart_type"))
+)
+# Do not ignore filter condition
+(example
+  (utterance "show selected with mpg greater than 5")
+  (targetValue (string "chart_type selection filter dim >= 5.0"))
 )

@@ -7,10 +7,6 @@
   (targetValue (string "chart_type filter dim = 15.0"))
 )
 (example
-  (utterance "cars with mpg greater than 15")
-  (targetValue (string "filter dim >= 15.0"))
-)
-(example
   (utterance "show cars with mpg no larger than 15 in a histogram")
   (targetValue (string "chart_type filter dim <= 15.0"))
 )

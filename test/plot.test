@@ -31,3 +31,7 @@
   (utterance "mpg distribution")
   (targetValue (string "chart_type dim"))
 )
+(example
+  (utterance "show mpg over model.year by origin in a line chart")
+  (targetValue (string "chart_type dim dim dim"))
+)

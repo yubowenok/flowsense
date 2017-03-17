@@ -3,10 +3,13 @@
 (rule $T_Dim (horsepower) (ConstantFn @dim))
 (rule $T_Dim (cylinders) (ConstantFn @dim))
 (rule $T_Dim (name) (ConstantFn @dim))
+(rule $T_Dim (origin) (ConstantFn @dim))
+(rule $T_Dim (model.year) (ConstantFn @dim))
 (rule $T_PlotType (scatterplot) (ConstantFn @chart))
 (rule $T_PlotType (histogram) (ConstantFn @chart))
 (rule $T_PlotType (distribution) (ConstantFn @chart)) # word that can be mapped to chart_type
 (rule $T_PlotType (parallel coordinates) (ConstantFn @chart))
+(rule $T_PlotType (line chart) (ConstantFn @chart))
 
 (rule $Dim ($T_Dim) (IdentityFn))
 (rule $Chart ($T_PlotType) (IdentityFn))

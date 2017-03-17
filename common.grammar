@@ -19,6 +19,7 @@
 # Preposition
 (def @prep (string "(prep)"))
 (rule $Prep (about) (ConstantFn @prep))
+(rule $Prep (between) (ConstantFn @prep))
 (rule $Prep (for) (ConstantFn @prep))
 (rule $Prep (from) (ConstantFn @prep))
 (rule $Prep (in) (ConstantFn @prep))
@@ -29,6 +30,7 @@
 (rule $Prep (to) (ConstantFn @prep))
 (rule $Prep (with) (ConstantFn @prep))
 (rule $Prep (within) (ConstantFn @prep))
+
 
 (rule $PrepOf (from) (ConstantFn @prep))
 (rule $PrepOf (in) (ConstantFn @prep))
@@ -113,6 +115,12 @@
 (rule $Assign (equal) (ConstantFn null))
 (rule $Assign (=) (ConstantFn null))
 (rule $Assign ($LEMMA_TOKEN) (IdentityFn))
+
+
+# Grouping
+(def @group (string "group"))
+(rule $GroupBy (group ($Prep optional)) (ConstantFn @group))
+(rule $GroupBy (by) (ConstantFn @group))
 
 
 # Utils
