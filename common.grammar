@@ -18,19 +18,11 @@
 
 # Preposition
 (def @prep (string "(prep)"))
-(rule $Prep (about) (ConstantFn @prep))
-(rule $Prep (between) (ConstantFn @prep))
-(rule $Prep (for) (ConstantFn @prep))
-(rule $Prep (from) (ConstantFn @prep))
-(rule $Prep (in) (ConstantFn @prep))
-(rule $Prep (into) (ConstantFn @prep))
-(rule $Prep (of) (ConstantFn @prep))
-(rule $Prep (on) (ConstantFn @prep))
-(rule $Prep (onto) (ConstantFn @prep))
-(rule $Prep (to) (ConstantFn @prep))
-(rule $Prep (with) (ConstantFn @prep))
-(rule $Prep (within) (ConstantFn @prep))
+(rule $Prep ($TOKEN) (FilterPosTagFn token IN TO))
 
+(rule $PrepIn (in) (ConstantFn @prep))
+(rule $PrepIn (within) (ConstantFn @prep))
+(rule $PrepIn (inside) (ConstantFn @prep))
 
 (rule $PrepOf (from) (ConstantFn @prep))
 (rule $PrepOf (in) (ConstantFn @prep))
@@ -47,12 +39,7 @@
 
 # Determiner
 (def @det (string "(det)"))
-(rule $Det (a) (ConstantFn @det))
-(rule $Det (an) (ConstantFn @det))
-(rule $Det (the) (ConstantFn @det))
-(rule $Det (my) (ConstantFn @det))
-(rule $Det (our) (ConstantFn @det))
-(rule $Det (your) (ConstantFn @det))
+(rule $Det ($TOKEN) (FilterPosTagFn token DT PRP PRP$))
 
 # Quantifier
 (def @quant_one (string "one"))
@@ -65,36 +52,40 @@
 (rule $QuantAll (all) (ConstantFn @quant_all))
 
 # Adverb
-(rule $Only (only) (ConstantFn null))
-(rule $Only (just) (ConstantFn null))
+(rule $Only ($TOKEN) (FilterPosTagFn token RB))
 
 # Passive Objects
 (def @passive_object (string "(object)"))
-(rule $PassiveObject (me) (ConstantFn @passive_object))
-(rule $PassiveObject (us) (ConstantFn @passive_object))
-
+(rule $PassiveObject ($TOKEN) (FilterPosTagFn token DT PRP PRP$))
 
 
 ### Value Changes ###
 (def @increase (string "+"))
 (rule $Increase (add) (ConstantFn @increase))
 (rule $Increase (big) (ConstantFn @increase))
+(rule $Increase (bigger) (ConstantFn @increase))
 (rule $Increase (bold) (ConstantFn @increase))
+(rule $Increase (bolder) (ConstantFn @increase))
 (rule $Increase (increase) (ConstantFn @increase))
 (rule $Increase (increment) (ConstantFn @increase))
 (rule $Increase (large) (ConstantFn @increase))
+(rule $Increase (larger) (ConstantFn @increase))
 (rule $Increase (more) (ConstantFn @increase))
 (rule $Increase (prominent) (ConstantFn @increase))
 (rule $Increase (thick) (ConstantFn @increase))
+(rule $Increase (thicker) (ConstantFn @increase))
 (rule $Increase (+) (ConstantFn @increase))
 
 (def @decrease (string "-"))
 (rule $Decrease (decrease) (ConstantFn @increase))
 (rule $Decrease (deduct) (ConstantFn @increase))
 (rule $Decrease (less) (ConstantFn @decrease))
+(rule $Decrease (fewer) (ConstantFn @decrease))
 (rule $Decrease (reduce) (ConstantFn @increase))
 (rule $Decrease (small) (ConstantFn @decrease))
+(rule $Decrease (smaller) (ConstantFn @decrease))
 (rule $Decrease (thin) (ConstantFn @decrease))
+(rule $Decrease (thinner) (ConstantFn @decrease))
 (rule $Decrease (-) (ConstantFn @decrease))
 (rule $ValueChange ($Increase) (IdentityFn))
 (rule $ValueChange ($Decrease) (IdentityFn))

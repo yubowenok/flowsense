@@ -10,4 +10,5 @@
 (include testing.grammar)
 
 ### Wrap up everything ###
+#(rule $CleanCommand ($Command) (FilterPosTagFn token reverse WRB WDT DT PRP))
 (rule $ROOT (($StopWord optional) $Command (? optional)) (IdentityFn))

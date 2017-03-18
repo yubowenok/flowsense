@@ -52,18 +52,6 @@
 # set width 5 and opacity 1
 (rule $AssignProperty ($AssignPropertyOrdered $AssignPropertyOrdered) (ConcatFn " "))
 
-# Color scales
-(def @colorscale_redgreen (string "color redGreen"))
-(rule $ScaleValue (color (scale optional)) (ConstantFn @colorscale_redgreen)) # default color scale
-(rule $ScaleValue (red green) (ConstantFn @colorscale_redgreen))
-(rule $ScaleValue (CWYR) (ConstantFn (string "color CWYR")))
-(rule $ScaleValue (monochrome) (ConstantFn (string "color monochrome")))
-(rule $ScaleValue (red yellow) (ConstantFn (string "color redYellow")))
-(rule $ScaleValue (yellow blue) (ConstantFn (string "color yellowBlue")))
-(rule $ScaleValue (categorical) (ConstantFn (string "color categorical")))
-(rule $ScaleValue ($ScaleValue color (scale optional)) (IdentityFn))
-(rule $ScaleValue ($ScaleValue colorscale) (IdentityFn))
-
 # color from red to green (not yet differentiate different scales here)
 (rule $ScaleValue ($ColorProperty from ($PHRASE optional)) (ConstantFn @colorscale_redgreen))
 
