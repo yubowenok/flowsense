@@ -25,7 +25,7 @@
 )
 (example
   (utterance "set width 5 and opacity 1")
-  (targetValue (string "width 5 opacity 1"))
+  (targetValue (string "width 5.0 opacity 1.0"))
 )
 (example
   (utterance "encode mpg by red green color scale")

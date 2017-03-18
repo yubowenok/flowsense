@@ -1,6 +1,5 @@
 # TODO: complete color list
-(rule $ColorValue (red) (ConstantFn (string "red")))
-(rule $ColorValue (blue) (ConstantFn (string "blue")))
+(rule $ColorToken ($TOKEN) (FilterTokenFn token red green blue black white yellow orange purple pink margenta cyan))
 
 # Color scales
 (def @colorscale_redgreen (string "color redGreen"))
@@ -11,5 +10,5 @@
 (rule $ScaleValue (red yellow) (ConstantFn (string "color redYellow")))
 (rule $ScaleValue (yellow blue) (ConstantFn (string "color yellowBlue")))
 (rule $ScaleValue (categorical) (ConstantFn (string "color categorical")))
-(rule $ScaleValue ($ScaleValue color (scale optional)) (IdentityFn))
-(rule $ScaleValue ($ScaleValue colorscale) (IdentityFn))
+(rule $ScaleValue ($ScaleValue color (scale optional)) (SelectFn 0))
+(rule $ScaleValue ($ScaleValue colorscale) (SelectFn 0))

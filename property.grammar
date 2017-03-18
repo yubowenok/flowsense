@@ -2,17 +2,15 @@
 
 (include color.grammar)
 
-# remove redundant "color"
-(rule $GetColor (color) (ConstantFn (lambda x (call .toString (var x)))))
 (rule $ColorPhrase ($ColorValue) (IdentityFn))
-(rule $ColorPhrase ($GetColor $ColorValue) (JoinFn forward))
-(rule $ColorPhrase ($ColorValue $GetColor) (JoinFn backward))
+(rule $ColorPhrase (color $ColorValue) (IdentityFn))
+(rule $ColorPhrase ($ColorValue color) (IdentityFn))
 (rule $ColorPhrase (to $ColorPhrase) (IdentityFn))
 
-(rule $PropertyValue ($TOKEN) (IdentityFn))
+(rule $PropertyValue ($ColorChange) (IdentityFn))
 (rule $PropertyValue ($ColorPhrase) (IdentityFn))
 (rule $PropertyValue ($ValueChange) (IdentityFn))
-(rule $PropertyValue (to $Number) (IdentityFn))
+(rule $PropertyValue ((to optional) $Number) (IdentityFn))
 
 # supported rendering properties
 (rule $ColorProperty (color) (ConstantFn (string "color")))
@@ -25,63 +23,51 @@
 (rule $Property ($ValueProperty) (IdentityFn))
 
 # encoding keywords
-(def @encode (string "map"))
-(rule $Encode (map) (ConstantFn @encode))
-(rule $Encode (encode) (ConstantFn @encode))
+(def @encode (string "encode"))
+(rule $Encode ($TOKEN) (FilterTokenFn lemma encode map))
 
 # width set 5
 (rule $PropertySetter ($Assign) (ConstantFn (lambda y (lambda x (call + (var x) (call + (string " ") (var y)))))))
 (rule $PropertyPartial ($PropertySetter $PropertyValue) (JoinFn forward))
 (rule $AssignProperty ($Property $PropertyPartial) (JoinFn backward))
 # set width 5
-(rule $AssignPropertyOrdered (($Assign optional) $Property $PropertyValue) (ConcatFn " "))
-(rule $AssignProperty ($AssignPropertyOrdered) (ConcatFn " "))
+(rule $AssignProperty (($Assign optional) $Property $PropertyValue) (ConcatFn " "))
 # set 5 width
 (rule $PropertyPartial3 ($PropertySetter $PropertyValue) (JoinFn forward))
 (rule $AssignProperty ($PropertyPartial3 $Property) (JoinFn forward))
 
 # increase width
-(rule $ValueChangeIncreaseSetter ($Increase) (ConstantFn (lambda x (call + (var x) (string " +")))))
-(rule $ValueChangeDecreaseSetter ($Decrease) (ConstantFn (lambda x (call + (var x) (string " -")))))
-(rule $AssignProperty ($ValueChangeIncreaseSetter $Property) (JoinFn forward))
-(rule $AssignProperty ($ValueChangeDecreaseSetter $Property) (JoinFn forward))
+(rule $AssignProperty ($ValueChange $Property) (ConcatFn reverse " "))
+(rule $AssignProperty ($ValueChange $Property) (ConcatFn reverse " "))
 
 # width increase
 (rule $AssignProperty ($Property $ValueChange) (ConcatFn " "))
 
 # set width 5 and opacity 1
-(rule $AssignProperty ($AssignPropertyOrdered $AssignPropertyOrdered) (ConcatFn " "))
+(rule $AssignProperty ($AssignProperty ($Conj optional) $AssignProperty) (ConcatFn " "))
 
 # color from red to green (not yet differentiate different scales here)
 (rule $ScaleValue ($ColorProperty from ($PHRASE optional)) (ConstantFn @colorscale_redgreen))
 
-(rule $ScaleValue (by $ScaleValue) (IdentityFn))
+(rule $ScaleValue ($PrepBy $ScaleValue) (SelectFn 1))
 (rule $ScaleValue ($NumericalScale) (IdentityFn))
 
 # map mpg to size from 5 to 6
 # Strangely, if the phrase is in the form "5 to 6", the CoreNLP parser in sempre fails to parse it with grammar
 # "$Number to $Number". We suspect it is because of the implementation of the sempre CoreNLP class. Further investigation pending.
-# For the moment a get-around is to use $PHRASE. This will not interpret sth like "one billion" of course.
-(rule $ValueRange ($PHRASE to $PHRASE) (ConcatFn " "))
+# For the moment a get-around is to use $NumberToken. This will not interpret sth like "one billion" of course.
+(rule $ValueRange ($NumberToken (to optional) $NumberToken) (ConcatFn " "))
 (rule $ValueRange ($Number ($Conj optional) $Number) (ConcatFn " "))
 (rule $ValueRange (from $ValueRange) (IdentityFn))
 
-(rule $NumericalScalePhrase ($ValueProperty (from optional) $ValueRange) (ConcatFn " "))
-
 # map mpg to 5 and 6 size
-(rule $ValueRangePartial2 ($PrepBy) (ConstantFn (lambda z (lambda y (lambda x (call + (var y) (string " ") (var z) (string " ") (var x)))))))
-(rule $ValueRangePartial ($ValueRangePartial2 $ValueRange) (JoinFn forward))
-(rule $NumericalScale ($ValueRangePartial $ValueProperty) (JoinFn forward))
-
-(rule $ValueRangePartial3 ($PrepBy) (ConstantFn (lambda y (lambda x (call + (var y) (string " ") (var x))))))
-(rule $NumericalScale ($ValueRangePartial3 $NumericalScalePhrase) (JoinFn forward))
+(rule $NumericalScale (($PrepBy optional) $ValueRange $ValueProperty) (ConcatFn reverse " "))
+(rule $NumericalScale (($PrepBy optional) $ValueProperty $ValueRange) (ConcatFn " "))
 
 (rule $AssignProperty (($Encode optional) $Dim $NumericalScale) (JoinFn backward))
 
 # encode mpg by red green color scale
-(rule $ScaleValuePartial2 ($PrepBy) (ConstantFn (lambda x (lambda y (call + (var x) (string " ") (var y))))))
-(rule $ScaleValuePartial ($ScaleValuePartial2 $ScaleValue) (JoinFn forward))
-(rule $AssignProperty (($Encode optional) $Dim $ScaleValuePartial) (JoinFn backward))
+(rule $AssignProperty (($Encode optional) $Dim ($PrepBy optional) $ScaleValue) (ConcatFn reverse " "))
 
 
 ### Application ###

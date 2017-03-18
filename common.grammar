@@ -7,8 +7,11 @@
 
 # Number
 (rule $NumberPhrase ($PHRASE) (FilterPosTagFn token CD))
-(rule $NumberToken ($TOKEN) (NumberFn))
+(rule $NumberToken ($TOKEN) (FilterPosTagFn token CD))
 (rule $Number ($NumberPhrase) (NumberFn))
+
+# Phrase with length constraint
+(rule $PhraseValue ($PHRASE) (FilterPosTagFn span reverse IN TO DT))
 
 # Conjecture
 (def @conj_and (string "and"))
@@ -61,52 +64,26 @@
 
 ### Value Changes ###
 (def @increase (string "+"))
-(rule $Increase (add) (ConstantFn @increase))
-(rule $Increase (big) (ConstantFn @increase))
-(rule $Increase (bigger) (ConstantFn @increase))
-(rule $Increase (bold) (ConstantFn @increase))
-(rule $Increase (bolder) (ConstantFn @increase))
-(rule $Increase (increase) (ConstantFn @increase))
-(rule $Increase (increment) (ConstantFn @increase))
-(rule $Increase (large) (ConstantFn @increase))
-(rule $Increase (larger) (ConstantFn @increase))
-(rule $Increase (more) (ConstantFn @increase))
-(rule $Increase (prominent) (ConstantFn @increase))
-(rule $Increase (thick) (ConstantFn @increase))
-(rule $Increase (thicker) (ConstantFn @increase))
-(rule $Increase (+) (ConstantFn @increase))
-
+(rule $Increase ($TOKEN) (FilterTokenFn lemma add big bigger bold bolder increase increment large larger more prominent thick thicker +))
 (def @decrease (string "-"))
-(rule $Decrease (decrease) (ConstantFn @increase))
-(rule $Decrease (deduct) (ConstantFn @increase))
-(rule $Decrease (less) (ConstantFn @decrease))
-(rule $Decrease (fewer) (ConstantFn @decrease))
-(rule $Decrease (reduce) (ConstantFn @increase))
-(rule $Decrease (small) (ConstantFn @decrease))
-(rule $Decrease (smaller) (ConstantFn @decrease))
-(rule $Decrease (thin) (ConstantFn @decrease))
-(rule $Decrease (thinner) (ConstantFn @decrease))
-(rule $Decrease (-) (ConstantFn @decrease))
-(rule $ValueChange ($Increase) (IdentityFn))
-(rule $ValueChange ($Decrease) (IdentityFn))
-(rule $ValueChange ($LEMMA_TOKEN) (IdentityFn))
+(rule $Decrease ($TOKEN) (FilterTokenFn lemma decrease deduct less fewer reduce small smaller thin thinner -))
+
+(rule $ValueChange ($Increase) (ConstantFn @increase))
+(rule $ValueChange ($Decrease) (ConstantFn @decrease))
 
 (def @dark (string "dark"))
 (def @bright (string "bright"))
-(rule $ColorChange (dark) (ConstantFn @dark))
-(rule $ColorChange (dim) (ConstantFn @dark))
-(rule $ColorChange (bright) (ConstantFn @bright))
-(rule $ColorChange (light) (ConstantFn @bright))
+(rule $Dark ($TOKEN) (FilterTokenFn lemma dark dim))
+(rule $Bright ($TOKEN) (FilterTokenFn lemma bright light))
 
-(rule $Assign (set) (ConstantFn null))
-(rule $Assign (make) (ConstantFn null))
-(rule $Assign (change) (ConstantFn null))
-(rule $Assign (draw) (ConstantFn null))
-(rule $Assign (show) (ConstantFn null))
-(rule $Assign (equal) (ConstantFn null))
-(rule $Assign (=) (ConstantFn null))
-(rule $Assign ($LEMMA_TOKEN) (IdentityFn))
+(rule $ColorChange ($Dark) (ConstantFn @dark))
+(rule $ColorChange ($Bright) (ConstantFn @bright))
 
+# Assign verb
+(rule $Assign ($TOKEN) (FilterTokenFn lemma set make change draw show equal =))
+
+# Having certain property (value filter)
+(rule $Have ($TOKEN) (FilterTokenFn lemma have contain include))
 
 # Grouping
 (def @group (string "group"))

@@ -12,7 +12,7 @@
   (targetValue (string "chart_type dim dim"))
 )
 (example
-  (utterance "scatterplot of horsepower")
+  (utterance "scatterplot of mpg")
   (targetValue (string "chart_type dim"))
 )
 (example

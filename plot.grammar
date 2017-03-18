@@ -1,14 +1,7 @@
 ### Plot ###
 
 (def @show (string "show"))
-(rule $ShowVerb (chart) (ConstantFn @show))
-(rule $ShowVerb (create) (ConstantFn @show))
-(rule $ShowVerb (draw) (ConstantFn @show))
-(rule $ShowVerb (illustrate) (ConstantFn @show))
-(rule $ShowVerb (present) (ConstantFn @show))
-(rule $ShowVerb (render) (ConstantFn @show))
-(rule $ShowVerb (show) (ConstantFn @show))
-(rule $ShowVerb (visualize) (ConstantFn @show))
+(rule $ShowVerb ($TOKEN) (FilterTokenFn lemma show chart create draw illustrate present render show visualize))
 
 (rule $Show ($ShowVerb) (ConstantFn @show))
 (rule $Show ($ShowVerb $StopNoun) (ConstantFn @show))
@@ -41,8 +34,7 @@
 (rule $Plot ($PlotPhrase $Dims ($Prep optional) ($Det optional) ($Chart optional)) (ConcatFn " "))
 
 # mpg scatterplot
-(rule $PlotPhrasePartial ($PlotPhrase) (ConstantFn (lambda x (call + @chart (string " ") (var x)))))
-(rule $Plot ($Dims $PlotPhrasePartial) (JoinFn backward))
+(rule $Plot ($Dims $PlotPhrase) (ConcatFn reverse " "))
 
 
 ### Application ###

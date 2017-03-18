@@ -54,6 +54,10 @@ for i in xrange(num_lines):
         break;
       j += 1
         
+if total != len(test_files):
+  print 'runtime error in execution'
+  sys.exit(1)
+  
 if incorrect > 0:
   print '%d/%d tests incorrect' % (incorrect, total)
   sys.exit(1)
