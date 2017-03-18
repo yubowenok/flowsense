@@ -8,6 +8,7 @@
 
 (rule $CompareValue ($Number) (IdentityFn))
 (rule $CompareValue ($PhraseValue) (IdentityFn))
+(rule $CompareValue (of $CompareValue) (IdentityFn))
 
 (rule $Strict (strictly) (ConstantFn null))
 
@@ -61,12 +62,28 @@
 # mpg greater than 15 and cylinders smaller than 10
 (rule $Condition ($Condition ($Conj optional) $Condition) (ConcatFn " "))
 
+# Containing certain pattern/substring (value filter)
+(def @contain (string "contain"))
+(rule $ContainToken ($TOKEN) (FilterTokenFn lemma with have contain include match))
+(rule $Contain ($ContainToken) (ConstantFn @contain))
+(rule $Contain ($Det $Contain) (ConstantFn @contain))
+
+# (an) mpg of 15
+(rule $ContainPartial (of) (ConstantFn (lambda x (lambda y (call + (var x) (string " = ") (call .toString (var y)))))))
+(rule $ContainPartialHalf ($Dim $ContainPartial) (JoinFn backward))
+(rule $Condition ($ContainPartialHalf $CompareValue) (JoinFn forward))
+
+# (a) name containing buick
+(rule $Condition ($Dim $Contain $TOKEN) (ConcatFn " "))
+
+
 (def @filter (string "filter"))
 (rule $FilterWord (filter) (ConstantFn @filter))
 (rule $FilterWord ($ShowVerb ($Only optional)) (ConstantFn @filter))
 
 (rule $PrepFilterToken ($TOKEN) (FilterTokenFn lemma by with that satisfy))
 (rule $PrepFilter ($PrepFilterToken) (ConstantFn @filter))
+(rule $PrepFilter ($Contain) (ConstantFn @filter))
 
 (def @find (string "find"))
 (rule $FindWord (find) (ConstantFn @find))
@@ -78,21 +95,13 @@
 # with mpg greater than 5
 (rule $FilterCondition ($PrepFilter $Condition) (ConcatFn " "))
 
-(rule $FilterPartial ($PrepFilter) (ConstantFn (lambda x (call + (string "filter ") (var x)))))
-(rule $FilterPartial2 ($PrepFilter) (ConstantFn (lambda y (lambda x (call + (var x) (string " filter ") (var y))))))
-
 (rule $FindPartial ($PrepFilter) (ConstantFn (lambda x (call + (string "find ") (var x)))))
 (rule $FindPartial2 ($PrepFilter) (ConstantFn (lambda y (lambda x (call + (var x) (string " find ") (var y))))))
 
 # cars with mpg greater than 15
-(rule $Filter (($StopNoun optional) $FilterPartial $Condition) (JoinFn forward))
+(rule $Filter (($StopNoun optional) $PrepFilter $Condition) (ConcatFn " "))
 
-# find cars with mpg greater than 15
-(rule $Find ($FindWord $Condition) (ConcatFn " "))
-
-# show/find cars with mpg greater than 15
-(rule $Filter2 (($StopNoun optional) $FilterPartial2 $Condition) (JoinFn forward))
-(rule $Plot ($PlotPhrase $Filter2) (JoinFn backward))
+#(rule $Plot ($PlotPhrase $Filter2) (JoinFn backward))
 (rule $Find2 ($FindWord ($StopNoun optional) $FindPartial2 $Condition) (JoinFn forward))
 (rule $Plot ($PlotPhrase $Find2) (JoinFn backward))
 
@@ -100,9 +109,12 @@
 (rule $Plot (($Show optional) $Filter ($Prep optional) $ChartPartial) (JoinFn backward))
 (rule $Plot (($Show optional) $Find ($Prep optional) $ChartPartial) (JoinFn backward))
 
-# show/find mpg greater than 15
+# show/find (cars) (with) mpg greater than 15
 (rule $Find ($FindWord $Condition) (ConcatFn " "))
 (rule $Filter ($FilterWord $Condition) (ConcatFn " "))
+
+# show cars with an mpg of 15
+(rule $Plot ($PlotPhrase $FilterCondition) (ConcatFn " "))
 
 ### Application ###
 (rule $Command ($Filter) (IdentityFn))

@@ -1,5 +1,5 @@
 # TODO: complete color list
-(rule $ColorToken ($TOKEN) (FilterTokenFn token red green blue black white yellow orange purple pink margenta cyan))
+(rule $ColorValue ($TOKEN) (FilterTokenFn token red green blue black white yellow orange purple pink margenta cyan))
 
 # Color scales
 (def @colorscale_redgreen (string "color redGreen"))

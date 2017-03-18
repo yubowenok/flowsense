@@ -7,7 +7,7 @@
 (rule $Dim (dim) (ConstantFn @dim))
 (rule $Dim ($DimWord) (ConstantFn @dim))
 (rule $Dim ($QuantAny $DimWord) (ConstantFn @dim))
-
+(rule $Dim ($Det $Dim) (ConstantFn @dim))
 
 # Single or multiple dimensions
 (rule $Dims ($Dim) (IdentityFn))

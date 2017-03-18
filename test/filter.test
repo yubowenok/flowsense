@@ -3,6 +3,10 @@
   (targetValue (string "filter dim >= 15.0"))
 )
 (example
+  (utterance "show cars with an mpg of 15")
+  (targetValue (string "chart_type filter dim = 15"))
+)
+(example
   (utterance "show a histogram of cars with mpg equal to 15")
   (targetValue (string "chart_type filter dim = 15.0"))
 )
@@ -25,4 +29,12 @@
 (example
   (utterance "search for cars with mpg between 10 and 15")
   (targetValue (string "find dim >= 10 <= 15"))
+)
+(example
+  (utterance "show cars with name containing buick")
+  (targetValue (string "chart_type filter dim contain buick"))
+)
+(example
+  (utterance "show cars with a name that contains buick")
+  (targetValue (string "chart_type filter dim contain buick"))
 )

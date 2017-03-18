@@ -11,7 +11,7 @@
 (rule $Number ($NumberPhrase) (NumberFn))
 
 # Phrase with length constraint
-(rule $PhraseValue ($PHRASE) (FilterPosTagFn span reverse IN TO DT))
+(rule $PhraseValue ($PHRASE) (FilterPosTagFn span reverse IN TO DT WDT))
 
 # Conjecture
 (def @conj_and (string "and"))
@@ -42,7 +42,7 @@
 
 # Determiner
 (def @det (string "(det)"))
-(rule $Det ($TOKEN) (FilterPosTagFn token DT PRP PRP$))
+(rule $Det ($TOKEN) (FilterPosTagFn token DT WDT PRP PRP$))
 
 # Quantifier
 (def @quant_one (string "one"))
@@ -59,7 +59,7 @@
 
 # Passive Objects
 (def @passive_object (string "(object)"))
-(rule $PassiveObject ($TOKEN) (FilterPosTagFn token DT PRP PRP$))
+(rule $PassiveObject ($TOKEN) (FilterPosTagFn token DT WDT PRP PRP$))
 
 
 ### Value Changes ###
@@ -81,9 +81,6 @@
 
 # Assign verb
 (rule $Assign ($TOKEN) (FilterTokenFn lemma set make change draw show equal =))
-
-# Having certain property (value filter)
-(rule $Have ($TOKEN) (FilterTokenFn lemma have contain include))
 
 # Grouping
 (def @group (string "group"))
