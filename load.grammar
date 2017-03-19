@@ -1,0 +1,11 @@
+(def @load (string "load"))
+(rule $LoadToken ($TOKEN) (FilterTokenFn lemma add open load))
+(rule $LoadToken ($TOKEN) (FilterTokenFn token load))
+(rule $LoadVerb ($LoadToken) (ConstantFn @load))
+
+(rule $StopData ($TOKEN) (FilterTokenFn lemma datum dataset file))
+
+(rule $Load ($LoadVerb $PHRASE ($StopData optional)) (ConcatFn " "))
+
+### Application
+(rule $Command ($Load) (IdentityFn))

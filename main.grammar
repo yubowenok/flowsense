@@ -4,11 +4,11 @@
 (include property.grammar)
 (include selection.grammar)
 (include filter.grammar)
+(include load.grammar)
 (include utils.grammar)
 
 ### Testing grammar includes constants ###
 (include testing.grammar)
 
 ### Wrap up everything ###
-#(rule $CleanCommand ($Command) (FilterPosTagFn token reverse WRB WDT DT PRP))
 (rule $ROOT (($StopWord optional) $Command (? optional)) (IdentityFn))

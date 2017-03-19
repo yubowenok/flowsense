@@ -3,4 +3,4 @@
 (rule $StopWord (please) (ConstantFn null))
 (rule $StopWord ($TOKEN) (FilterPosTagFn token WRB WDT))
 
-(rule $StopNoun ($LEMMA_PHRASE) (FilterPosTagFn span NN NNS NNP NNPS PRP))
+(rule $StopNoun ($PHRASE) (FilterPosTagFn span NN NNS NNP NNPS PRP))
