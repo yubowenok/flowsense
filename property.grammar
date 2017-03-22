@@ -66,6 +66,12 @@
 
 (rule $AssignProperty (($Encode optional) $Dim $NumericalScale) (JoinFn backward))
 
+# (color) encode mpg
+(def @default_color_encode (string "color redGreen"))
+(rule $EncodeDefault ($Encode) (ConstantFn @default_color_encode))
+(rule $EncodeDefault (color $Encode) (ConstantFn @default_color_encode))
+(rule $AssignProperty ($EncodeDefault $Dim) (ConcatFn " "))
+
 # encode mpg by red green color scale
 (rule $AssignProperty (($Encode optional) $Dim ($PrepBy optional) $ScaleValue) (ConcatFn reverse " "))
 

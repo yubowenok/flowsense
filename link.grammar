@@ -23,6 +23,7 @@
 (rule $LinkPhrase ($LinkHighlightPhrase) (IdentityFn))
 
 (rule $LinkSource ($PrepFrom $Node) (ConcatFn " "))
+(rule $LinkSource ($PrepFrom $Chart) (ConcatFn " "))
 (rule $LinkTarget ($PrepTo $Node) (ConcatFn " "))
 (rule $LinkTarget ($PrepTo $Chart) (ConcatFn " "))
 

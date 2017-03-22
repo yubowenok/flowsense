@@ -35,6 +35,10 @@
   (utterance "map mpg to red green color")
   (targetValue (string "color redGreen dim"))
 )
+(example
+  (utterance "color encode mpg")
+  (targetValue (string "color redGreen dim"))
+)
 # because of the CoreNLP number range problem, we do not get numerical values here
 (example
   (utterance "map mpg to size from 5 to 6")

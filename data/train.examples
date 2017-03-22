@@ -70,3 +70,8 @@
   (utterance "load training dataset")
   (targetValue (string "load training"))
 )
+# maximum is a keyword instead of a stopNoun
+(example
+  (utterance "find the maximum of mpg")
+  (targetValue (string "filter dim max"))
+)

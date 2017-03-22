@@ -10,6 +10,19 @@
 (rule $NumberToken ($TOKEN) (FilterPosTagFn token CD))
 (rule $Number ($NumberPhrase) (NumberFn))
 
+(def @percent (string "%"))
+(rule $PercentToken (%) (ConstantFn @percent))
+(rule $PercentToken (percent) (ConstantFn @percent))
+(rule $PercentToken (percentage) (ConstantFn @percent))
+# This will return "5 percent" or "5 %".
+# Because of the NER span priority there seems to be no way we can overwrite this.
+# There we shall check both result formats.
+(rule $PercentSpan ($PHRASE) (FilterNerSpanFn PERCENT))
+
+(rule $CountPercent ($Number) (IdentityFn))
+(rule $CountPercent ($PercentSpan) (IdentityFn))
+(rule $CountPercent ($Number $PercentToken) (ConcatFn " "))
+
 # Phrase with length constraint
 (rule $PhraseValue ($PHRASE) (FilterPosTagFn span reverse IN TO DT WDT))
 

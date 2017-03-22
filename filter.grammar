@@ -89,9 +89,8 @@
 (rule $PrepFilter ($Contain) (ConstantFn @filter))
 
 (def @find (string "find"))
-(rule $FindWord (find) (ConstantFn @find))
-(rule $FindWord (search (for optional)) (ConstantFn @find))
-(rule $FindWord (look for) (ConstantFn @find))
+(rule $FilterToken ($TOKEN) (FilterTokenFn lemma find search look get fetch retrieve))
+(rule $FindWord ($FilterToken (for optional)) (ConstantFn @find))
 (rule $FindWord ($FindWord $StopNoun ($PrepFilter optional)) (ConstantFn @find))
 
 
@@ -119,6 +118,44 @@
 # show cars with an mpg of 15
 (rule $Plot ($PlotPhrase $FilterCondition) (ConcatFn " "))
 
+
+# Sampler
+(def @sample (string "filter"))
+(rule $SampleToken ($TOKEN) (FilterTokenFn lemma sample))
+(rule $SampleWord ($FindWord) (ConstantFn @sample))
+(rule $SampleWord ($FilterWord) (ConstantFn @sample))
+(rule $SampleWord ($SampleToken) (ConstantFn @sample))
+(rule $RandomWord ($TOKEN) (FilterTokenFn lemma random randomly))
+(rule $RandomSampleWord (($RandomWord optional) $SampleWord) (ConstantFn (string "filter index random")))
+
+# extremum min/max
+(def @max (string "max"))
+(rule $MaxToken ($TOKEN) (FilterTokenFn token max maximal maximum))
+(rule $Maximum ($MaxToken) (ConstantFn @max))
+(def @min (string "min"))
+(rule $MinToken ($TOKEN) (FilterTokenFn token min minimal minimum))
+(rule $Minimum ($MinToken) (ConstantFn @min))
+(rule $Extremum ($Maximum) (IdentityFn))
+(rule $Extremum ($Minimum) (IdentityFn))
+(rule $Extremum ($Det $Extremum) (SelectFn 1))
+
+(rule $ExtremumCondition ($Extremum ($Prep optional) $Dim) (ConcatFn reverse " "))
+(rule $ExtremumCondition ($Number $ExtremumCondition) (ConcatFn reverse " "))
+
+(rule $ExtremumConditionNumber ($CountPercent ($Prep optional) ($StopNoun optional) ($Prep optional) $ExtremumCondition) (ConcatFn reverse " "))
+(rule $GroupByDim ($GroupBy $Dim) (SelectFn 1))
+
+# find cars with max mpg
+(rule $Sample ($SampleWord ($StopNoun optional) ($Prep optional) $ExtremumCondition) (ConcatFn " "))
+# find 5 (percent of) cars with max mpg
+(rule $Sample ($SampleWord $ExtremumConditionNumber) (ConcatFn " "))
+# find 5 percent of cars
+(rule $Sample ($RandomSampleWord $CountPercent ($Prep optional) ($StopNoun optional)) (ConcatFn " "))
+
+# find ... group by origin
+(rule $Sample ($Sample $GroupByDim) (ConcatFn " "))
+
 ### Application ###
 (rule $Command ($Filter) (IdentityFn))
 (rule $Command ($Find) (IdentityFn))
+(rule $Command ($Sample) (IdentityFn))

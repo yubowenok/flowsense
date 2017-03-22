@@ -50,3 +50,27 @@
   (utterance "show only cars with mpg greater than 13 and smaller than 15")
   (targetValue (string "filter dim >= 13.0 <= 15.0"))
 )
+(example
+  (utterance "find cars with max mpg")
+  (targetValue (string "filter dim max"))
+)
+(example
+  (utterance "find 5 cars with minimum mpg")
+  (targetValue (string "filter dim min 5.0"))
+)
+(example
+  (utterance "find 5 percent of cars with maximum mpg")
+  (targetValue (string "filter dim max 5 percent"))
+)
+(example
+  (utterance "find 5 percent of cars with maximum mpg group by origin")
+  (targetValue (string "filter dim max 5 percent dim"))
+)
+(example
+  (utterance "sample 5 percent of cars")
+  (targetValue (string "filter index random 5 percent"))
+)
+(example
+  (utterance "sample 5 percent of cars group by origin")
+  (targetValue (string "filter index random 5 percent dim"))
+)
