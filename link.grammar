@@ -1,0 +1,45 @@
+# Value extraction
+(def @extract (string "extract"))
+(rule $ExtractToken ($TOKEN) (FilterTokenFn lemma extract find get retrieve))
+
+(rule $ExtractVerb ($ExtractToken) (ConstantFn @extract))
+
+(rule $Extract ($ExtractVerb $Dims) (ConcatFn " "))
+
+
+(rule $ExtractSource (($PrepFrom optional) $Selection) (IdentityFn))
+
+(rule $ExtractDimsSelection ($Dims $ExtractSource) (ConcatFn reverse " "))
+(rule $Extract ($ExtractVerb $ExtractDimsSelection) (ConcatFn " "))
+
+# Linking
+(def @link (string "link"))
+(rule $LinkToken ($TOKEN) (FilterTokenFn lemma link get retrieve find))
+(rule $LinkVerb ($LinkToken) (ConstantFn @link))
+(rule $SameDim (($Prep optional) ($Det optional) same $Dim) (ConstantFn @dim))
+
+(rule $LinkHighlightPhrase ($LinkVerb ($Conj optional) $HighlightVerb ($StopNoun optional)) (ConcatFn " "))
+(rule $LinkPhrase ($LinkVerb ($StopNoun optional)) (IdentityFn))
+(rule $LinkPhrase ($LinkHighlightPhrase) (IdentityFn))
+
+(rule $LinkSource ($PrepFrom $Node) (ConcatFn " "))
+(rule $LinkTarget ($PrepTo $Node) (ConcatFn " "))
+(rule $LinkTarget ($PrepTo $Chart) (ConcatFn " "))
+
+(rule $LinkDim (($Prep optional) $Dim) (IdentityFn))
+(rule $LinkDim ($SameDim) (IdentityFn))
+
+(rule $Link ($LinkPhrase $LinkDim) (ConcatFn " "))
+(rule $Link ($Link $LinkSource) (ConcatFn " "))
+
+(rule $LinkHighlightPartial ($LinkPhrase) (ConstantFn (lambda x (call + (string "link highlight ") (var x)))))
+(rule $LinkHighlight ($LinkHighlightPartial $LinkDim) (JoinFn forward))
+
+# If there is target, then highlighting is necessary.
+(rule $Link ($LinkHighlight $LinkTarget) (ConcatFn " "))
+(rule $Link ($LinkHighlight $LinkSource $LinkTarget) (ConcatFn " "))
+
+
+### Application
+(rule $Command ($Extract) (IdentityFn))
+(rule $Command ($Link) (IdentityFn))

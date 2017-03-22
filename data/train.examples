@@ -60,3 +60,13 @@
   (utterance "show selected with mpg greater than 5")
   (targetValue (string "chart_type selection filter dim >= 5.0"))
 )
+# Do not split greater than "or" equal to. Treat "or" as IN not as value.
+(example
+  (utterance "show cars with mpg greater than or equal to 15")
+  (targetValue (string "chart_type filter dim >= 15.0"))
+)
+# Unemphasize "dataset"
+(example
+  (utterance "load training dataset")
+  (targetValue (string "load training"))
+)

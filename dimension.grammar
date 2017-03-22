@@ -8,6 +8,8 @@
 (rule $Dim ($DimWord) (ConstantFn @dim))
 (rule $Dim ($QuantAny $DimWord) (ConstantFn @dim))
 (rule $Dim ($Det $Dim) (ConstantFn @dim))
+(rule $Dim ($Dim $StopValue) (ConstantFn @dim))
+(rule $Dim ($Det $StopValue ($Prep optional) $Dim) (ConstantFn @dim))
 
 # Single or multiple dimensions
 (rule $Dims ($Dim) (IdentityFn))

@@ -27,13 +27,18 @@
 (rule $PrepIn (within) (ConstantFn @prep))
 (rule $PrepIn (inside) (ConstantFn @prep))
 
-(rule $PrepOf (from) (ConstantFn @prep))
-(rule $PrepOf (in) (ConstantFn @prep))
-(rule $PrepOf (of) (ConstantFn @prep))
+(def @from (string "from"))
+(rule $PrepFrom (from) (ConstantFn @from))
+(rule $PrepFrom (in) (ConstantFn @from))
+(rule $PrepFrom (of) (ConstantFn @from))
 
-(rule $PrepTo (in) (ConstantFn @prep))
-(rule $PrepTo (into) (ConstantFn @prep))
-(rule $PrepTo (onto) (ConstantFn @prep))
+(def @to (string "to"))
+(rule $PrepTo (in) (ConstantFn @to))
+(rule $PrepTo (to) (ConstantFn @to))
+(rule $PrepTo (in to) (ConstantFn @to))
+(rule $PrepTo (into) (ConstantFn @to))
+(rule $PrepTo (on to) (ConstantFn @to))
+(rule $PrepTo (onto) (ConstantFn @to))
 
 (rule $PrepBy (by) (ConstantFn @prep))
 (rule $PrepBy (to) (ConstantFn @prep))
@@ -87,6 +92,9 @@
 (rule $GroupBy (group ($Prep optional)) (ConstantFn @group))
 (rule $GroupBy (by) (ConstantFn @group))
 
+# Nodes
+(def @node (string "node"))
+(rule $Node (node) (ConstantFn @node))
 
 # Utils
 (rule $NumberToString ($Number) (lambda x (call .toString (var x))))

@@ -10,6 +10,10 @@
 (rule $T_PlotType (distribution) (ConstantFn @chart)) # word that can be mapped to chart_type
 (rule $T_PlotType (parallel coordinates) (ConstantFn @chart))
 (rule $T_PlotType (line chart) (ConstantFn @chart))
+(rule $T_Node (node-1) (ConstantFn @node))
+(rule $T_Node (chart-1) (ConstantFn @node))
+(rule $T_Node (filter-1) (ConstantFn @node))
 
 (rule $Dim ($T_Dim) (IdentityFn))
 (rule $Chart ($T_PlotType) (IdentityFn))
+(rule $Node ($T_Node) (IdentityFn))

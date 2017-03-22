@@ -23,7 +23,7 @@
 (rule $CompareGreater (>) (ConstantFn @gt))
 (rule $CompareGreater (>=) (ConstantFn @geq))
 (rule $CompareGreater (> =) (ConstantFn @geq))
-(rule $CompareGreater ($GreaterToken ($TOKEN optional) equal ($TOKEN optional)) (ConstantFn @geq))
+(rule $CompareGreater ($GreaterToken ($TOKEN optional) ($Conj optional) equal ($TOKEN optional)) (ConstantFn @geq))
 (rule $CompareGreater ($Strict $GreaterToken) (ConstantFn @gt))
 
 (rule $LessToken (before) (ConstantFn @le_token))
@@ -59,6 +59,8 @@
 (rule $Condition ($Dim $CompareBetween) (JoinFn backward))
 # mpg greater than 13
 (rule $Condition ($Dim $Compare $CompareValue) (ConcatFn " "))
+# mpg greater than 13 and smaller than 15
+(rule $Condition ($Dim $Compare $CompareValue ($Conj optional) $Compare $CompareValue) (ConcatFn " "))
 # mpg greater than 15 and cylinders smaller than 10
 (rule $Condition ($Condition ($Conj optional) $Condition) (ConcatFn " "))
 
@@ -79,7 +81,8 @@
 
 (def @filter (string "filter"))
 (rule $FilterWord (filter) (ConstantFn @filter))
-(rule $FilterWord ($ShowVerb ($Only optional)) (ConstantFn @filter))
+(rule $FilterWord ($ShowVerb) (ConstantFn @filter))
+(rule $FilterWord ($ShowVerb $Only) (ConstantFn @filter))
 
 (rule $PrepFilterToken ($TOKEN) (FilterTokenFn lemma by with that satisfy))
 (rule $PrepFilter ($PrepFilterToken) (ConstantFn @filter))
@@ -111,7 +114,7 @@
 
 # show/find (cars) (with) mpg greater than 15
 (rule $Find ($FindWord $Condition) (ConcatFn " "))
-(rule $Filter ($FilterWord $Condition) (ConcatFn " "))
+(rule $Filter ($FilterWord ($StopNoun optional) ($Prep optional) $Condition) (ConcatFn " "))
 
 # show cars with an mpg of 15
 (rule $Plot ($PlotPhrase $FilterCondition) (ConcatFn " "))

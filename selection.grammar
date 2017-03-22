@@ -1,8 +1,9 @@
 ### Selection and highlighting ###
 (def @highlight (string "highlight"))
 (def @selection (string "selection"))
+(rule $HighlightToken ($TOKEN) (FilterTokenFn lemma highlight brush))
 
-(rule $HighlightVerb (highlight) (ConstantFn @highlight))
+(rule $HighlightVerb ($HighlightToken) (ConstantFn @highlight))
 (rule $HighlightVerb ((make optional) prominent) (ConstantFn @highlight))
 
 (rule $Selection (chosen) (ConstantFn @selection))
@@ -24,8 +25,7 @@
 (rule $Highlight ($HighlightSelection) (IdentityFn))
 
 # highlight selection of scatterplot
-(rule $SourcePartial ($PrepOf $Plot) (SelectFn 1))
-(rule $Highlight ($HighlightSelection $SourcePartial) (ConcatFn " of "))
+(rule $Highlight ($HighlightSelection $PrepFrom $Plot) (ConcatFn " "))
 
 # highlight selection in a scatterplot
 (rule $HighlightFromTo ($Highlight $InChart) (ConcatFn " "))
@@ -58,6 +58,20 @@
 (rule $Plot ($PlotPhrase $Selection ($StopNoun optional) $FilterCondition ($Chart optional)) (ConcatFn " "))
 (rule $Plot ($PlotPhrase $SelectionDims ($StopNoun optional) $FilterCondition ($Prep optional) ($Chart optional)) (ConcatFn " "))
 
+
+# Make selection
+(def @select (string "select"))
+(rule $SelectToken ($TOKEN) (FilterTokenFn lemma select choose circle))
+(rule $SelectVerb ($SelectToken) (ConstantFn @select))
+
+(rule $Select ($SelectVerb ($StopNoun optional) ($Prep optional) $Condition) (ConcatFn " "))
+(rule $SelectCondition ($SelectVerb ($StopNoun optional) ($Prep optional) $Condition) (SelectFn 1))
+
+(rule $FilterToken ($TOKEN) (FilterTokenFn lemma filter))
+(rule $FilterSelection (($PrepTo optional) ($Det optional) $FilterToken) (ConstantFn (string "filter selection")))
+(rule $Select ($SelectCondition $FilterSelection) (ConcatFn reverse " "))
+
 ### Application ###
 (rule $Command ($HighlightFromTo) (IdentityFn)) 
 (rule $Command ($Highlight) (IdentityFn)) 
+(rule $Command ($Select) (IdentityFn)) 

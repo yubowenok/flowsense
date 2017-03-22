@@ -4,7 +4,7 @@
 )
 (example
   (utterance "highlight selection from the plot")
-  (targetValue (string "highlight selection of chart_type"))
+  (targetValue (string "highlight selection from chart_type"))
 )
 (example
   (utterance "highlight selection in a histogram")
@@ -12,7 +12,7 @@
 )
 (example
   (utterance "highlight selection from the plot in a parallel coordinates plot")
-  (targetValue (string "highlight selection of chart_type chart_type"))
+  (targetValue (string "highlight selection from chart_type chart_type"))
 )
 (example
   (utterance "show selection")
@@ -45,4 +45,12 @@
 (example
   (utterance "show mpg cylinders of selected cars with mpg greater than 5 in a scatterplot")
   (targetValue (string "chart_type selection dim dim filter dim >= 5.0"))
+)
+(example
+  (utterance "select cars with mpg greater than 15")
+  (targetValue (string "select dim >= 15.0"))
+)
+(example
+  (utterance "select cars with mpg greater than 15 into a filter")
+  (targetValue (string "filter selection dim >= 15.0"))
 )
