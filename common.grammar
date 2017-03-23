@@ -31,6 +31,7 @@
 (def @conj_or (string "or"))
 (rule $Conj (and) (ConstantFn @conj_and))
 (rule $Conj (or) (ConstantFn @conj_or))
+(rule $Conj (versus) (ConstantFn @conj_or))
 
 # Preposition
 (def @prep (string "(prep)"))
@@ -39,6 +40,10 @@
 (rule $PrepIn (in) (ConstantFn @prep))
 (rule $PrepIn (within) (ConstantFn @prep))
 (rule $PrepIn (inside) (ConstantFn @prep))
+
+(def @over (string "over"))
+(rule $PrepOverToken ($TOKEN) (FilterTokenFn lemma over by with to against))
+(rule $PrepOver ($PrepOverToken) (ConstantFn @over))
 
 (def @from (string "from"))
 (rule $PrepFrom (from) (ConstantFn @from))

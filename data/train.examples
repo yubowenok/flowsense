@@ -75,3 +75,7 @@
   (utterance "find the maximum of mpg")
   (targetValue (string "filter dim max"))
 )
+(example
+  (utterance "show mpg series over model.year")
+  (targetValue (string "chart_type dim dim"))
+)

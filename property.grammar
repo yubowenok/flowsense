@@ -28,13 +28,13 @@
 
 # width set 5
 (rule $PropertySetter ($Assign) (ConstantFn (lambda y (lambda x (call + (var x) (call + (string " ") (var y)))))))
-(rule $PropertyPartial ($PropertySetter $PropertyValue) (JoinFn forward))
+(rule $PropertyPartial ($PropertySetter ($Prep optional) $PropertyValue) (JoinFn forward))
 (rule $AssignProperty ($Property $PropertyPartial) (JoinFn backward))
 # set width 5
-(rule $AssignProperty (($Assign optional) $Property $PropertyValue) (ConcatFn " "))
+(rule $AssignProperty (($Assign optional) $Property ($Prep optional) $PropertyValue) (ConcatFn " "))
 # set 5 width
-(rule $PropertyPartial3 ($PropertySetter $PropertyValue) (JoinFn forward))
-(rule $AssignProperty ($PropertyPartial3 $Property) (JoinFn forward))
+(rule $PropertyPartial2 ($PropertySetter ($Prep optional) $PropertyValue) (JoinFn forward))
+(rule $AssignProperty ($PropertyPartial2 $Property) (JoinFn forward))
 
 # increase width
 (rule $AssignProperty ($ValueChange $Property) (ConcatFn reverse " "))

@@ -15,7 +15,7 @@
 (rule $Dims ($Dim) (IdentityFn))
 (rule $Dims ($Dim (, optional) ($Conj optional) $Dims) (ConcatFn " "))
 (rule $Dims ($Dim (, optional) $Dims) (ConcatFn " "))
-(rule $Dims ($Dim over $Dim) (ConcatFn " "))
+(rule $Dims ($Dim ($PrepOver optional) $Dim) (ConcatFn " "))
 
 (rule $GroupPartial ($GroupBy) (ConstantFn (lambda x (lambda y (call + (var x) (string " ") (var y))))))
 (rule $Group ($GroupPartial $Dim) (JoinFn forward))

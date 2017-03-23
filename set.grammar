@@ -1,0 +1,32 @@
+(def @minus (string "minus"))
+(def @union (string "union"))
+(def @intersect (string "intersect"))
+
+(rule $DifferenceToken ($TOKEN) (FilterTokenFn lemma diff differ different difference))
+(rule $IntersectionToken ($TOKEN) (FilterTokenFn lemma intersect intersection join common share shared))
+(rule $UnionToken ($TOKEN) (FilterTokenFn lemma union merge combine put unify))
+(rule $UnionToken (combined ($StopNoun optional)) (IdentityFn))
+(rule $UnionToken (merged ($StopNoun optional)) (IdentityFn))
+(rule $UnionToken ($UnionToken together) (IdentityFn))
+
+(rule $DiffSet ($DifferenceToken) (ConstantFn @minus))
+(rule $UnionSet ($UnionToken) (ConstantFn @union))
+(rule $IntersectionSet ($IntersectionToken) (ConstantFn @intersect))
+
+(rule $AnySet ($DiffSet) (IdentityFn))
+(rule $AnySet ($UnionSet) (IdentityFn))
+(rule $AnySet ($IntersectionSet) (IdentityFn))
+(rule $AnySet ($AnySet $StopNoun) (SelectFn 0))
+(rule $AnySet ($Det $AnySet) (SelectFn 1))
+
+(rule $TwoNodes (($Prep optional) $Node ($Conj optional) $Node) (ConcatFn " "))
+(rule $OneNode (($Prep optional) $Node) (IdentityFn))
+(rule $FromNode (($Det optional) ($StopNoun optional) ($Prep optional) $Node) (IdentityFn))
+
+(rule $Set (($FindWord optional) $AnySet $TwoNodes) (ConcatFn " "))
+(rule $Set (($FindWord optional) $AnySet ($Prep optional) ($StopNoun optional) $OneNode) (ConcatFn " "))
+(rule $Set (($FindWord optional) $AnySet $FromNode ($Prep optional) $FromNode) (ConcatFn " "))
+(rule $Set (($FindWord optional) $AnySet $FromNode) (ConcatFn " "))
+
+### Application
+(rule $Command ($Set) (IdentityFn))

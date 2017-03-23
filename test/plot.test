@@ -35,3 +35,15 @@
   (utterance "show mpg over model.year by origin in a line chart")
   (targetValue (string "chart_type dim dim dim"))
 )
+(example
+  (utterance "show mpg series")
+  (targetValue (string "chart_type dim"))
+)
+(example
+  (utterance "show mpg series over model.year")
+  (targetValue (string "chart_type dim dim"))
+)
+(example
+  (utterance "show mpg series over model.year by origin")
+  (targetValue (string "chart_type dim dim dim"))
+)

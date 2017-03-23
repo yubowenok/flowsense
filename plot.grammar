@@ -33,8 +33,16 @@
 # show all the dimensions in a parallel coordinates
 (rule $Plot ($PlotPhrase $Dims ($Prep optional) ($Det optional) ($Chart optional)) (ConcatFn " "))
 
+# mpg series
+(rule $DimChart ($Dims $Chart) (ConcatFn reverse " "))
+# mpg series over time
+(rule $DimChart ($DimChart ($PrepOver optional) $Dim) (ConcatFn " "))
+
 # mpg scatterplot
-(rule $Plot ($Dims $PlotPhrase) (ConcatFn reverse " "))
+(rule $Plot ($DimChart) (IdentityFn))
+
+# show mpg series over time
+(rule $Plot ($PlotPhrase $DimChart) (SelectFn 1))
 
 
 ### Application ###

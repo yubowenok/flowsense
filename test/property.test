@@ -4,6 +4,10 @@
   (targetValue (string "color blue"))
 )
 (example
+  (utterance "color by red")
+  (targetValue (string "color red"))
+)
+(example
   (utterance "change opacity to 0.5")
   (targetValue (string "opacity 0.5"))
 )

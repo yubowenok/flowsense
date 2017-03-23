@@ -5,6 +5,7 @@
 (include selection.grammar)
 (include filter.grammar)
 (include load.grammar)
+(include set.grammar)
 (include link.grammar)
 (include utils.grammar)
 
