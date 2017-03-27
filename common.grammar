@@ -87,7 +87,7 @@
 
 ### Value Changes ###
 (def @increase (string "+"))
-(rule $Increase ($TOKEN) (FilterTokenFn lemma add big bigger bold bolder increase increment large larger more prominent thick thicker +))
+(rule $Increase ($TOKEN) (FilterTokenFn lemma add big bigger bold bolder increase increment large larger more prominent thick thicker great greater +))
 (def @decrease (string "-"))
 (rule $Decrease ($TOKEN) (FilterTokenFn lemma decrease deduct less fewer reduce small smaller thin thinner -))
 
@@ -107,7 +107,8 @@
 
 # Grouping
 (def @group (string "group"))
-(rule $GroupBy (group ($Prep optional)) (ConstantFn @group))
+(rule $GroupToken ($TOKEN) (FilterTokenFn lemma group))
+(rule $GroupBy ($GroupToken ($Prep optional)) (ConstantFn @group))
 (rule $GroupBy (by) (ConstantFn @group))
 
 # Nodes

@@ -1,7 +1,7 @@
 ### Plot ###
 
 (def @show (string "show"))
-(rule $ShowVerb ($TOKEN) (FilterTokenFn lemma show chart create draw illustrate present render show visualize))
+(rule $ShowVerb ($TOKEN) (FilterTokenFn lemma show chart create draw illustrate present render show visualize view see))
 
 (rule $Show ($ShowVerb) (ConstantFn @show))
 (rule $Show ($ShowVerb $StopNoun) (ConstantFn @show))

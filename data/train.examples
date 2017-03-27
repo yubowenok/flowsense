@@ -79,3 +79,8 @@
   (utterance "show mpg series over model.year")
   (targetValue (string "chart_type dim dim"))
 )
+# prevents mpg of selection to become a filter
+(example
+  (utterance "show mpg of selected cars in a histogram")
+  (targetValue (string "chart_type selection dim"))
+)
