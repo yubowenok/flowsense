@@ -1,109 +1,35 @@
+(include pos.grammar)
 (include stop.grammar)
 
 ### Auxiliary tokens ###
 
-# Time
-(rule $Time ($PHRASE) (DateFn))
+# Date
+(rule $Date ($PHRASE) (DateFn))
 
 # Number
-(rule $NumberPhrase ($PHRASE) (FilterPosTagFn token CD))
-(rule $NumberToken ($TOKEN) (FilterPosTagFn token CD))
-(rule $Number ($NumberPhrase) (NumberFn))
+# (rule $NumberPhrase ($PHRASE) (FilterPosTagFn token CD))
+(rule $Number ($PHRASE) (NumberFn))
 
 (def @percent (string "%"))
-(rule $PercentToken (%) (ConstantFn @percent))
-(rule $PercentToken (percent) (ConstantFn @percent))
-(rule $PercentToken (percentage) (ConstantFn @percent))
+(rule $PercentToken_ ($TOKEN) (FilterTokenFn lemma % percent percentage))
+(rule $PercentToken ($PercentToken_) (ConstantFn @percent))
 # This will return "5 percent" or "5 %".
 # Because of the NER span priority there seems to be no way we can overwrite this.
 # There we shall check both result formats.
-(rule $PercentSpan ($PHRASE) (FilterNerSpanFn PERCENT))
+(rule $PercentPhrase ($PHRASE) (FilterNerSpanFn PERCENT))
 
 (rule $CountPercent ($Number) (IdentityFn))
-(rule $CountPercent ($PercentSpan) (IdentityFn))
-(rule $CountPercent ($Number $PercentToken) (ConcatFn " "))
+(rule $CountPercent ($PercentPhrase) (IdentityFn))
+(rule $CountPercent ($Number $PercentToken) (ConcatFn ""))
 
 # Phrase with length constraint
 (rule $PhraseValue ($PHRASE) (FilterPosTagFn span reverse IN TO DT WDT))
 
-# Conjecture
-(def @conj_and (string "and"))
-(def @conj_or (string "or"))
-(rule $Conj (and) (ConstantFn @conj_and))
-(rule $Conj (or) (ConstantFn @conj_or))
-(rule $Conj (versus) (ConstantFn @conj_or))
-
-# Preposition
-(def @prep (string "(prep)"))
-(rule $Prep ($TOKEN) (FilterPosTagFn token IN TO))
-
-(rule $PrepIn (in) (ConstantFn @prep))
-(rule $PrepIn (within) (ConstantFn @prep))
-(rule $PrepIn (inside) (ConstantFn @prep))
-
-(def @over (string "over"))
-(rule $PrepOverToken ($TOKEN) (FilterTokenFn lemma over by with to against))
-(rule $PrepOver ($PrepOverToken) (ConstantFn @over))
-
-(def @from (string "from"))
-(rule $PrepFrom (from) (ConstantFn @from))
-(rule $PrepFrom (in) (ConstantFn @from))
-(rule $PrepFrom (of) (ConstantFn @from))
-
-(def @to (string "to"))
-(rule $PrepTo (in) (ConstantFn @to))
-(rule $PrepTo (to) (ConstantFn @to))
-(rule $PrepTo (in to) (ConstantFn @to))
-(rule $PrepTo (into) (ConstantFn @to))
-(rule $PrepTo (on to) (ConstantFn @to))
-(rule $PrepTo (onto) (ConstantFn @to))
-
-(rule $PrepBy (by) (ConstantFn @prep))
-(rule $PrepBy (to) (ConstantFn @prep))
-(rule $PrepBy (with) (ConstantFn @prep))
-(rule $PrepBy (via) (ConstantFn @prep))
-
-# Determiner
-(def @det (string "(det)"))
-(rule $Det ($TOKEN) (FilterPosTagFn token DT WDT PRP PRP$))
-
-# Quantifier
-(def @quant_one (string "one"))
-(def @quant_all (string "all"))
-(rule $QuantAny (a) (ConstantFn @quant_one))
-(rule $QuantAny (an) (ConstantFn @quant_one))
-(rule $QuantAny (one) (ConstantFn @quant_one))
-(rule $QuantAny (any) (ConstantFn @quant_one))
-(rule $QuantAll (every) (ConstantFn @quant_all))
-(rule $QuantAll (all) (ConstantFn @quant_all))
-
-# Adverb
-(rule $Only ($TOKEN) (FilterPosTagFn token RB))
-
 # Passive Objects
-(def @passive_object (string "(object)"))
-(rule $PassiveObject ($TOKEN) (FilterPosTagFn token DT WDT PRP PRP$))
+# (def @passive_object (string "(object)"))
+# (rule $PassiveObject ($TOKEN) (FilterPosTagFn token DT WDT PRP PRP$))
 
 
-### Value Changes ###
-(def @increase (string "+"))
-(rule $Increase ($TOKEN) (FilterTokenFn lemma add big bigger bold bolder increase increment large larger more prominent thick thicker great greater +))
-(def @decrease (string "-"))
-(rule $Decrease ($TOKEN) (FilterTokenFn lemma decrease deduct less fewer reduce small smaller thin thinner -))
-
-(rule $ValueChange ($Increase) (ConstantFn @increase))
-(rule $ValueChange ($Decrease) (ConstantFn @decrease))
-
-(def @dark (string "dark"))
-(def @bright (string "bright"))
-(rule $Dark ($TOKEN) (FilterTokenFn lemma dark dim))
-(rule $Bright ($TOKEN) (FilterTokenFn lemma bright light))
-
-(rule $ColorChange ($Dark) (ConstantFn @dark))
-(rule $ColorChange ($Bright) (ConstantFn @bright))
-
-# Assign verb
-(rule $Assign ($TOKEN) (FilterTokenFn lemma set make change draw show equal =))
 
 # Grouping
 (def @group (string "group"))

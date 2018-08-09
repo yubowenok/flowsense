@@ -1,0 +1,45 @@
+# Conjecture
+(def @conj_and (string "and"))
+(def @conj_or (string "or"))
+(rule $Conj (and) (ConstantFn @conj_and))
+(rule $Conj (or) (ConstantFn @conj_or))
+# (rule $Conj (versus) (ConstantFn @conj_or))
+
+# Preposition
+(rule $Prep ($TOKEN) (FilterPosTagFn token IN TO))
+
+# "over" is a specification for series column
+(def @over (string "over"))
+(rule $PrepOverToken ($TOKEN) (FilterTokenFn lemma over by with to against along))
+(rule $PrepOver ($PrepOverToken) (ConstantFn @over))
+
+# "from" is a specification for diagram connection source
+(def @from (string "from"))
+(rule $PrepFrom_ ($TOKEN) (FilterTokenFn lemma from in of))
+(rule $PrepFrom ($PrepFrom_) (ConstantFn @from))
+
+# "to" is a specification for diagram connection target
+(def @to (string "to"))
+(rule $PrepTo_ ($TOKEN) (FilterTokenFn lemma in to onto into))
+(rule $PrepTo_ (in to) (IdentityFn))
+(rule $PrepTo_ (on to) (IdentityFn))
+(rule $PrepTo ($PrepTo_) (ConstantFn @to))
+
+(def @by (string "by"))
+(rule $PrepBy ($Prep) (FilterPosTagFn token IN))
+
+# Determiner
+# DT: a, the, that, these
+(def @det (string "(det)"))
+(rule $Det ($TOKEN) (FilterPosTagFn token DT WDT PRP PRP$))
+
+# Quantifier
+(def @quant_one (string "one"))
+(def @quant_all (string "all"))
+(rule $QuantAny_ ($TOKEN) (FilterTokenFn lemma a an one any))
+(rule $QuantAny ($QuantAny_) (ConstantFn @quant_one))
+(rule $QuantAll_ ($TOKEN) (FilterTokenFn lemma every all))
+(rule $QuantAll ($QuantAll_) (ConstantFn @quant_all))
+
+# Adverb
+(rule $Only ($TOKEN) (FilterPosTagFn token RB))

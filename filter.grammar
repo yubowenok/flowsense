@@ -78,6 +78,11 @@
 # (a) name containing buick
 (rule $Condition ($Dim $Contain $TOKEN) (ConcatFn " "))
 
+# with acm name
+(rule $ContainPartial2 ($Prep) (ConstantFn (lambda x (lambda y (call + (var y) (string " contain ") (call .toString (var x)))))))
+(rule $ContainPartialHalf2 ($ContainPartial2 $TOKEN) (JoinFn forward))
+(rule $Condition ($ContainPartialHalf2 $Dim) (JoinFn forward))
+
 
 (def @filter (string "filter"))
 (rule $FilterWord (filter) (ConstantFn @filter))

@@ -16,12 +16,12 @@ done
 
 java -cp libsempre/*:lib/* -ea edu.stanford.nlp.sempre.Main\
     -languageAnalyzer corenlp.CoreNLPAnalyzer\
-    -Grammar.inPaths ../main.grammar\
+    -Grammar.inPaths ../main_tests.grammar\
     -FeatureExtractor.featureDomains rule\
     -Learner.maxTrainIters 3\
     -Dataset.inPaths\
      train:../data/train.examples\
      test:$alltest > $allresult
 
-python ../checker.py $allresult $alltest
+python ../script/checker.py $allresult $alltest
 exit $?

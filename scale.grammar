@@ -1,0 +1,11 @@
+# Color scales
+(def @colorscale_redgreen (string "color redGreen"))
+(rule $ScaleValue (color (scale optional)) (ConstantFn @colorscale_redgreen)) # default color scale
+(rule $ScaleValue (red green) (ConstantFn @colorscale_redgreen))
+(rule $ScaleValue (CWYR) (ConstantFn (string "color CWYR")))
+(rule $ScaleValue (monochrome) (ConstantFn (string "color monochrome")))
+(rule $ScaleValue (red yellow) (ConstantFn (string "color redYellow")))
+(rule $ScaleValue (yellow blue) (ConstantFn (string "color yellowBlue")))
+(rule $ScaleValue (categorical) (ConstantFn (string "color categorical")))
+(rule $ScaleValue ($ScaleValue color (scale optional)) (SelectFn 0))
+(rule $ScaleValue ($ScaleValue colorscale) (SelectFn 0))

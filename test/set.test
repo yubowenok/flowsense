@@ -30,3 +30,7 @@
   (utterance "find the common cars among chart-1 and filter-1")
   (targetValue (string "intersect node node"))
 )
+(example
+  (utterance "merge")
+  (targetValue (string "union"))
+)

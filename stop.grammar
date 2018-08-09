@@ -1,14 +1,18 @@
-(rule $StopCompare ($TOKEN) (FilterTokenFn lemma against exact exactly than that to))
+#(rule $StopCompare ($TOKEN) (FilterTokenFn lemma against exact exactly than that to))
 
-(rule $StopWord (please) (ConstantFn null))
-(rule $StopWord ($TOKEN) (FilterPosTagFn token WRB WDT VBD-AUX WP))
+# WRB: why, where, how
+# WDT: what
+# WP: who
+# VBD-AUX: am, are
+(rule $StopToken ($TOKEN) (FilterPosTagFn token WRB WDT VBD-AUX WP))
 
-(rule $StopNoun ($PHRASE) (FilterPosTagFn span NN NNS NNP NNPS PRP))
-(rule $StopNoun ($Det $StopNoun) (ConcatFn " "))
+# NN: car
+# NNS: cars
+# PRP: I, you, we
+(rule $StopToken ($PHRASE) (FilterPosTagFn span NN NNS NNP NNPS PRP))
 
-(rule $StopPhrase ($StopWord) (IdentityFn))
-(rule $StopPhrase ($StopWord $StopWord) (ConcatFn " "))
+# Determiner: a, the, ...
+(rule $StopToken ($Det) (ConstantFn ""))
 
-(rule $StopValue ($TOKEN) (FilterTokenFn lemma value number))
-
-(rule $ROOT ($StopPhrase) (IdentityFn))
+(rule $StopPhrase ($StopToken) (ConstantFn ""))
+(rule $StopPhrase ($StopToken $StopPhrase) (ConstantFn ""))

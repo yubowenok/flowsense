@@ -1,13 +1,34 @@
-### Rendering properties  ###
-
 (include color.grammar)
+(include scale.grammar)
 
+### Value Changes ###
+(def @increase (string "+"))
+(rule $Increase ($TOKEN) (FilterTokenFn lemma add big bigger bold bolder increase increment large larger more prominent thick thicker great greater +))
+(def @decrease (string "-"))
+(rule $Decrease ($TOKEN) (FilterTokenFn lemma decrease deduct less fewer reduce small smaller thin thinner -))
+
+(rule $ValueChange ($Increase) (ConstantFn @increase))
+(rule $ValueChange ($Decrease) (ConstantFn @decrease))
+
+# (def @dark (string "dark"))
+# (def @bright (string "bright"))
+# (rule $Dark ($TOKEN) (FilterTokenFn lemma dark dim))
+# (rule $Bright ($TOKEN) (FilterTokenFn lemma bright light))
+
+# (rule $ColorChange ($Dark) (ConstantFn @dark))
+# (rule $ColorChange ($Bright) (ConstantFn @bright))
+
+# Assign verb
+(rule $Assign ($TOKEN) (FilterTokenFn lemma set make change draw show equal =))
+
+
+### Visual properties  ###
 (rule $ColorPhrase ($ColorValue) (IdentityFn))
 (rule $ColorPhrase (color $ColorValue) (IdentityFn))
 (rule $ColorPhrase ($ColorValue color) (IdentityFn))
 (rule $ColorPhrase (to $ColorPhrase) (IdentityFn))
 
-(rule $PropertyValue ($ColorChange) (IdentityFn))
+# (rule $PropertyValue ($ColorChange) (IdentityFn))
 (rule $PropertyValue ($ColorPhrase) (IdentityFn))
 (rule $PropertyValue ($ValueChange) (IdentityFn))
 (rule $PropertyValue ((to optional) $Number) (IdentityFn))
@@ -24,7 +45,7 @@
 
 # encoding keywords
 (def @encode (string "encode"))
-(rule $Encode ($TOKEN) (FilterTokenFn lemma encode map))
+(rule $Encode ($TOKEN) (FilterTokenFn lemma encode map)) 
 
 # width set 5
 (rule $PropertySetter ($Assign) (ConstantFn (lambda y (lambda x (call + (var x) (call + (string " ") (var y)))))))
@@ -56,7 +77,7 @@
 # Strangely, if the phrase is in the form "5 to 6", the CoreNLP parser in sempre fails to parse it with grammar
 # "$Number to $Number". We suspect it is because of the implementation of the sempre CoreNLP class. Further investigation pending.
 # For the moment a get-around is to use $NumberToken. This will not interpret sth like "one billion" of course.
-(rule $ValueRange ($NumberToken (to optional) $NumberToken) (ConcatFn " "))
+(rule $ValueRange ($Number (to optional) $Number) (ConcatFn " "))
 (rule $ValueRange ($Number ($Conj optional) $Number) (ConcatFn " "))
 (rule $ValueRange (from $ValueRange) (IdentityFn))
 
@@ -64,16 +85,16 @@
 (rule $NumericalScale (($PrepBy optional) $ValueRange $ValueProperty) (ConcatFn reverse " "))
 (rule $NumericalScale (($PrepBy optional) $ValueProperty $ValueRange) (ConcatFn " "))
 
-(rule $AssignProperty (($Encode optional) $Dim $NumericalScale) (JoinFn backward))
+(rule $AssignProperty (($Encode optional) $Column $NumericalScale) (JoinFn backward))
 
 # (color) encode mpg
 (def @default_color_encode (string "color redGreen"))
 (rule $EncodeDefault ($Encode) (ConstantFn @default_color_encode))
 (rule $EncodeDefault (color $Encode) (ConstantFn @default_color_encode))
-(rule $AssignProperty ($EncodeDefault $Dim) (ConcatFn " "))
+(rule $AssignProperty ($EncodeDefault $Column) (ConcatFn " "))
 
 # encode mpg by red green color scale
-(rule $AssignProperty (($Encode optional) $Dim ($PrepBy optional) $ScaleValue) (ConcatFn reverse " "))
+(rule $AssignProperty (($Encode optional) $Column ($PrepBy optional) $ScaleValue) (ConcatFn reverse " "))
 
 
 ### Application ###

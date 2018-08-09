@@ -1,0 +1,25 @@
+(def @column (string "column"))
+(def @all_columns (string "all_columns"))
+
+(rule $ColumnToken ($TOKEN) (FilterTokenFn lemma column attribute dimension))
+
+(rule $Column ($ColumnToken) (ConstantFn @column))
+(rule $Column ($QuantAny $ColumnToken) (ConstantFn @column))
+(rule $Column ($Det $Column) (ConstantFn @column))
+(rule $Column ($Column $StopPhrase) (ConstantFn @column))
+(rule $Column ($Det $StopPhrase ($Prep optional) $Column) (ConstantFn @column))
+
+# Single or multiple dimensions
+(rule $Columns ($Column) (IdentityFn))
+(rule $Columns ($Column (, optional) ($Conj optional) $Columns) (ConcatFn " "))
+(rule $Columns ($Column (, optional) $Columns) (ConcatFn " "))
+(rule $Columns ($Column ($PrepOver optional) $Column) (ConcatFn " "))
+
+(rule $GroupPartial ($GroupBy) (ConstantFn (lambda x (lambda y (call + (var x) (string " ") (var y))))))
+(rule $Group ($GroupPartial $Column) (JoinFn forward))
+(rule $Columns ($Columns $Group) (JoinFn backward))
+
+
+(rule $AllColumns (all ($Prep optional) ($Det optional) $LEMMA_TOKEN) (ConstantFn @all_columns))
+
+(rule $Columns ($AllColumns) (IdentityFn))

@@ -59,6 +59,10 @@
   (targetValue (string "filter dim min 5.0"))
 )
 (example
+  (utterance "show cars with amc name")
+  (targetValue (string "filter dim contain amc"))
+)
+(example
   (utterance "find 5 percent of cars with maximum mpg")
   (targetValue (string "filter dim max 5 percent"))
 )

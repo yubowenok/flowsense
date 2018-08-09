@@ -27,6 +27,7 @@
 (rule $Set (($FindWord optional) $AnySet ($Prep optional) ($StopNoun optional) $OneNode) (ConcatFn " "))
 (rule $Set (($FindWord optional) $AnySet $FromNode ($Prep optional) $FromNode) (ConcatFn " "))
 (rule $Set (($FindWord optional) $AnySet $FromNode) (ConcatFn " "))
+(rule $Set (($FindWord optional) $AnySet) (IdentityFn))
 
 ### Application
 (rule $Command ($Set) (IdentityFn))
