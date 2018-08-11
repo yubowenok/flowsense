@@ -1,4 +1,3 @@
-# Rendering properties
 (example
   (utterance "set blue color")
   (targetValue (string "color:blue"))
@@ -39,7 +38,8 @@
   (utterance "color encode mpg")
   (targetValue (string "column:color:red-green"))
 )
-# because of the CoreNLP number range problem, we do not get numerical values here
+# Because of the NumberFn issue regarding "from ... to ...",
+# we do not get floating points 5.0, 6.0 here.
 (example
   (utterance "map mpg to size from 5 to 6")
   (targetValue (string "column:size:5:6"))

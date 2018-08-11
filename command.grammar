@@ -3,4 +3,3 @@
 (rule $Command ($Command $StopPhrase) (SelectFn 0))
 (rule $Command ($Command $Command) (ConcatFn ";"))
 (rule $ROOT ($Command) (IdentityFn))
-

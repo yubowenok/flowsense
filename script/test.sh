@@ -23,5 +23,5 @@ java -cp libsempre/*:lib/* -ea edu.stanford.nlp.sempre.Main\
      train:../data/train.examples\
      test:$alltest > $allresult
 
-python ../script/checker.py $allresult $alltest
+python ../script/test_checker.py $allresult $alltest
 exit $?
