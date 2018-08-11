@@ -1,7 +1,8 @@
 (include common.grammar)
-#(include dimension.grammar)
+(include column.grammar)
+(include visuals.grammar)
+
 #(include plot.grammar)
-#(include property.grammar)
 #(include selection.grammar)
 #(include filter.grammar)
 #(include load.grammar)
@@ -12,6 +13,4 @@
 ### Testing grammar includes constants ###
 (include testing.grammar)
 
-### Wrap up everything ###
-(rule $ROOT ($Command) (IdentityFn))
-#(rule $ROOT (($StopPhrase optional) $Command (? optional)) (IdentityFn))
+(include command.grammar)

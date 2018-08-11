@@ -19,7 +19,6 @@
 (rule $Group ($GroupPartial $Column) (JoinFn forward))
 (rule $Columns ($Columns $Group) (JoinFn backward))
 
-
 (rule $AllColumns (all ($Prep optional) ($Det optional) $LEMMA_TOKEN) (ConstantFn @all_columns))
 
 (rule $Columns ($AllColumns) (IdentityFn))

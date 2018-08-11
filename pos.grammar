@@ -1,12 +1,20 @@
-# Conjecture
-(def @conj_and (string "and"))
-(def @conj_or (string "or"))
-(rule $Conj (and) (ConstantFn @conj_and))
-(rule $Conj (or) (ConstantFn @conj_or))
-# (rule $Conj (versus) (ConstantFn @conj_or))
+# Conjunction
+(rule $Conj (and) (ConstantFn "and"))
+(rule $Conj (or) (ConstantFn "or"))
 
 # Preposition
-(rule $Prep ($TOKEN) (FilterPosTagFn token IN TO))
+# IN, TO: in, within, to
+# VBG: using
+(rule $Prep ($TOKEN) (FilterPosTagFn token IN TO VBG))
+
+# Verb
+(rule $Verb ($TOKEN) (FilterPosTagFn token VB VBN VBP))
+# Handle special verbs that can be recognized as NN
+(rule $Verb ($TOKEN) (FilterTokenFn lemma map change))
+
+# To connectors
+(rule $To_ ($TOKEN) (FilterPosTagFn token TO VBD-AUX))
+(rule $To ($To_) (ConstantFn ""))
 
 # "over" is a specification for series column
 (def @over (string "over"))

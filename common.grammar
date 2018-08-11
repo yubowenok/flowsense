@@ -1,5 +1,6 @@
 (include pos.grammar)
 (include stop.grammar)
+(include column.grammar)
 
 ### Auxiliary tokens ###
 
@@ -7,8 +8,20 @@
 (rule $Date ($PHRASE) (DateFn))
 
 # Number
-# (rule $NumberPhrase ($PHRASE) (FilterPosTagFn token CD))
-(rule $Number ($PHRASE) (NumberFn))
+(rule $NumberPhrase ($PHRASE) (FilterPosTagFn token CD))
+(rule $Number ($NumberPhrase) (NumberFn))
+
+(rule $RangeValue ($Number) (IdentityFn))
+(rule $RangeValue ($Date) (IdentityFn))
+
+# 5 to 6, from 5 to 6, etc
+(rule $NumericalRange (($Prep optional) $RangeValue ($Prep optional) $RangeValue) (ConcatFn ":"))
+# Strangely, sempre NumberFn fails to parse "from 5 to 6".
+# It may be because of the implementation of the sempre CoreNLP class. 
+# For the moment a get-around is to use $NumberPhrase,
+# which however does not interpret string phrase "one billion".
+(rule $NumericalRange (($Prep optional) $NumberPhrase ($Prep optional) $NumberPhrase) (ConcatFn ":"))
+
 
 (def @percent (string "%"))
 (rule $PercentToken_ ($TOKEN) (FilterTokenFn lemma % percent percentage))

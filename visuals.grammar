@@ -1,101 +1,69 @@
 (include color.grammar)
 (include scale.grammar)
 
-### Value Changes ###
-(def @increase (string "+"))
-(rule $Increase ($TOKEN) (FilterTokenFn lemma add big bigger bold bolder increase increment large larger more prominent thick thicker great greater +))
-(def @decrease (string "-"))
-(rule $Decrease ($TOKEN) (FilterTokenFn lemma decrease deduct less fewer reduce small smaller thin thinner -))
+### Assign visual properties  ###
+(rule $ColorVisualType ($TOKEN) (FilterTokenFn lemma color border))
+(rule $NumericalVisualType ($TOKEN) (FilterTokenFn lemma size width opacity))
 
-(rule $ValueChange ($Increase) (ConstantFn @increase))
-(rule $ValueChange ($Decrease) (ConstantFn @decrease))
+(rule $VisualType ($ColorVisualType) (IdentityFn))
+(rule $VisualType ($NumericalVisualType) (IdentityFn))
 
-# (def @dark (string "dark"))
-# (def @bright (string "bright"))
-# (rule $Dark ($TOKEN) (FilterTokenFn lemma dark dim))
-# (rule $Bright ($TOKEN) (FilterTokenFn lemma bright light))
+(rule $VisualValue ($Number) (IdentityFn))
+(rule $VisualValue ($Color) (IdentityFn))
 
-# (rule $ColorChange ($Dark) (ConstantFn @dark))
-# (rule $ColorChange ($Bright) (ConstantFn @bright))
+# size 5
+(rule $VisualPair ($VisualType ($To optional) $VisualValue) (ConcatFn ":"))
+# red border
+(rule $VisualPair ($VisualValue ($To optional) $VisualType) (ConcatFn reverse ":"))
 
-# Assign verb
-(rule $Assign ($TOKEN) (FilterTokenFn lemma set make change draw show equal =))
+# $StopPhrase: give "it" red color
+(rule $SetVisual (($Verb optional) ($StopPhrase optional) $VisualPair) (IdentityFn))
+
+# visual value increase and decrease
+(rule $Increase_ ($TOKEN) (FilterTokenFn lemma add big bigger bold bolder increase increment large larger more prominent thick thicker great greater +))
+(rule $Increase ($Increase_) (ConstantFn "+"))
+(rule $Decrease_ ($TOKEN) (FilterTokenFn lemma decrease deduct less fewer reduce small smaller thin thinner -))
+(rule $Decrease ($Decrease_) (ConstantFn "-"))
+(rule $IncreaseDecrease ($Increase) (IdentityFn))
+(rule $IncreaseDecrease ($Decrease) (IdentityFn))
+
+# make size bigger
+(rule $SetVisual (($Verb optional) $VisualType $IncreaseDecrease) (ConcatFn ":"))
+# increase size
+(rule $SetVisual ($IncreaseDecrease $VisualType) (ConcatFn reverse ":"))
+
+# Conjunction: set width to 5 and opacity to 1
+(rule $SetVisual ($SetVisual (and optional) $SetVisual) (ConcatFn " "))
 
 
-### Visual properties  ###
-(rule $ColorPhrase ($ColorValue) (IdentityFn))
-(rule $ColorPhrase (color $ColorValue) (IdentityFn))
-(rule $ColorPhrase ($ColorValue color) (IdentityFn))
-(rule $ColorPhrase (to $ColorPhrase) (IdentityFn))
+### Apply visual encoding ###
 
-# (rule $PropertyValue ($ColorChange) (IdentityFn))
-(rule $PropertyValue ($ColorPhrase) (IdentityFn))
-(rule $PropertyValue ($ValueChange) (IdentityFn))
-(rule $PropertyValue ((to optional) $Number) (IdentityFn))
+# mpg by red green color scale
+(rule $ApplyScale ($Column ($Prep optional) $ColorScale) (ConcatFn ":color:"))
 
-# supported rendering properties
-(rule $ColorProperty (color) (ConstantFn (string "color")))
-(rule $ColorProperty (border) (ConstantFn (string "border")))
-(rule $ValueProperty (opacity) (ConstantFn (string "opacity")))
-(rule $ValueProperty (size) (ConstantFn (string "size")))
-(rule $ValueProperty (width) (ConstantFn (string "width")))
+# size from 5 to 6
+(rule $VisualScale ($VisualType $Scale) (ConcatFn ":"))
+# 5 to 6 size
+(rule $VisualScale ($Scale $VisualType) (ConcatFn reverse ":"))
+# size 5 to 6 by mpg
+(rule $ApplyScale ($VisualScale ($Prep optional) $Column) (ConcatFn reverse ":"))
+# mpg to 5 to 6 size
+(rule $ApplyScale ($Column ($Prep optional) $VisualScale ) (ConcatFn ":"))
 
-(rule $Property ($ColorProperty) (IdentityFn))
-(rule $Property ($ValueProperty) (IdentityFn))
+(rule $EncodeVisual (($Verb optional) $ApplyScale) (IdentityFn))
 
-# encoding keywords
-(def @encode (string "encode"))
-(rule $Encode ($TOKEN) (FilterTokenFn lemma encode map)) 
+# Shortcuts without scales. Use default scale instead.
+# color by mpg, cylinders by width
+(rule $ColorVisualShortcut_ ($ColorVisualType ($Verb optional) ($Prep optional) $Column) (ConcatFn reverse ":"))
+(rule $ColorVisualShortcut_ ($Column ($Verb optional) ($Prep optional) $ColorVisualType) (ConcatFn ":"))
+(rule $ColorVisualShortcut ($ColorVisualShortcut_) (ConcatFn append @default_color_scale))
+(rule $NumericalVisualShortcut_ ($NumericalVisualType ($Verb optional) ($Prep optional) $Column) (ConcatFn reverse ":"))
+(rule $NumericalVisualShortcut_ ($Column ($Verb optional) ($Prep optional) $NumericalVisualType) (ConcatFn ":"))
+(rule $NumericalVisualShortcut ($NumericalVisualShortcut_) (ConcatFn append @default_numerical_scale))
 
-# width set 5
-(rule $PropertySetter ($Assign) (ConstantFn (lambda y (lambda x (call + (var x) (call + (string " ") (var y)))))))
-(rule $PropertyPartial ($PropertySetter ($Prep optional) $PropertyValue) (JoinFn forward))
-(rule $AssignProperty ($Property $PropertyPartial) (JoinFn backward))
-# set width 5
-(rule $AssignProperty (($Assign optional) $Property ($Prep optional) $PropertyValue) (ConcatFn " "))
-# set 5 width
-(rule $PropertyPartial2 ($PropertySetter ($Prep optional) $PropertyValue) (JoinFn forward))
-(rule $AssignProperty ($PropertyPartial2 $Property) (JoinFn forward))
-
-# increase width
-(rule $AssignProperty ($ValueChange $Property) (ConcatFn reverse " "))
-(rule $AssignProperty ($ValueChange $Property) (ConcatFn reverse " "))
-
-# width increase
-(rule $AssignProperty ($Property $ValueChange) (ConcatFn " "))
-
-# set width 5 and opacity 1
-(rule $AssignProperty ($AssignProperty ($Conj optional) $AssignProperty) (ConcatFn " "))
-
-# color from red to green (not yet differentiate different scales here)
-(rule $ScaleValue ($ColorProperty from ($PHRASE optional)) (ConstantFn @colorscale_redgreen))
-
-(rule $ScaleValue ($PrepBy $ScaleValue) (SelectFn 1))
-(rule $ScaleValue ($NumericalScale) (IdentityFn))
-
-# map mpg to size from 5 to 6
-# Strangely, if the phrase is in the form "5 to 6", the CoreNLP parser in sempre fails to parse it with grammar
-# "$Number to $Number". We suspect it is because of the implementation of the sempre CoreNLP class. Further investigation pending.
-# For the moment a get-around is to use $NumberToken. This will not interpret sth like "one billion" of course.
-(rule $ValueRange ($Number (to optional) $Number) (ConcatFn " "))
-(rule $ValueRange ($Number ($Conj optional) $Number) (ConcatFn " "))
-(rule $ValueRange (from $ValueRange) (IdentityFn))
-
-# map mpg to 5 and 6 size
-(rule $NumericalScale (($PrepBy optional) $ValueRange $ValueProperty) (ConcatFn reverse " "))
-(rule $NumericalScale (($PrepBy optional) $ValueProperty $ValueRange) (ConcatFn " "))
-
-(rule $AssignProperty (($Encode optional) $Column $NumericalScale) (JoinFn backward))
-
-# (color) encode mpg
-(def @default_color_encode (string "color redGreen"))
-(rule $EncodeDefault ($Encode) (ConstantFn @default_color_encode))
-(rule $EncodeDefault (color $Encode) (ConstantFn @default_color_encode))
-(rule $AssignProperty ($EncodeDefault $Column) (ConcatFn " "))
-
-# encode mpg by red green color scale
-(rule $AssignProperty (($Encode optional) $Column ($PrepBy optional) $ScaleValue) (ConcatFn reverse " "))
-
+(rule $EncodeVisual (($Verb optional) $ColorVisualShortcut) (IdentityFn))
+(rule $EncodeVisual (($Verb optional) $NumericalVisualShortcut) (IdentityFn))
 
 ### Application ###
-(rule $Command ($AssignProperty) (IdentityFn))
+(rule $Command ($SetVisual) (IdentityFn))
+(rule $Command ($EncodeVisual) (IdentityFn))

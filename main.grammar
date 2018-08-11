@@ -12,5 +12,4 @@
 
 ### Testing grammar includes constants ###
 
-### Wrap up everything ###
-(rule $ROOT ($Command) (IdentityFn))
+(include command.grammar)

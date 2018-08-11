@@ -11,7 +11,7 @@ before_script:
 
 # now at flowsense/sempre
 script:
-  - ../tester.sh
+  - ../script/tester.sh
   - rm -rf ../sempre_lib
   - rm -rf ../sempre_fig
   - mv lib ../sempre_lib

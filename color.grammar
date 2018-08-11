@@ -148,6 +148,4 @@
 (rule $ColorValue (yellow) (ConstantFn "yellow"))
 (rule $ColorValue (yellow green) (ConstantFn "yellowgreen"))
 
-(rule $Color (($Prep optional) $ColorValue color) (ConcatFn prepend "color:"))
-
-(rule $ROOT ($Color) (IdentityFn))
+(rule $Color (($Prep optional) $ColorValue (color optional)) (IdentityFn))
