@@ -35,6 +35,18 @@
 (rule $Plot ($PlotPhrase $DimChart) (SelectFn 1))
 
 
-### Application ###
+### With filters ###
+## show/find cars with mpg smaller than 15 in a histogram
+#(rule $Plot (($Show optional) $Filter ($Prep optional) $ChartPartial) (JoinFn backward))
+#(rule $Plot (($Show optional) $Find ($Prep optional) $ChartPartial) (JoinFn backward))
+#
+## show/find (cars) (with) mpg greater than 15
+#(rule $Find ($FindWord $Condition) (ConcatFn " "))
+#(rule $Filter ($FilterWord ($StopNoun optional) ($Prep optional) $Condition) (ConcatFn " "))
+#
+## show cars with an mpg of 15
+#(rule $Plot ($PlotPhrase $FilterCondition) (ConcatFn " "))
+
+
 (rule $Command ($Plot) (IdentityFn))
 

@@ -7,14 +7,16 @@
 # WDT: what
 # WP: who
 # VBD-AUX: am, are
-(rule $StopToken ($TOKEN) (FilterPosTagFn token WRB WDT VBD-AUX WP))
+# RB: only
+(rule $StopToken ($TOKEN) (FilterPosTagFn token WRB WDT VBD-AUX WP RB))
 
 # NN: car
 # NNS: cars
 # PRP: I, you, we
-(rule $StopNoun ($PHRASE) (FilterPosTagFn span NN NNS NNP NNPS PRP))
-(rule $StopNoun ($TOKEN) (FilterPosTagFn token NN NNS NNP NNPS PRP))
-# (rule $StopNoun ($Det StopNoun) (SelectFn 1))
+(rule $StopNoun ($TOKEN) (FilterPosTagFn token DT NN NNS NNP NNPS PRP))
+(rule $StopNoun ($StopNoun $StopNoun) (IdentityFn))
+# of cars
+(rule $StopNoun ($Prep $TOKEN) (SelectFn 1))
 
 # Determiner: a, the, ...
 (rule $StopToken ($Det) (ConstantFn ""))

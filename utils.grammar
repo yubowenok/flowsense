@@ -1,6 +1,6 @@
 # Auto Layout
 (def @auto_layout (string "auto-layout"))
-(rule $AutoLayoutPhrase (($Verb optional) ($StopPhrase optional) layout) (IdentityFn))
+(rule $AutoLayoutPhrase (($Verb optional) ($StopPhrase optional) layout ($StopNoun optional)) (IdentityFn))
 (rule $AutoLayoutPhrase (($Adj optional) layout) (IdentityFn))
 (rule $AutoLayoutPhrase (autolayout) (IdentityFn))
 

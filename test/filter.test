@@ -1,0 +1,60 @@
+(example
+  (utterance "cars with mpg greater than 15")
+  (targetValue (string "filter:column:>=:15.0"))
+)
+(example
+  (utterance "find cars with mpg greater than or equal to 15")
+  (targetValue (string "filter:column:>=:15.0"))
+)
+(example
+  (utterance "find name equals buick")
+  (targetValue (string "filter:column:=:buick"))
+)
+(example
+  (utterance "draw only name being buick")
+  (targetValue (string "filter:column:=:buick"))
+)
+(example
+  (utterance "show only cars with mpg greater than 15")
+  (targetValue (string "filter:column:>=:15.0"))
+)
+(example
+  (utterance "cars with mpg between 10 and 15")
+  (targetValue (string "filter:column:[]:10:15"))
+)
+(example
+  (utterance "search for cars with mpg between 10 and 15")
+  (targetValue (string "filter:column:[]:10:15"))
+)
+(example
+  (utterance "show only cars with mpg greater than 13 and smaller than 15")
+  (targetValue (string "filter:column:>=:13.0:<=:15.0"))
+)
+(example
+  (utterance "find cars with max mpg")
+  (targetValue (string "filter:column:max:1"))
+)
+(example
+  (utterance "find 5 cars with minimum mpg")
+  (targetValue (string "filter:column:min:5.0"))
+)
+(example
+  (utterance "show cars with a name of amc")
+  (targetValue (string "filter:column:=:amc"))
+)
+(example
+  (utterance "find 5 percent of cars with maximum mpg")
+  (targetValue (string "filter:column:max:0.05_%"))
+)
+(example
+  (utterance "find 5 percent of cars with maximum mpg group by origin")
+  (targetValue (string "filter:column:max:0.05_%:group_by:column"))
+)
+(example
+  (utterance "sample 5 percent of cars")
+  (targetValue (string "filter:_index:random:0.05_%"))
+)
+(example
+  (utterance "sample 5 percent of cars group by origin")
+  (targetValue (string "filter:_index:random:0.05_%:group_by:column"))
+)

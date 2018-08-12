@@ -1,6 +1,10 @@
 # Conjunction
+(rule $Conj ($TOKEN) (FilterPosTagFn token CC))
 (rule $Conj ($TOKEN) (FilterTokenFn lemma and with , ;))
 (rule $Conj (or) (ConstantFn "or"))
+
+# Adverb
+(rule $Adverb ($TOKEN) (FilterPosTagFn token RB RBR RBS))
 
 # Preposition
 # IN, TO: in, within, to
@@ -9,8 +13,13 @@
 
 # Verb
 (rule $Verb ($TOKEN) (FilterPosTagFn token VB VBN VBP))
+# e.g. search for
+(rule $Verb ($Verb $Prep) (SelectFn 0))
+# e.g. show only
+(rule $Verb ($Verb $Adverb) (SelectFn 0))
+(rule $Verb ($Adverb $Verb) (SelectFn 1))
 # Handle special verbs that can be recognized as NN/JJ
-(rule $Verb ($TOKEN) (FilterTokenFn lemma map change load open))
+(rule $Verb ($TOKEN) (FilterTokenFn lemma show map change load open sample))
 
 # Adjective
 (rule $Adj ($TOKEN) (FilterPosTagFn token JJ))
@@ -19,6 +28,7 @@
 
 # To connectors
 (rule $To_ ($TOKEN) (FilterPosTagFn token TO VBD-AUX))
+(rule $To_ ($TOKEN) (FilterTokenFn token equal =))
 (rule $To ($To_) (ConstantFn ""))
 
 # "over" is a specification for series column
@@ -53,5 +63,7 @@
 (rule $QuantAll_ ($TOKEN) (FilterTokenFn lemma every all))
 (rule $QuantAll ($QuantAll_) (ConstantFn @quant_all))
 
-# Adverb
-(rule $Only ($TOKEN) (FilterPosTagFn token RB))
+# Descriptor
+# e.g. that has, that satisfy
+(rule $Descriptor_ ($TOKEN) (FilterTokenFn lemma with that satisfy have))
+(rule $Descriptor ($Descriptor_ ($Descriptor_ optional)) (ConstantFn ""))

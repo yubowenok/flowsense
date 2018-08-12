@@ -47,7 +47,7 @@ for i in xrange(num_lines):
     while j < num_lines:
       cur_line = lines[j].strip()
      
-      result = re.match('targetValue: \(string "(.*)"\)', cur_line)
+      result = re.match('targetValue: \(string "?(.*)"?\)', cur_line)
       if result != None: # Get answer
         answer = result.group(1)
       

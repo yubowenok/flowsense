@@ -8,8 +8,8 @@
   (utterance "load the car dataset")
   (targetValue (string "load:car"))
 )
-# Extend as far as possible. Do not split sentence.
+# Avoid recognizing "column" as stop noun.
 (example
-  (utterance "merge node and node")
-  (targetValue (string "union:node:node"))
+  (utterance "map column to red green color")
+  (targetValue (string "visual:column:color:red-green"))
 )

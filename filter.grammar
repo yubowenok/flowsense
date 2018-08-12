@@ -1,168 +1,92 @@
-(def @gt (string ">"))
-(def @le (string "<"))
-(def @geq (string ">="))
-(def @leq (string "<="))
-(def @eq (string "="))
-(def @gt_token (string ">t"))
-(def @le_token (string "<t"))
-
-(rule $CompareValue ($Number) (IdentityFn))
-(rule $CompareValue ($PhraseValue) (IdentityFn))
-(rule $CompareValue (of $CompareValue) (IdentityFn))
-
-(rule $Strict (strictly) (ConstantFn null))
-
-(rule $GreaterToken (after) (ConstantFn @gt_token))
-(rule $GreaterToken (greater) (ConstantFn @gt_token))
-(rule $GreaterToken (larger) (ConstantFn @gt_token))
-(rule $GreaterToken (more) (ConstantFn @gt_token))
-(rule $GreaterToken (no $LessToken) (ConstantFn @gt_token))
-(rule $GreaterToken (>) (ConstantFn @gt_token))
-
-(rule $CompareGreater ($GreaterToken) (ConstantFn @geq))
-(rule $CompareGreater (>) (ConstantFn @gt))
-(rule $CompareGreater (>=) (ConstantFn @geq))
-(rule $CompareGreater (> =) (ConstantFn @geq))
-(rule $CompareGreater ($GreaterToken ($TOKEN optional) ($Conj optional) equal ($TOKEN optional)) (ConstantFn @geq))
-(rule $CompareGreater ($Strict $GreaterToken) (ConstantFn @gt))
-
-(rule $LessToken (before) (ConstantFn @le_token))
-(rule $LessToken (less) (ConstantFn @le_token))
-(rule $LessToken (fewer) (ConstantFn @le_token))
-(rule $LessToken (smaller) (ConstantFn @le_token))
-(rule $LessToken (no $GreaterToken) (ConstantFn @le_token))
-
-(rule $CompareLess ($LessToken) (ConstantFn @leq))
-(rule $CompareLess (<) (ConstantFn @le))
-(rule $CompareLess (<=) (ConstantFn @leq))
-(rule $CompareLess (< =) (ConstantFn @leq))
-(rule $CompareLess ($LessToken ($TOKEN optional) equal ($TOKEN optional)) (ConstantFn @leq))
-(rule $CompareLess ($Strict $LessToken) (ConstantFn @le))
+### Filters (range, pattern)
+(def @geq ">=")
+(def @leq "<=")
+(def @eq "=")
+(def @between "[]")
+(def @pattern (string "pattern"))
 
 (rule $EqualToken ($TOKEN) (FilterTokenFn lemma be equal =))
-(rule $CompareEqual ($EqualToken) (ConstantFn @eq))
+(rule $EqualPhrase ($EqualToken ($Prep optional)) (ConstantFn @eq))
 
-(def @between (string "between"))
-(rule $Between (within) (ConstantFn @between))
-(rule $Between (between) (ConstantFn @between))
-(rule $BetweenPair ($Between) (ConstantFn (lambda x (lambda y (lambda z (call + (var z) (string " >= ") (call .toString (var x)) (string " <= ") (call .toString (var y))))))))
-(rule $BetweenPartial ($BetweenPair $CompareValue) (JoinFn forward))
-(rule $CompareBetween ($BetweenPartial ($Conj optional) $CompareValue) (JoinFn forward))
+(rule $GreaterToken ($TOKEN) (FilterTokenFn lemma after greater larger more >))
+(rule $GreaterToken (> =) (ConstantFn @geq))
+(rule $GreaterToken (no $LessToken) (ConstantFn @geq))
+(rule $GreaterToken ($GreaterToken $Prep) (SelectFn 0))
 
-(rule $Compare ($CompareGreater) (IdentityFn))
-(rule $Compare ($CompareLess) (IdentityFn))
-(rule $Compare ($CompareEqual) (IdentityFn))
-(rule $Compare ($Compare $StopCompare) (SelectFn 0))
-(rule $Compare ($StopCompare $Compare) (SelectFn 1))
+(rule $GreaterPhrase ($GreaterToken) (ConstantFn @geq))
+(rule $GreaterPhrase ($GreaterToken ($Conj optional) $EqualPhrase) (ConstantFn @geq))
 
-# mpg between 13 and 15
-(rule $Condition ($Dim $CompareBetween) (JoinFn backward))
-# mpg greater than 13
-(rule $Condition ($Dim $Compare $CompareValue) (ConcatFn " "))
-# mpg greater than 13 and smaller than 15
-(rule $Condition ($Dim $Compare $CompareValue ($Conj optional) $Compare $CompareValue) (ConcatFn " "))
-# mpg greater than 15 and cylinders smaller than 10
-(rule $Condition ($Condition ($Conj optional) $Condition) (ConcatFn " "))
+(rule $LessToken ($TOKEN) (FilterTokenFn lemma before less fewer smaller <))
+(rule $LessToken (< =) (ConstantFn @leq))
+(rule $LessToken (no $GreaterToken) (ConstantFn @leq))
+(rule $LessToken ($LessToken $Prep) (SelectFn 0))
 
-# Containing certain pattern/substring (value filter)
-(def @contain (string "contain"))
-(rule $ContainToken ($TOKEN) (FilterTokenFn lemma with have contain include match))
-(rule $Contain ($ContainToken) (ConstantFn @contain))
-(rule $Contain ($Det $Contain) (ConstantFn @contain))
+(rule $LessPhrase ($LessToken) (ConstantFn @leq))
+(rule $LessPhrase ($LessToken ($Conj optional) $EqualPhrase) (ConstantFn @leq))
 
-# (an) mpg of 15
-(rule $ContainPartial (of) (ConstantFn (lambda x (lambda y (call + (var x) (string " = ") (call .toString (var y)))))))
-(rule $ContainPartialHalf ($Dim $ContainPartial) (JoinFn backward))
-(rule $Condition ($ContainPartialHalf $CompareValue) (JoinFn forward))
+(rule $BetweenToken ($TOKEN) (FilterTokenFn lemma between within in among from))
+(rule $BetweenPhrase ($BetweenToken) (ConstantFn @between))
 
-# (a) name containing buick
-(rule $Condition ($Dim $Contain $TOKEN) (ConcatFn " "))
+(rule $Compare ($GreaterPhrase $Value) (ConcatFn ":"))
+(rule $Compare ($LessPhrase $Value) (ConcatFn ":"))
+(rule $Compare ($EqualPhrase $Value) (ConcatFn ":"))
+(rule $Compare ($BetweenPhrase $NumericalRange) (ConcatFn ":"))
 
-# with acm name
-(rule $ContainPartial2 ($Prep) (ConstantFn (lambda x (lambda y (call + (var y) (string " contain ") (call .toString (var x)))))))
-(rule $ContainPartialHalf2 ($ContainPartial2 $TOKEN) (JoinFn forward))
-(rule $Condition ($ContainPartialHalf2 $Dim) (JoinFn forward))
+# Pattern filter
+(rule $PatternToken ($TOKEN) (FilterTokenFn lemma with have contain include match))
+(rule $PatternPhrase ($PatternToken) (ConstantFn @pattern))
 
+(rule $Compare ($PatternPhrase $StringValue) (ConcatFn ":"))
 
-(def @filter (string "filter"))
-(rule $FilterWord (filter) (ConstantFn @filter))
-(rule $FilterWord ($ShowVerb) (ConstantFn @filter))
-(rule $FilterWord ($ShowVerb $Only) (ConstantFn @filter))
+# greater than 13 and smaller than 15
+(rule $Compare ($Compare ($Conj optional) $Compare) (ConcatFn ":"))
 
-(rule $PrepFilterToken ($TOKEN) (FilterTokenFn lemma by with that satisfy))
-(rule $PrepFilter ($PrepFilterToken) (ConstantFn @filter))
-(rule $PrepFilter ($Contain) (ConstantFn @filter))
+(rule $Condition (($Prep optional) $Column $Compare) (ConcatFn ":"))
+# with name (of) amc
+(rule $Condition (($Prep optional) $Column ($Prep optional) $Value) (ConcatFn ":=:"))
 
-(def @find (string "find"))
-(rule $FilterToken ($TOKEN) (FilterTokenFn lemma find search look get fetch retrieve))
-(rule $FindWord ($FilterToken (for optional)) (ConstantFn @find))
-(rule $FindWord ($FindWord $StopNoun ($PrepFilter optional)) (ConstantFn @find))
+(rule $Filter (($Verb optional) ($StopNoun optional) ($Descriptor optional) $Condition) (ConcatFn prepend "filter:"))
 
-
-# with mpg greater than 5
-(rule $FilterCondition ($PrepFilter $Condition) (ConcatFn " "))
-
-(rule $FindPartial ($PrepFilter) (ConstantFn (lambda x (call + (string "find ") (var x)))))
-(rule $FindPartial2 ($PrepFilter) (ConstantFn (lambda y (lambda x (call + (var x) (string " find ") (var y))))))
-
-# cars with mpg greater than 15
-(rule $Filter (($StopNoun optional) $PrepFilter $Condition) (ConcatFn " "))
-
-#(rule $Plot ($PlotPhrase $Filter2) (JoinFn backward))
-(rule $Find2 ($FindWord ($StopNoun optional) $FindPartial2 $Condition) (JoinFn forward))
-(rule $Plot ($PlotPhrase $Find2) (JoinFn backward))
-
-# show/find cars with mpg smaller than 15 in a histogram
-(rule $Plot (($Show optional) $Filter ($Prep optional) $ChartPartial) (JoinFn backward))
-(rule $Plot (($Show optional) $Find ($Prep optional) $ChartPartial) (JoinFn backward))
-
-# show/find (cars) (with) mpg greater than 15
-(rule $Find ($FindWord $Condition) (ConcatFn " "))
-(rule $Filter ($FilterWord ($StopNoun optional) ($Prep optional) $Condition) (ConcatFn " "))
-
-# show cars with an mpg of 15
-(rule $Plot ($PlotPhrase $FilterCondition) (ConcatFn " "))
-
-
-# Sampler
-(def @sample (string "filter"))
-(rule $SampleToken ($TOKEN) (FilterTokenFn lemma sample))
-(rule $SampleWord ($FindWord) (ConstantFn @sample))
-(rule $SampleWord ($FilterWord) (ConstantFn @sample))
-(rule $SampleWord ($SampleToken) (ConstantFn @sample))
-(rule $RandomWord ($TOKEN) (FilterTokenFn lemma random randomly))
-(rule $RandomSampleWord (($RandomWord optional) $SampleWord) (ConstantFn (string "filter index random")))
-
-# extremum min/max
-(def @max (string "max"))
+### Sampler
+(def @max "max")
+(def @min "min")
+(def @random "random")
 (rule $MaxToken ($TOKEN) (FilterTokenFn token max maximal maximum))
 (rule $Maximum ($MaxToken) (ConstantFn @max))
-(rule $Maximum ($Increase) (ConstantFn @max))
-(def @min (string "min"))
 (rule $MinToken ($TOKEN) (FilterTokenFn token min minimal minimum))
 (rule $Minimum ($MinToken) (ConstantFn @min))
-(rule $Minimum ($Decrease) (ConstantFn @min))
 (rule $Extremum ($Maximum) (IdentityFn))
 (rule $Extremum ($Minimum) (IdentityFn))
-(rule $Extremum ($Det $Extremum) (SelectFn 1))
 
-(rule $ExtremumCondition ($Extremum ($Prep optional) $Dim) (ConcatFn reverse " "))
-(rule $ExtremumCondition ($Number $ExtremumCondition) (ConcatFn reverse " "))
+(rule $SampleCriteria ($Extremum) (IdentityFn))
+(rule $SampleCriteria (random) (ConstantFn @random))
 
-(rule $ExtremumConditionNumber ($CountPercent ($Prep optional) ($StopNoun optional) ($Prep optional) $ExtremumCondition) (ConcatFn reverse " "))
-(rule $GroupByDim ($GroupBy $Dim) (SelectFn 1))
+(rule $SampleAmountCriteria ($CountOrPercent $SampleCriteria) (ConcatFn reverse ":"))
+(rule $SampleAmountCriteria ($SampleCriteria $CountOrPercent) (ConcatFn ":"))
 
-# find cars with max mpg
-(rule $Sample ($SampleWord ($StopNoun optional) ($Prep optional) $ExtremumCondition) (ConcatFn " "))
-# find 5 (percent of) cars with max mpg
-(rule $Sample ($SampleWord $ExtremumConditionNumber) (ConcatFn " "))
-# find 5 percent of cars
-(rule $Sample ($RandomSampleWord $CountPercent ($Prep optional) ($StopNoun optional)) (ConcatFn " "))
+(rule $SampleCondition ($SampleAmountCriteria ($Prep optional) $Column) (ConcatFn reverse ":"))
+(rule $SampleCondition ($Column ($Descriptor optional) $SampleAmountCriteria) (ConcatFn ":"))
+# 5 cars with max mpg
+(rule $SampleCondition ($CountOrPercent ($StopNoun optional) ($Descriptor optional) $SampleCriteria $Column) (ConcatFn reverse ":"))
+# Default count = 1
+# car with max mpg
+(rule $SampleConditionNoCount ($SampleCriteria $Column) (ConcatFn reverse ":"))
+(rule $SampleCondition ($SampleConditionNoCount) (ConcatFn append ":1"))
 
+# sample 5 percent
+(rule $SampleVerb_ ($Verb) (FilterTokenFn lemma sample get))
+(rule $SampleVerb ($SampleVerb_) (ConstantFn ""))
+(rule $SampleShortcut ($SampleVerb $CountOrPercent ($Prep optional) ($StopNoun optional)) (ConcatFn "_index:random:"))
+
+(rule $Sample_ (($Verb optional) $SampleCondition) (IdentityFn))
+(rule $Sample_ ($SampleShortcut) (IdentityFn))
 # find ... group by origin
-(rule $Sample ($Sample $GroupByDim) (ConcatFn " "))
+(rule $Sample_ ($Sample_ $GroupByColumn) (ConcatFn ":"))
+
+(rule $Sample (($Verb optional) ($StopNoun optional) ($Descriptor optional) $Sample_) (ConcatFn prepend "filter:"))
 
 ### Application ###
 (rule $Command ($Filter) (IdentityFn))
-(rule $Command ($Find) (IdentityFn))
 (rule $Command ($Sample) (IdentityFn))
+
+(rule $Command ($SampleCondition) (IdentityFn))

@@ -33,7 +33,7 @@
 (rule $SetVisual ($IncreaseDecrease $VisualType) (ConcatFn reverse ":"))
 
 # Conjunction: set width to 5 and opacity to 1
-(rule $SetVisual ($SetVisual (and optional) $SetVisual) (ConcatFn " "))
+(rule $SetVisual ($SetVisual ($Connector optional) $SetVisual) (ConcatFn ";"))
 
 
 ### Apply visual encoding ###
@@ -48,7 +48,7 @@
 # size 5 to 6 by mpg
 (rule $ApplyScale ($VisualScale ($Prep optional) $Column) (ConcatFn reverse ":"))
 # mpg to 5 to 6 size
-(rule $ApplyScale ($Column ($Prep optional) $VisualScale ) (ConcatFn ":"))
+(rule $ApplyScale ($Column ($Prep optional) $VisualScale) (ConcatFn ":"))
 
 (rule $EncodeVisual (($Verb optional) $ApplyScale) (IdentityFn))
 
@@ -64,6 +64,7 @@
 (rule $EncodeVisual (($Verb optional) $ColorVisualShortcut) (IdentityFn))
 (rule $EncodeVisual (($Verb optional) $NumericalVisualShortcut) (IdentityFn))
 
-### Application ###
-(rule $Command ($SetVisual) (IdentityFn))
-(rule $Command ($EncodeVisual) (IdentityFn))
+(rule $Visual ($SetVisual) (ConcatFn prepend "visual:"))
+(rule $Visual ($EncodeVisual) (ConcatFn prepend "visual:"))
+
+(rule $Command ($Visual) (IdentityFn))

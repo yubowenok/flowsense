@@ -2,42 +2,55 @@
 (include stop.grammar)
 (include column.grammar)
 
-
-### Auxiliary tokens ###
+# Connector to concatenate two commands/nouns
+(rule $Connector ($TOKEN) (FilterTokenFn token and , . ;))
 
 # Date
 (rule $Date ($PHRASE) (DateFn))
 
 # Number
-(rule $NumberPhrase ($PHRASE) (FilterPosTagFn token CD))
+(rule $NumberPhrase ($PHRASE) (FilterPosTagFn token LS CD))
 (rule $Number ($NumberPhrase) (NumberFn))
+
+# Values
+(rule $ValueToken ($TOKEN) (FilterPosTagFn token reverse IN DT CC)) # Avoid using prep, det, conj as values
 
 (rule $RangeValue ($Number) (IdentityFn))
 (rule $RangeValue ($Date) (IdentityFn))
 
+(rule $Value ($Date) (IdentityFn))
+(rule $Value ($Number) (IdentityFn))
+(rule $Value ($ValueToken) (IdentityFn))
+
+(rule $StringValue ($Date) (IdentityFn))
+(rule $StringValue ($ValueToken) (IdentityFn))
+
 # 5 to 6, from 5 to 6, etc
-(rule $NumericalRange (($Prep optional) $RangeValue ($Prep optional) $RangeValue) (ConcatFn ":"))
+(rule $RangeConj ($Conj) (IdentityFn))
+(rule $RangeConj ($Prep) (IdentityFn))
+(rule $NumericalRange (($Prep optional) $RangeValue ($RangeConj optional) $RangeValue) (ConcatFn ":"))
 # Strangely, sempre NumberFn fails to parse "from 5 to 6".
 # It may be because of the implementation of the sempre CoreNLP class. 
 # For the moment a get-around is to use $NumberPhrase,
 # which however does not interpret string phrase "one billion".
-(rule $NumericalRange (($Prep optional) $NumberPhrase ($Prep optional) $NumberPhrase) (ConcatFn ":"))
+(rule $NumericalRange ((-lsb- optional) ($Prep optional) $NumberPhrase ($RangeConj optional) $NumberPhrase (-rsb- optional)) (ConcatFn ":"))
 
-
-(def @percent (string "%"))
+(def @percent "%")
 (rule $PercentToken_ ($TOKEN) (FilterTokenFn lemma % percent percentage))
 (rule $PercentToken ($PercentToken_) (ConstantFn @percent))
-# This will return "5 percent" or "5 %".
-# Because of the NER span priority there seems to be no way we can overwrite this.
-# There we shall check both result formats.
-(rule $PercentPhrase ($PHRASE) (FilterNerSpanFn PERCENT))
 
-(rule $CountPercent ($Number) (IdentityFn))
-(rule $CountPercent ($PercentPhrase) (IdentityFn))
-(rule $CountPercent ($Number $PercentToken) (ConcatFn ""))
+# This will return "5 percent" or "5 %".
+# We use NumberFn to cast this to a number between [0, 1].
+# The rule $CountOrPercent appends "_%" special token to denote this percent is not in [0, 100].
+(rule $PercentPhrase_ ($PHRASE) (FilterNerSpanFn PERCENT))
+(rule $PercentPhrase ($PercentPhrase_) (NumberFn))
+
+(rule $CountOrPercent ($Number) (IdentityFn))
+(rule $CountOrPercent ($PercentPhrase) (ConcatFn append "_%")) # _% indicate raw percent, which should be between [0, 1].
+(rule $CountOrPercent ($Number $PercentToken) (ConcatFn ""))
 
 # Phrase with length constraint
-(rule $ValuePhrase ($PHRASE) (FilterPosTagFn span reverse IN TO DT WDT))
+# (rule $ValuePhrase ($PHRASE) (FilterPosTagFn span reverse IN TO DT WDT))
 
 # Passive Objects
 # (def @passive_object (string "(object)"))
@@ -49,16 +62,10 @@
 (rule $Chart (($Det optional) $ChartToken ($ChartToken optional)) (ConstantFn @chart))
 (rule $Chart ($Chart ($Prep optional) $StopPhrase) (ConstantFn @chart))
 
-# Grouping
-(def @group (string "group"))
-(rule $GroupToken ($TOKEN) (FilterTokenFn lemma group))
-(rule $GroupBy ($GroupToken ($Prep optional)) (ConstantFn @group))
-(rule $GroupBy (by) (ConstantFn @group))
-
 # Nodes
 (def @node (string "node"))
 (rule $Node (($Det optional) node) (ConstantFn @node))
 (rule $Node (($Det optional) $StopNoun ($Prep optional) $Node) (ConstantFn @node))
 
 # Utils
-(rule $NumberToString ($Number) (lambda x (call .toString (var x))))
+# (rule $NumberToString ($Number) (lambda x (call .toString (var x))))
