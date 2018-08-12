@@ -1,0 +1,15 @@
+# Include all stop words as one command, instead of several commands.
+(example
+  (utterance "the car")
+  (targetValue (string "the car"))
+)
+# Ignore leading $Det in the load command. Ignore trailing dataset stop word.
+(example
+  (utterance "load the car dataset")
+  (targetValue (string "load:car"))
+)
+# Extend as far as possible. Do not split sentence.
+(example
+  (utterance "merge node and node")
+  (targetValue (string "union:node:node"))
+)

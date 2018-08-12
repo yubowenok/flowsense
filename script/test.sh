@@ -4,6 +4,10 @@
 
 allresult="../all.result"
 alltest="../all.test"
+test_grammar="../main_test.grammar"
+
+cp ../main.grammar $test_grammar
+echo "(include test.grammar)" >> $test_grammar
 
 if [ -f $allresult ]; then rm $allresult; fi
 if [ -f $alltest ]; then rm $alltest; fi
@@ -16,7 +20,7 @@ done
 
 java -cp libsempre/*:lib/* -ea edu.stanford.nlp.sempre.Main\
     -languageAnalyzer corenlp.CoreNLPAnalyzer\
-    -Grammar.inPaths ../main_tests.grammar\
+    -Grammar.inPaths $test_grammar\
     -FeatureExtractor.featureDomains rule\
     -Learner.maxTrainIters 3\
     -Dataset.inPaths\

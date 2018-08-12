@@ -1,5 +1,8 @@
 #(rule $StopCompare ($TOKEN) (FilterTokenFn lemma against exact exactly than that to))
 
+# Ignore "the" from parsing
+# All "the" tokens are removed from the input before sempre is run.
+
 # WRB: why, where, how
 # WDT: what
 # WP: who
@@ -9,10 +12,13 @@
 # NN: car
 # NNS: cars
 # PRP: I, you, we
-(rule $StopToken ($PHRASE) (FilterPosTagFn span NN NNS NNP NNPS PRP))
+(rule $StopNoun ($PHRASE) (FilterPosTagFn span NN NNS NNP NNPS PRP))
+(rule $StopNoun ($TOKEN) (FilterPosTagFn token NN NNS NNP NNPS PRP))
+# (rule $StopNoun ($Det StopNoun) (SelectFn 1))
 
 # Determiner: a, the, ...
 (rule $StopToken ($Det) (ConstantFn ""))
 
+(rule $StopPhrase ($StopNoun) (ConstantFn ""))
 (rule $StopPhrase ($StopToken) (ConstantFn ""))
 (rule $StopPhrase ($StopToken $StopPhrase) (ConstantFn ""))

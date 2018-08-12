@@ -1,0 +1,36 @@
+(example
+  (utterance "union chart-1 and filter-1")
+  (targetValue (string "union:node:node"))
+)
+(example
+  (utterance "find difference between chart-1 and filter-1")
+  (targetValue (string "difference:node:node"))
+)
+(example
+  (utterance "find shared elements between chart-1 and filter-1")
+  (targetValue (string "intersection:node:node"))
+)
+(example
+  (utterance "merge with cars from chart-1")
+  (targetValue (string "union:node"))
+)
+(example
+  (utterance "merge cars of chart-1 with cars of filter-1")
+  (targetValue (string "union:node:node"))
+)
+(example
+  (utterance "merge into chart-1")
+  (targetValue (string "union:node"))
+)
+(example
+  (utterance "find different cars from chart-1")
+  (targetValue (string "difference:node"))
+)
+(example
+  (utterance "find common cars among chart-1 and filter-1")
+  (targetValue (string "intersection:node:node"))
+)
+(example
+  (utterance "merge")
+  (targetValue (string "union"))
+)

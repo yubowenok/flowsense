@@ -1,10 +1,10 @@
 # Auto Layout
-(def @autolayout (string "autolayout"))
-(rule $LayoutWord (adjust) (ConstantFn @autolayout))
-(rule $LayoutWord (layout) (ConstantFn @autolayout))
-(rule $LayoutWord (auto layout) (ConstantFn @autolayout))
-(rule $LayoutWord (autolayout) (ConstantFn @autolayout))
-(rule $AutoLayout (($PHRASE optional) $LayoutWord ($PHRASE optional)) (IdentityFn))
+(def @auto_layout (string "auto-layout"))
+(rule $AutoLayoutPhrase (($Verb optional) ($StopPhrase optional) layout) (IdentityFn))
+(rule $AutoLayoutPhrase (($Adj optional) layout) (IdentityFn))
+(rule $AutoLayoutPhrase (autolayout) (IdentityFn))
+
+(rule $AutoLayout ($AutoLayoutPhrase) (ConstantFn @auto_layout))
 
 ### Application ###
 (rule $Command ($AutoLayout) (IdentityFn))

@@ -1,5 +1,5 @@
 # Conjunction
-(rule $Conj (and) (ConstantFn "and"))
+(rule $Conj ($TOKEN) (FilterTokenFn lemma and with , ;))
 (rule $Conj (or) (ConstantFn "or"))
 
 # Preposition
@@ -9,8 +9,13 @@
 
 # Verb
 (rule $Verb ($TOKEN) (FilterPosTagFn token VB VBN VBP))
-# Handle special verbs that can be recognized as NN
-(rule $Verb ($TOKEN) (FilterTokenFn lemma map change))
+# Handle special verbs that can be recognized as NN/JJ
+(rule $Verb ($TOKEN) (FilterTokenFn lemma map change load open))
+
+# Adjective
+(rule $Adj ($TOKEN) (FilterPosTagFn token JJ))
+# Handle special adjectives that can be recognized as NN
+(rule $Adj ($TOKEN) (FilterTokenFn lemma auto))
 
 # To connectors
 (rule $To_ ($TOKEN) (FilterPosTagFn token TO VBD-AUX))
@@ -38,8 +43,7 @@
 
 # Determiner
 # DT: a, the, that, these
-(def @det (string "(det)"))
-(rule $Det ($TOKEN) (FilterPosTagFn token DT WDT PRP PRP$))
+(rule $Det ($TOKEN) (FilterPosTagFn token DT WDT PRP)) # PRP$
 
 # Quantifier
 (def @quant_one (string "one"))

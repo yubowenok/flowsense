@@ -7,16 +7,6 @@
 (rule $Show ($ShowVerb $StopNoun) (ConstantFn @show))
 (rule $Show ($Show $Prep) (ConstantFn @show))
 
-(def @chart (string "chart_type"))
-(rule $Chart (plot) (ConstantFn @chart))
-(rule $Chart (chart) (ConstantFn @chart))
-(rule $Chart (visualization) (ConstantFn @chart))
-(rule $Chart (graph) (ConstantFn @chart))
-(rule $Chart (chart_type) (ConstantFn @chart))
-(rule $Chart ($Chart plot) (ConstantFn @chart))
-(rule $Chart ($Det $Chart) (ConstantFn @chart))
-(rule $Chart ($Chart ($Prep optional) $StopNoun) (ConstantFn @chart))
-
 (rule $InChart ($PrepIn $Chart) (ConstantFn @chart))
 
 (rule $ChartPartial ($Chart) (ConstantFn (lambda x (call + @chart (string " ")(var x)))))

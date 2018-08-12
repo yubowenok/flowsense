@@ -1,15 +1,11 @@
 (include common.grammar)
 (include column.grammar)
 (include visuals.grammar)
-
 #(include plot.grammar)
 #(include selection.grammar)
 #(include filter.grammar)
-#(include load.grammar)
-#(include set.grammar)
+(include load.grammar)
+(include set.grammar)
 #(include link.grammar)
-#(include utils.grammar)
-
-### Testing grammar includes constants ###
-
+(include utils.grammar)
 (include command.grammar)

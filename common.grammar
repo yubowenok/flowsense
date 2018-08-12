@@ -2,6 +2,7 @@
 (include stop.grammar)
 (include column.grammar)
 
+
 ### Auxiliary tokens ###
 
 # Date
@@ -36,13 +37,17 @@
 (rule $CountPercent ($Number $PercentToken) (ConcatFn ""))
 
 # Phrase with length constraint
-(rule $PhraseValue ($PHRASE) (FilterPosTagFn span reverse IN TO DT WDT))
+(rule $ValuePhrase ($PHRASE) (FilterPosTagFn span reverse IN TO DT WDT))
 
 # Passive Objects
 # (def @passive_object (string "(object)"))
 # (rule $PassiveObject ($TOKEN) (FilterPosTagFn token DT WDT PRP PRP$))
 
-
+# Chart
+(def @chart (string "chart_type"))
+(rule $ChartToken ($TOKEN) (FilterTokenFn lemma plot chart visualization graph chart_type))
+(rule $Chart (($Det optional) $ChartToken ($ChartToken optional)) (ConstantFn @chart))
+(rule $Chart ($Chart ($Prep optional) $StopPhrase) (ConstantFn @chart))
 
 # Grouping
 (def @group (string "group"))
@@ -52,7 +57,8 @@
 
 # Nodes
 (def @node (string "node"))
-(rule $Node (node) (ConstantFn @node))
+(rule $Node (($Det optional) node) (ConstantFn @node))
+(rule $Node (($Det optional) $StopNoun ($Prep optional) $Node) (ConstantFn @node))
 
 # Utils
 (rule $NumberToString ($Number) (lambda x (call .toString (var x))))

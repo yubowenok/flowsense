@@ -1,11 +1,12 @@
-(def @load (string "load"))
-(rule $LoadToken ($TOKEN) (FilterTokenFn lemma add open load))
-(rule $LoadToken ($TOKEN) (FilterTokenFn token load))
-(rule $LoadVerb ($LoadToken) (ConstantFn @load))
+(rule $DataToken ($TOKEN) (FilterTokenFn lemma datum dataset file))
 
-(rule $StopData ($TOKEN) (FilterTokenFn lemma datum dataset file))
+(rule $LoadVerb ($TOKEN) (FilterTokenFn lemma load open add))
 
-(rule $Load ($LoadVerb $PHRASE ($StopData optional)) (ConcatFn " "))
+(rule $DatasetPhrase ($Det $PHRASE) (SelectFn 1))
+(rule $DatasetPhrase ($PHRASE) (IdentityFn))
+
+(rule $LoadDataset_ ($LoadVerb $DatasetPhrase ($DataToken optional)) (SelectFn 1))
+(rule $LoadDataset ($LoadDataset_) (ConcatFn prepend "load:"))
 
 ### Application
-(rule $Command ($Load) (IdentityFn))
+(rule $Command ($LoadDataset) (IdentityFn))
