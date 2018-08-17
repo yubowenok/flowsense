@@ -38,7 +38,7 @@
 
 # "from" is a specification for diagram connection source
 (def @from (string "from"))
-(rule $PrepFrom_ ($TOKEN) (FilterTokenFn lemma from in of))
+(rule $PrepFrom_ ($TOKEN) (FilterTokenFn lemma from of))
 (rule $PrepFrom ($PrepFrom_) (ConstantFn @from))
 
 # "to" is a specification for diagram connection target

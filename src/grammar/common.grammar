@@ -1,6 +1,7 @@
 (include pos.grammar)
 (include stop.grammar)
 (include column.grammar)
+(include node.grammar)
 
 # Connector to concatenate two commands/nouns
 (rule $Connector ($TOKEN) (FilterTokenFn token and , . ;))
@@ -55,17 +56,6 @@
 # Passive Objects
 # (def @passive_object (string "(object)"))
 # (rule $PassiveObject ($TOKEN) (FilterPosTagFn token DT WDT PRP PRP$))
-
-# Chart
-(def @chart (string "chart_type"))
-(rule $ChartToken ($TOKEN) (FilterTokenFn lemma plot chart visualization graph chart_type))
-(rule $Chart (($Det optional) $ChartToken ($ChartToken optional)) (ConstantFn @chart))
-(rule $Chart ($Chart ($Prep optional) $StopPhrase) (ConstantFn @chart))
-
-# Nodes
-(def @node (string "node"))
-(rule $Node (($Det optional) node) (ConstantFn @node))
-(rule $Node (($Det optional) $StopNoun ($Prep optional) $Node) (ConstantFn @node))
 
 # Utils
 # (rule $NumberToString ($Number) (lambda x (call .toString (var x))))

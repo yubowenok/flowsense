@@ -8,8 +8,30 @@
   (utterance "load the car dataset")
   (targetValue (string "load:car"))
 )
-# Avoid recognizing "column" as stop noun.
+# Avoid recognizing "r_column_*" as stop noun.
 (example
-  (utterance "map column to red green color")
-  (targetValue (string "visual:column:color:red-green"))
+  (utterance "map r_column_1 to red green color")
+  (targetValue (string "visual:r_column_1:color:red-green"))
+)
+# Always expand to columns rather than take columns as stop nouns.
+# Always consider specific chart types (instead of use "default").
+#(example
+#  (utterance "a scatterplot of mpg")
+#  (targetValue (string "chart:scatterplot:mpg"))
+#)
+# Take "over" as signal for series.
+#(example
+#  (utterance "show mpg over model.year")
+#  (targetValue (string "chart:default:mpg:series:model.year"))
+#)
+# Prefer visual encoding rules to pattern matching (mpg in "size")
+(example
+  (utterance "r_column_1 by size")
+  (targetValue (string "visual:mpg:size:1:10"))
+)
+# Prefer value parser (like NumberFn) to ValueToken (parses as string).
+# Note that ranges are exceptions than cannot be parsed by NumberFn.
+(example
+  (utterance "r_column_1 greater than 15")
+  (targetValue (string "filter:r_column_1:>=:15.0"))
 )

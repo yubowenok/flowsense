@@ -1,0 +1,20 @@
+# Node labels can be injected.
+(rule $NodeInjected ($TOKEN) (FilterTokenFn token r_placeholder))
+
+# Nodes
+(rule $Node (($Det optional) $TOKEN) (FilterTokenFn token r_node_1 r_node_2 r_node_3 r_node_4 r_node_5))
+(rule $Node (($Det optional) $StopNoun ($Prep optional) $Node) (SelectFn 1))
+(rule $Node ($NodeInjected) (IdentityFn))
+
+## Command source/target ##
+(rule $ChartTarget ($PrepTo $ChartDescriptor) (SelectFn 1))
+(rule $ChartSource ($PrepFrom $ChartDescriptor) (SelectFn 1))
+
+(rule $Target_ ($ChartTarget) (IdentityFn))
+(rule $Source_ ($ChartSource) (IdentityFn))
+
+(rule $Target ($Target_) (ConcatFn prepend "to:"))
+(rule $Source ($Source_) (ConcatFn prepend "from:"))
+
+(rule $SourceTarget ($Source) (IdentityFn))
+(rule $SourceTarget ($Target) (IdentityFn))

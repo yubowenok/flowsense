@@ -1,4 +1,18 @@
+# sempre is installed separately
 sempre/
+
+# js/ts dependencies
+node_modules/
+
+# dist files from yarn build
+dist/
+
+# files created by tests
 all.result
 all.test
-main_test.grammar
+src/grammar/main_test.grammar
+
+# .env files
+.env*
+
+*.log

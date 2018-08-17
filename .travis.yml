@@ -1,24 +1,32 @@
+sudo: true
+
 language: java
 
 jdk:
   - oraclejdk8
 
-before_script:
+node_js:
+  - "8.11.2"
+
+install:
+  - yarn install
   - git clone https://github.com/yubowenok/sempre
   - cd sempre
   - ../sempreCache.sh
-  - ant core corenlp 
+  - ant core corenlp
 
 # now at flowsense/sempre
 script:
-  - ../script/test.sh
+  - yarn build
+  - ../tests/run.sh
   - rm -rf ../sempre_lib
   - rm -rf ../sempre_fig
   - mv lib ../sempre_lib
   - mv fig ../sempre_fig
 
 cache:
+  yarn: true
   directories:
+  - node_modules
   - sempre_lib
   - sempre_fig
-

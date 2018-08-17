@@ -1,6 +1,0 @@
-### Wrap up everything ###
-(rule $Command ($StopToken $Command) (SelectFn 1))
-(rule $Command ($Command $StopToken) (SelectFn 0))
-(rule $CommandWithConnector ($Connector $Command) (SelectFn 1))
-(rule $Command ($Command $CommandWithConnector) (ConcatFn ";"))
-(rule $ROOT ($Command) (IdentityFn))

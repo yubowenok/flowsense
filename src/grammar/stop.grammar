@@ -9,18 +9,17 @@
 # VBD-AUX: am, are
 # RB: only
 (rule $StopToken ($TOKEN) (FilterPosTagFn token WRB WDT VBD-AUX WP RB))
+# Determiner: a, the, ...
+(rule $StopToken ($Det) (ConstantFn ""))
 
 # NN: car
 # NNS: cars
 # PRP: I, you, we
-(rule $StopNoun ($TOKEN) (FilterPosTagFn token DT NN NNS NNP NNPS PRP))
+(rule $StopNoun ($TOKEN) (FilterPosTagFn token DT NN NNS PRP)) # NNP NNPS
 (rule $StopNoun ($StopNoun $StopNoun) (IdentityFn))
 # of cars
-(rule $StopNoun ($Prep $TOKEN) (SelectFn 1))
+(rule $StopNoun ($Prep $StopNoun) (SelectFn 1))
 
-# Determiner: a, the, ...
-(rule $StopToken ($Det) (ConstantFn ""))
-
-(rule $StopPhrase ($StopNoun) (ConstantFn ""))
-(rule $StopPhrase ($StopToken) (ConstantFn ""))
-(rule $StopPhrase ($StopToken $StopPhrase) (ConstantFn ""))
+(rule $StopPhrase ($StopNoun) (ConstantFn (string "")))
+(rule $StopPhrase ($StopToken) (ConstantFn (string "")))
+(rule $StopPhrase ($StopToken $StopPhrase) (ConstantFn (string "")))

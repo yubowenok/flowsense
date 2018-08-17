@@ -1,0 +1,41 @@
+# Charts
+(rule $ChartToken ($TOKEN) (FilterTokenFn lemma plot chart visualization graph drawing series))
+(rule $ChartDescriptor (($Det optional) $ChartToken ($ChartToken optional)) (ConstantFn (string "default")))
+#(rule $ChartDescriptor ($ChartDescriptor ($Prep optional) $StopNoun) (SelectFn 0))
+(rule $ChartDescriptor ($Prep ($Det optional) $ChartDescriptor) (SelectFn 1))
+(rule $ChartDescriptor ($ChartType) (IdentityFn))
+
+(rule $ChartType ($TOKEN) (FilterTokenFn token chart_type_1 chart_type_2 chart_type_3 chart_type_4 chart_type_5))
+
+# Chart types can be injected
+(rule $ChartTypeInjected ($TOKEN) (FilterTokenFn token r_placeholder))
+(rule $ChartTypeInjected (series) (ConstantFn (string "line-chart")))
+(rule $ChartTypeInjected (distribution) (ConstantFn (string "histogram")))
+
+(rule $ChartType ($ChartTypeInjected) (IdentityFn))
+
+(rule $ChartVerb ($TOKEN) (FilterTokenFn lemma show chart create draw illustrate present render show visualize view see))
+(rule $ChartVerb ($Verb) (IdentityFn))
+#(rule $ChartVerb ($ChartVerb $StopNoun) (IdentityFn))
+
+# mpg (just column names)
+(rule $ChartColumns ($Columns) (ConcatFn prepend "columns:"))
+# mpg series over time
+(rule $ChartColumns ($ChartColumns ($PrepOver optional) $Column) (ConcatFn ";series:"))
+
+# show mpg and cylinders
+(rule $ChartWithColumns ($ChartDescriptor ($Prep optional) $ChartColumns) (ConcatFn ";"))
+# mpg series
+(rule $ChartWithColumns ($Columns $ChartDescriptor) (ConcatFn reverse ";columns:"))
+
+
+# scatterplot
+(rule $ChartPhrase ($ChartDescriptor) (IdentityFn))
+# show a scatterplot (of) mpg
+(rule $ChartPhrase ($ChartWithColumns) (IdentityFn))
+
+(rule $Chart (($ChartVerb optional) $ChartPhrase) (ConcatFn prepend "create:"))
+# show
+(rule $Chart ($ChartVerb) (ConstantFn (string "create:default_chart")))
+
+(rule $Command ($Chart) (IdentityFn))

@@ -33,7 +33,7 @@
 (rule $SetVisual ($IncreaseDecrease $VisualType) (ConcatFn reverse ":"))
 
 # Conjunction: set width to 5 and opacity to 1
-(rule $SetVisual ($SetVisual ($Connector optional) $SetVisual) (ConcatFn ";"))
+(rule $SetVisual ($SetVisual ($Connector optional) $SetVisual) (ConcatFn ";visual:"))
 
 
 ### Apply visual encoding ###

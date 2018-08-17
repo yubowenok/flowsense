@@ -28,23 +28,23 @@
 )
 (example
   (utterance "encode mpg by red green color scale")
-  (targetValue (string "visual:column:color:red-green"))
+  (targetValue (string "visual:mpg:color:red-green"))
 )
 (example
   (utterance "map mpg to red green color")
-  (targetValue (string "visual:column:color:red-green"))
+  (targetValue (string "visual:mpg:color:red-green"))
 )
 (example
   (utterance "color encode mpg")
-  (targetValue (string "visual:column:color:red-green"))
+  (targetValue (string "visual:mpg:color:red-green"))
 )
 # Because of the NumberFn issue regarding "from ... to ...",
 # we do not get floating points 5.0, 6.0 here.
 (example
   (utterance "map mpg to size from 5 to 6")
-  (targetValue (string "visual:column:size:5:6"))
+  (targetValue (string "visual:mpg:size:5:6"))
 )
 (example
   (utterance "mpg by size")
-  (targetValue (string "visual:column:size:1:10"))
+  (targetValue (string "visual:mpg:size:1:10"))
 )

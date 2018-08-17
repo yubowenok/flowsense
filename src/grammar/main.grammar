@@ -1,7 +1,7 @@
 (include common.grammar)
 (include column.grammar)
 (include visuals.grammar)
-#(include plot.grammar)
+(include chart.grammar)
 #(include selection.grammar)
 (include filter.grammar)
 (include load.grammar)
@@ -10,3 +10,5 @@
 (include utils.grammar)
 (include injected.grammar)
 (include command.grammar)
+
+(include test.grammar)
