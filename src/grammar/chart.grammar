@@ -15,7 +15,7 @@
 (rule $ChartType ($ChartTypeInjected) (IdentityFn))
 
 (rule $ChartVerb ($TOKEN) (FilterTokenFn lemma show chart create draw illustrate present render show visualize view see))
-(rule $ChartVerb ($Verb) (IdentityFn))
+# (rule $ChartVerb ($Verb) (IdentityFn))
 #(rule $ChartVerb ($ChartVerb $StopNoun) (IdentityFn))
 
 # mpg (just column names)

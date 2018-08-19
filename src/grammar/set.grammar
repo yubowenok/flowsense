@@ -2,20 +2,20 @@
 (def @set_union (string "union"))
 (def @set_intersection (string "intersection"))
 
-(rule $UnionToken ($TOKEN) (FilterTokenFn lemma union merge combine put unify))
-(rule $IntersectionToken ($TOKEN) (FilterTokenFn lemma intersect intersection join common share shared))
-(rule $DifferenceToken ($TOKEN) (FilterTokenFn lemma diff differ different difference))
+(rule $UnionToken ($TOKEN) (FilterTokenFn lemma union merge combine put unify r_union))
+(rule $IntersectionToken ($TOKEN) (FilterTokenFn lemma intersect intersection join common share shared r_intersection))
+(rule $DifferenceToken ($TOKEN) (FilterTokenFn lemma diff differ different difference r_difference))
 
 (rule $SetToken ($UnionToken) (ConstantFn @set_union))
 (rule $SetToken ($IntersectionToken) (ConstantFn @set_intersection))
 (rule $SetToken ($DifferenceToken) (ConstantFn @set_difference))
-# Common cars
+# common cars
 (rule $SetToken ($SetToken $StopNoun) (SelectFn 0))
 
 (rule $SetPhrase ($SetToken) (IdentityFn))
 
 (rule $TwoNodes (($Prep optional) $Node ($Conj optional) $Node) (ConcatFn ":"))
-(rule $SourceNode (($Det optional) ($Prep optional) $Node) (IdentityFn))
+(rule $SourceNode (($Prep optional) $Node) (IdentityFn))
 
 (rule $Set ($SetPhrase $TwoNodes) (ConcatFn ":"))
 (rule $Set ($SetPhrase $Node) (ConcatFn ":"))
@@ -23,5 +23,7 @@
 (rule $Set ($SetPhrase $SourceNode) (ConcatFn ":"))
 (rule $Set ($SetPhrase) (IdentityFn))
 
+(rule $SetMarker ($Marker) (IdentityFn))
+(rule $SetMarker ($Verb) (IdentityFn))
 ### Application
-(rule $Command (($Verb optional) $Set) (IdentityFn))
+(rule $Command (($SetMarker optional) $Set) (ConcatFn prepend "set:"))

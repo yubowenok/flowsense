@@ -1,11 +1,10 @@
 (rule $DataToken ($TOKEN) (FilterTokenFn lemma datum dataset file))
 
-(rule $LoadVerb ($TOKEN) (FilterTokenFn lemma load open add))
+(rule $LoadMarker ($TOKEN) (FilterTokenFn lemma r_load add))
 
-(rule $DatasetPhrase ($Det $PHRASE) (SelectFn 1))
-(rule $DatasetPhrase ($PHRASE) (IdentityFn))
+(rule $DatasetMarker ($TOKEN) (FilterTokenFn token r_dataset_1 r_dataset_2 r_dataset_3))
 
-(rule $LoadDataset_ ($LoadVerb $DatasetPhrase ($DataToken optional)) (SelectFn 1))
+(rule $LoadDataset_ ($LoadMarker $DatasetMarker ($DataToken optional)) (SelectFn 1))
 (rule $LoadDataset ($LoadDataset_) (ConcatFn prepend "load:"))
 
 ### Application

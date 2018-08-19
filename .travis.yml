@@ -8,8 +8,12 @@ jdk:
 node_js:
   - "8.11.2"
 
+python:
+  - "2.7"
+
 install:
-  - yarn install
+  - yarn install # node dependencies
+  - pip install --user -r requirements.txt # wup_server python dependencies
   - git clone https://github.com/yubowenok/sempre
   - cd sempre
   - ../sempreCache.sh
@@ -19,6 +23,8 @@ install:
 script:
   - yarn build
   - ../tests/run.sh
+
+before_cache:
   - rm -rf ../sempre_lib
   - rm -rf ../sempre_fig
   - mv lib ../sempre_lib
@@ -26,7 +32,9 @@ script:
 
 cache:
   yarn: true
+  pip: true
   directories:
-  - node_modules
-  - sempre_lib
-  - sempre_fig
+    - /home/travis/nltk_data
+    - node_modules
+    - sempre_lib
+    - sempre_fig

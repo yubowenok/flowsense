@@ -3,7 +3,7 @@
 
 # Nodes
 (rule $Node (($Det optional) $TOKEN) (FilterTokenFn token r_node_1 r_node_2 r_node_3 r_node_4 r_node_5))
-(rule $Node (($Det optional) $StopNoun ($Prep optional) $Node) (SelectFn 1))
+# (rule $Node (($Det optional) $StopNoun ($Prep optional) $Node) (SelectFn 1))
 (rule $Node ($NodeInjected) (IdentityFn))
 
 ## Command source/target ##

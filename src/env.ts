@@ -14,5 +14,6 @@ if (envFile) {
 }
 
 export const SEMPRE_URL = process.env.SEMPRE_URL || 'http://localhost:8400/sempre';
+export const WUP_URL = process.env.WUP_URL || 'http://localhost:7473';
 export const ENVIRONMENT = process.env.NODE_ENV || 'development';
 export const PORT = process.env.PORT || 7471;

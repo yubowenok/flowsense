@@ -1,8 +1,0 @@
-(example
-  (utterance "load car dataset")
-  (targetValue (string "load:car"))
-)
-(example
-  (utterance "open car")
-  (targetValue (string "load:car"))
-)

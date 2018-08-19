@@ -15,10 +15,13 @@
 # NN: car
 # NNS: cars
 # PRP: I, you, we
-(rule $StopNoun ($TOKEN) (FilterPosTagFn token DT NN NNS PRP)) # NNP NNPS
-(rule $StopNoun ($StopNoun $StopNoun) (IdentityFn))
+(rule $StopNoun_ ($TOKEN) (FilterPosTagFn token DT NN NNS PRP)) # NNP NNPS
+(rule $StopNoun ($StopNoun_) (FilterMarkerFn reject))
+
 # of cars
 (rule $StopNoun ($Prep $StopNoun) (SelectFn 1))
+(rule $StopNoun ($StopNoun $StopNoun) (IdentityFn))
+
 
 (rule $StopPhrase ($StopNoun) (ConstantFn (string "")))
 (rule $StopPhrase ($StopToken) (ConstantFn (string "")))

@@ -3,6 +3,9 @@
 (rule $Conj ($TOKEN) (FilterTokenFn lemma and with , ;))
 (rule $Conj (or) (ConstantFn "or"))
 
+# Marker
+(rule $Marker ($TOKEN) (FilterMarkerFn accept))
+
 # Adverb
 (rule $Adverb ($TOKEN) (FilterPosTagFn token RB RBR RBS))
 
@@ -10,6 +13,8 @@
 # IN, TO: in, within, to
 # VBG: using
 (rule $Prep ($TOKEN) (FilterPosTagFn token IN TO VBG))
+# Multiple preps are usually redundant. Take the last one.
+(rule $Prep ($Prep $Prep) (SelectFn 1))
 
 # Verb
 (rule $Verb ($TOKEN) (FilterPosTagFn token VB VBN VBP))

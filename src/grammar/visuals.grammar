@@ -16,8 +16,10 @@
 # red border
 (rule $VisualPair ($VisualValue ($To optional) $VisualType) (ConcatFn reverse ":"))
 
-# $StopPhrase: give "it" red color
-(rule $SetVisual (($Verb optional) ($StopPhrase optional) $VisualPair) (IdentityFn))
+# $StopNoun: give "it" red color
+(rule $SetVisual (($Verb optional) ($StopNoun optional) $VisualPair) (IdentityFn))
+
+(rule $SetVisual ($Color) (ConcatFn prepend "color:"))
 
 # visual value increase and decrease
 (rule $Increase_ ($TOKEN) (FilterTokenFn lemma add big bigger bold bolder increase increment large larger more prominent thick thicker great greater +))
@@ -33,7 +35,7 @@
 (rule $SetVisual ($IncreaseDecrease $VisualType) (ConcatFn reverse ":"))
 
 # Conjunction: set width to 5 and opacity to 1
-(rule $SetVisual ($SetVisual ($Connector optional) $SetVisual) (ConcatFn ";visual:"))
+(rule $SetVisual ($SetVisual ($Connector optional) $SetVisual) (ConcatFn ":"))
 
 
 ### Apply visual encoding ###
@@ -64,7 +66,7 @@
 (rule $EncodeVisual (($Verb optional) $ColorVisualShortcut) (IdentityFn))
 (rule $EncodeVisual (($Verb optional) $NumericalVisualShortcut) (IdentityFn))
 
-(rule $Visual ($SetVisual) (ConcatFn prepend "visual:"))
-(rule $Visual ($EncodeVisual) (ConcatFn prepend "visual:"))
+(rule $Visual ($SetVisual) (ConcatFn prepend "visuals:assignment:"))
+(rule $Visual ($EncodeVisual) (ConcatFn prepend "visuals:encoding:"))
 
 (rule $Command ($Visual) (IdentityFn))
