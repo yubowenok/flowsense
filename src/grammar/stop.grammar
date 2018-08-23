@@ -18,8 +18,8 @@
 (rule $StopNoun_ ($TOKEN) (FilterPosTagFn token DT NN NNS PRP)) # NNP NNPS
 (rule $StopNoun ($StopNoun_) (FilterMarkerFn reject))
 
-# of cars
-(rule $StopNoun ($Prep $StopNoun) (SelectFn 1))
+# of (cars), stop nouns may have been filtered before passing to the grammar
+(rule $StopNoun ($Prep ($StopNoun optional)) (IdentityFn))
 (rule $StopNoun ($StopNoun $StopNoun) (IdentityFn))
 
 

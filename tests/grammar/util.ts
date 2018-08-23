@@ -3,6 +3,7 @@ import request from 'supertest';
 import app from '@src/app';
 
 import { SempreResult } from '@src/parser';
+import { QueryValue } from '@/query-value';
 
 const INJECT_VALUES: { [w: string]: string } = {
   // chart types
@@ -12,6 +13,8 @@ const INJECT_VALUES: { [w: string]: string } = {
   // columns
   'mpg': 'r_column_1',
   'cylinders': 'r_column_2',
+  'origin': 'r_column_3',
+  'name': 'r_column_4',
   // nodes
   'node-1': 'r_node_1',
   'chart-1': 'r_node_2',
@@ -41,11 +44,12 @@ export const injectedValue = (token: string): string => {
 /**
  * Sends a query and checks its return value.
  */
-export const checkQuery = (query: string, done: jest.DoneCallback, answer: {}) => {
+export const checkQuery = (query: string, done: jest.DoneCallback, stringAnswer: string, answer: QueryValue) => {
   query = injectTestValues(query);
   request(app).post('/')
     .send({ query })
     .expect((res: { body: SempreResult }) => {
+      expect(res.body.stringValue).toEqual(stringAnswer);
       expect(res.body.value).toEqual(answer);
     })
     .expect(200, done);

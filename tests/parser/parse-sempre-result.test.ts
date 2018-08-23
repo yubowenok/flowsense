@@ -57,7 +57,8 @@ describe('parse sempre result', () => {
         posTags: ['UH', 'NN'],
         nerTags: ['O', 'O'],
         nerValues: ['null', 'null'],
-        value: '',
+        stringValue: '',
+        value: {},
       });
       done();
     });

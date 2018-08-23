@@ -22,16 +22,19 @@
 (rule $Value ($Date) (IdentityFn))
 (rule $Value ($Number) (IdentityFn))
 (rule $Value ($ValueToken) (IdentityFn))
+# Enforce value when it is expressed as "value {some_value}", "a value of {some_value}", etc.
+(rule $Value (value ($Prep optional) $Value) (IdentityFn))
 
 (rule $StringValue ($Date) (IdentityFn))
 (rule $StringValue ($ValueToken) (IdentityFn))
+(rule $StringValue (value ($Prep optional) $StringValue) (IdentityFn))
 
 # 5 to 6, from 5 to 6, etc
 (rule $RangeConj ($Conj) (IdentityFn))
 (rule $RangeConj ($Prep) (IdentityFn))
 (rule $NumericalRange (($Prep optional) $RangeValue ($RangeConj optional) $RangeValue) (ConcatFn ":"))
 # Strangely, sempre NumberFn fails to parse "from 5 to 6".
-# It may be because of the implementation of the sempre CoreNLP class. 
+# It may be because of the implementation of the sempre CoreNLP class.
 # For the moment a get-around is to use $NumberPhrase,
 # which however does not interpret string phrase "one billion".
 (rule $NumericalRange ((-lsb- optional) ($Prep optional) $NumberPhrase ($RangeConj optional) $NumberPhrase (-rsb- optional)) (ConcatFn ":"))

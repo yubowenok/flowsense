@@ -1,4 +1,9 @@
-### Filters (range, pattern)
+(def @filter_marker (string "r_filter"))
+(rule $FilterVerb_ ($TOKEN) (FilterTokenFn token r_filter r_chart))
+(rule $FilterVerb_ ($Verb) (FilterTokenFn lemma sample find get))
+(rule $FilterVerb ($FilterVerb_) (ConstantFn @filter_marker))
+
+### Range, pattern
 (def @geq ">=")
 (def @leq "<=")
 (def @eq "=")
@@ -41,52 +46,55 @@
 # greater than 13 and smaller than 15
 (rule $Compare ($Compare ($Conj optional) $Compare) (ConcatFn ":"))
 
-(rule $Condition (($Prep optional) $Column $Compare) (ConcatFn ":"))
+(rule $PatternOrRangeCondition (($Prep optional) $Column $Compare) (ConcatFn ":"))
 # with name (of) amc
-(rule $Condition (($Prep optional) $Column ($Prep optional) $Value) (ConcatFn ":=:"))
+(rule $PatternOrRangeCondition (($Prep optional) $Column ($Prep optional) $Value) (ConcatFn ":=:"))
 
-(rule $Filter (($Verb optional) ($StopNoun optional) ($Descriptor optional) $Condition) (ConcatFn prepend "filter:"))
+(rule $PatternOrRange ($PatternOrRangeCondition) (IdentityFn))
 
-### Sampler
+### Extremum
 (def @max "max")
 (def @min "min")
-(def @random "random")
 (rule $MaxToken ($TOKEN) (FilterTokenFn token max maximal maximum))
 (rule $Maximum ($MaxToken) (ConstantFn @max))
 (rule $MinToken ($TOKEN) (FilterTokenFn token min minimal minimum))
 (rule $Minimum ($MinToken) (ConstantFn @min))
-(rule $Extremum ($Maximum) (IdentityFn))
-(rule $Extremum ($Minimum) (IdentityFn))
 
-(rule $SampleCriteria ($Extremum) (IdentityFn))
-(rule $SampleCriteria (random) (ConstantFn @random))
+(rule $ExtremumCriteria ($Maximum) (IdentityFn))
+(rule $ExtremumCriteria ($Minimum) (IdentityFn))
+(rule $ExtremumCondition ($ExtremumCriteria $Column) (ConcatFn reverse ":extremum:"))
+(rule $ExtremumCondition ($Column $ExtremumCriteria) (ConcatFn ":extremum:"))
 
-(rule $SampleAmountCriteria ($CountOrPercent $SampleCriteria) (ConcatFn reverse ":"))
-(rule $SampleAmountCriteria ($SampleCriteria $CountOrPercent) (ConcatFn ":"))
+# 5 cars having maximum mpg
+(rule $Extremum_ ($CountOrPercent ($StopNoun optional) ($Descriptor optional) $ExtremumCondition) (ConcatFn reverse ":"))
+# shortcut: car with max mpg, default count = 1
+(rule $Extremum_ (($StopNoun optional) ($Descriptor optional) $ExtremumCondition) (ConcatFn append ":1"))
+# (rule $Extremum_ ($ExtremumCondition $CountOrPercent ($StopNoun optional)) (ConcatFn ":extremum:"))
 
-(rule $SampleCondition ($SampleAmountCriteria ($Prep optional) $Column) (ConcatFn reverse ":"))
-(rule $SampleCondition ($Column ($Descriptor optional) $SampleAmountCriteria) (ConcatFn ":"))
-# 5 cars with max mpg
-(rule $SampleCondition ($CountOrPercent ($StopNoun optional) ($Descriptor optional) $SampleCriteria $Column) (ConcatFn reverse ":"))
-# Default count = 1
-# car with max mpg
-(rule $SampleConditionNoCount ($SampleCriteria $Column) (ConcatFn reverse ":"))
-(rule $SampleCondition ($SampleConditionNoCount) (ConcatFn append ":1"))
+(rule $Extremum_ ($Extremum_ $GroupByColumn) (ConcatFn ":"))
 
-# sample 5 percent
-(rule $SampleVerb_ ($Verb) (FilterTokenFn lemma sample get))
-(rule $SampleVerb ($SampleVerb_) (ConstantFn ""))
-(rule $SampleShortcut ($SampleVerb $CountOrPercent ($Prep optional) ($StopNoun optional)) (ConcatFn "_index:random:"))
+(rule $Extremum ($Extremum_) (IdentityFn))
 
-(rule $Sample_ (($Verb optional) $SampleCondition) (IdentityFn))
+### Sampling
+(def @sampling "sampling")
+
+(rule $SampleAmount ($CountOrPercent ($StopNoun optional) ($Prep optional) $Column) (ConcatFn reverse ":sampling:"))
+(rule $SampleAmount ($Column ($Descriptor optional) $CountOrPercent ($StopNoun optional)) (ConcatFn ":sampling:"))
+
+# sample 5 percent (no column)
+(rule $SampleShortcut ($CountOrPercent ($Prep optional) ($StopNoun optional)) (ConcatFn prepend "_index:sampling:"))
+
+(rule $Sample_ ($SampleAmount) (IdentityFn))
 (rule $Sample_ ($SampleShortcut) (IdentityFn))
+
 # find ... group by origin
 (rule $Sample_ ($Sample_ $GroupByColumn) (ConcatFn ":"))
 
-(rule $Sample (($Verb optional) ($StopNoun optional) ($Descriptor optional) $Sample_) (ConcatFn prepend "filter:"))
+(rule $Sample ($Sample_) (IdentityFn))
 
-### Application ###
+(rule $Filter_ ($PatternOrRange) (IdentityFn))
+(rule $Filter_ ($Extremum) (IdentityFn))
+(rule $Filter_ ($Sample) (IdentityFn))
+(rule $Filter (($FilterVerb optional) ($StopNoun optional) ($Descriptor optional) $Filter_) (ConcatFn prepend "filter:"))
+
 (rule $Command ($Filter) (IdentityFn))
-(rule $Command ($Sample) (IdentityFn))
-
-(rule $Command ($SampleCondition) (IdentityFn))

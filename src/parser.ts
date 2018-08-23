@@ -3,7 +3,7 @@ import { Response, Request, NextFunction } from 'express';
 import _ from 'lodash';
 
 import { SEMPRE_URL, WUP_URL } from './env';
-import { parseQueryValue } from './query-value';
+import { parseQueryValue, QueryValue } from './query-value';
 import * as def from './def';
 
 export interface SempreResult {
@@ -14,7 +14,8 @@ export interface SempreResult {
   posTags: string[];
   nerTags: string[];
   nerValues: string[];
-  value: string;
+  stringValue: string;
+  value: QueryValue;
 }
 
 /**
@@ -29,7 +30,7 @@ const isInjectedToken = (token: string): boolean => {
  */
 export const parseSempreResult = (html: string): SempreResult | null => {
   const pre = html.match(/<pre>([\S\s]*)<\/pre>/)[1];
-  const success = pre.match(/0 candidates/) === null;
+  const success = pre.match(/ 0 candidates/) === null;
   const matchedQuery = pre.match(/Example:\s(.*)\s{/);
   if (matchedQuery === null) {
     // Sempre server errored.
@@ -51,7 +52,8 @@ export const parseSempreResult = (html: string): SempreResult | null => {
     posTags,
     nerTags,
     nerValues,
-    value,
+    stringValue: value,
+    value: {},
   };
 };
 
@@ -84,6 +86,15 @@ export const isVerb = (token: string, posTag: string): boolean => {
     return true;
   }
   return def.SPECIAL_VERBS.indexOf(token) !== -1;
+};
+
+/**
+ * Checks if a token is likely to be a stop noun. A token is a stop noun if
+ * - It has a stop noun's POS tag.
+ * - It is not an NN verb (special verbs that may be considered verbs).
+ */
+export const isProbablyStopNoun = (token: string, posTag: string): boolean => {
+  return def.STOP_NOUN_POS_TAGS.indexOf(posTag) !== -1 && def.SPECIAL_VERBS.indexOf(token) === -1;
 };
 
 /**
@@ -156,7 +167,7 @@ export const sanitizeQuery = (html: string): Promise<string> => {
       }
 
       // Remove a stop noun if it is not close to any meaningful nouns.
-      if (def.STOP_NOUN_POS_TAGS.indexOf(posTag) !== -1) {
+      if (isProbablyStopNoun(token, posTag)) {
         addRequest();
         request.get(`${WUP_URL}/${token}/${def.SPECIAL_NOUNS.join(',')}`, (err, res) => {
           if (err) {
@@ -219,7 +230,8 @@ export const parse = (req: Request, res: Response, next: NextFunction) => {
       return;
     }
     const result = parseSempreResult(sempreRes.body);
-    const value = parseQueryValue(result.value);
+    console.log('sempre value:', result.stringValue);
+    const value = parseQueryValue(result.stringValue as string);
     // Replace value by parsed JSON
     res.json(_.extend(result, { value }));
   });

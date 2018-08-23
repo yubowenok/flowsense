@@ -49,7 +49,6 @@ export const STOP_TOKENS = [
 export const SPECIAL_NOUNS = [
   'plot',
   'chart',
-  'diagram',
   'node',
   'color',
   'border',
@@ -59,7 +58,20 @@ export const SPECIAL_NOUNS = [
   'union',
   'intersection',
   'difference',
+  // automatic layout
+  'diagram',
+  'layout',
+  // enforce data value over stop nouns
+  'value',
+  // percentage / percent
+  'percent',
+  'max',
+  'maximum',
+  'min',
+  'minimum',
 ];
+// Be conservative to keep most nouns, instead of filtering out useful nouns as stop nouns.
+// Prefer to have the user disambiguiate in the UI.
 export const STOP_NOUN_WUP_THRESHOLD = 0.75;
 
 
@@ -69,9 +81,10 @@ export const STOP_NOUN_WUP_THRESHOLD = 0.75;
 export const SPECIAL_MARKER_VERBS = {
   r_load: ['load', 'open'],
   r_chart: ['show', 'draw', 'visualize'],
-  r_filter: ['filter', 'find', 'search'],
+  r_filter: ['filter', 'find', 'search', 'sample', 'sampling'],
 };
-export const VERB_WUP_THRESHOLD = 0.81;
+// Be conservative so as not to easily consider new verbs as special markers.
+export const VERB_WUP_THRESHOLD = 0.9;
 
 
 /** A list of verbs that may be recognized as NN, JJ. */
@@ -79,4 +92,8 @@ export const SPECIAL_VERBS = [
   'show',
   'load',
   'open',
+  'increase',
+  'decrease',
+  'sample',
+  'sampling',
 ];

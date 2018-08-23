@@ -17,6 +17,7 @@
 (rule $Columns ($AllColumns) (IdentityFn))
 
 # Group by column
-(rule $GroupToken ($TOKEN) (FilterTokenFn lemma group per by))
+(rule $GroupToken ($TOKEN) (FilterTokenFn lemma group per))
+(rule $GroupToken (for each) (IdentityFn))
 (rule $GroupByColumn_ ($GroupToken ($Prep optional) $Column) (SelectFn 1))
 (rule $GroupByColumn ($GroupByColumn_) (ConcatFn prepend "group_by:"))

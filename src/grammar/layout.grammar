@@ -1,0 +1,13 @@
+# Auto Layout
+(def @auto_layout (string "auto-layout"))
+
+(rule $LayoutToken ($TOKEN) (FilterTokenFn lemma layout diagram dataflow flow graph))
+(rule $LayoutToken (data flow) (IdentityFn))
+
+(rule $AutoLayoutPhrase (($StopPhrase optional) ($Adj optional) $LayoutToken ($StopNoun optional)) (IdentityFn))
+(rule $AutoLayoutPhrase (autolayout) (IdentityFn))
+
+(rule $AutoLayout (($Verb optional) $AutoLayoutPhrase) (ConstantFn @auto_layout))
+
+### Application ###
+(rule $Command ($AutoLayout) (IdentityFn))

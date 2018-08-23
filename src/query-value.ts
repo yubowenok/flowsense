@@ -1,3 +1,4 @@
+import _ from 'lodash';
 interface VisualsSpecification {
   assignment?: { [prop: string]: string | number };
   encoding?: {
@@ -9,8 +10,17 @@ interface VisualsSpecification {
 
 interface FilterSpecification {
   column: string;
-  type: string;
-  range?: [number | string, number | string];
+  // Filter type is inferred by which of the following properties is present.
+  pattern?: string;
+  sampling?: 'random';
+  extremum?: 'minimum' | 'maximum';
+  range?: {
+    min?: number | string;
+    max?: number | string;
+  };
+  amount?: number;
+  amountType?: 'percentage' | 'count';
+  groupBy?: string;
 }
 
 interface SetOperatorSpecification {
@@ -18,8 +28,9 @@ interface SetOperatorSpecification {
   nodes: string[]; // node labels
 }
 
-interface QueryValue {
+export interface QueryValue {
   loadDataset?: string;
+  autoLayout?: boolean;
   columns?: string[];
   visuals?: VisualsSpecification[];
   filters?: FilterSpecification[];
@@ -35,18 +46,67 @@ interface QueryValue {
 }
 
 /**
+ * Parses an amount string, i.e. count or percentage.
+ */
+const parseAmount = (value: string): { amount: number, amountType: 'count' | 'percentage' } => {
+  const amountStr = value;
+  let amount: number;
+  let amountType: 'percentage' | 'count' = 'percentage';
+  if (amountStr.match(/_\%$/)) {
+    // The value is a percentage value between [0, 1].
+    amount = +amountStr.match(/^(.*)_\%$/)[1] * 100;
+  } else if (amountStr.match(/\%$/)) {
+    // The value is a percentage between [0, 100].
+    amount = +amountStr.match(/^(.*)\%$/)[1];
+  } else {
+    // Count, not percentage.
+    amount = +amountStr;
+    amountType = 'count';
+  }
+  return { amount, amountType };
+};
+
+/**
  * Adds a filter specification to the result.
  */
 const addFilter = (result: QueryValue, values: string[]) => {
   if (!result.filters) {
     result.filters = [];
   }
-  const type = values[1] === 'pattern' ? 'pattern' : 'range';
-  result.filters.push({
+  const type = values[1];
+  const spec: FilterSpecification = {
     column: values[0],
-    type,
-    range: type === 'range' ? [values[1], values[2]] : undefined,
-  });
+  };
+  values = values.slice(2);
+  if (type === 'pattern' || type === '=') { // '=' is pattern matching
+    spec.pattern = values[0];
+  } else if (type === 'range' || type === '[]' || type.indexOf('=') !== -1) { // '<=', '>=' are range matching
+    if (type === 'range' || type === '[]') {
+      spec.range = { min: values[0], max: values[1] };
+    } else { // setting min and max separately.
+      spec.range = {};
+      values = [type].concat(values);
+      while (values.length) {
+        if (values[0] === '>=') {
+          spec.range.min = values[1];
+        } else if (values[0] === '<=') {
+          spec.range.max = values[1];
+        }
+        values = values.slice(2);
+      }
+    }
+  } else if (type === 'extremum' || type === 'sampling') {
+    if (type === 'extremum') {
+      spec.extremum = values[0] === 'min' ? 'minimum' : 'maximum'; // min or max
+      values.shift();
+    } else {
+      spec.sampling = 'random';
+    }
+    _.extend(spec, parseAmount(values[0]));
+    values.shift();
+    spec.groupBy = values[0] === 'group_by' ? values[1] : undefined;
+  }
+  result.filters.push(spec);
 };
 
 /**
@@ -148,6 +208,9 @@ export const parseQueryValue = (value: string): QueryValue => {
         break;
       case 'load':
         result.loadDataset = values[0];
+        break;
+      case 'auto-layout':
+        result.autoLayout = true;
         break;
       case 'columns':
         if (result[key]) {

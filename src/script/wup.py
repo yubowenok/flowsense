@@ -4,7 +4,7 @@ from two comma-separated word lists X and Y.
 Usage: http://localhost:7473/{X[0],X[1],...}/{Y[0],Y[1],...}
 """
 import nltk
-nltk.download('all-corpora')
+nltk.download('wordnet')
 
 from nltk.corpus import wordnet as wn
 from flask import Flask, jsonify

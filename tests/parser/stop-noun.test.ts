@@ -64,4 +64,31 @@ describe('stop nouns', () => {
       });
     });
   });
+
+  it('verb that can be noun: increase', done => {
+    sendQuery('increase', (err, sempreRes) => {
+      sanitizeQuery(sempreRes.body).then(sanitized => {
+        expect(sanitized).toBe('increase');
+        done();
+      });
+    });
+  });
+
+  it('sample', done => {
+    sendQuery('sample', (err, sempreRes) => {
+      sanitizeQuery(sempreRes.body).then(sanitized => {
+        expect(sanitized).toBe('r_filter');
+        done();
+      });
+    });
+  });
+
+  it('sampling', done => {
+    sendQuery('sampling', (err, sempreRes) => {
+      sanitizeQuery(sempreRes.body).then(sanitized => {
+        expect(sanitized).toBe('r_filter');
+        done();
+      });
+    });
+  });
 });
