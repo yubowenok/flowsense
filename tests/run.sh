@@ -36,6 +36,8 @@ do
   if [ $? -eq 0 ]; then break; fi
   sleep 1
 done
+# Call sempre server once. This blocks before CoreNLP is loaded.
+curl http://localhost:8400/sempre
 echo 'sempre is ready'
 
 # Wait for wup server to import nltk
@@ -50,8 +52,11 @@ echo 'wup server is ready'
 
 # Run tests via jest
 yarn test
+test_result=$?
 
 # Kill the screen that runs sempre
 screen -X -S $semprePid quit
 # Kill the screen that runs wup_server
 screen -X -S $(screen -ls | grep '[0-9]*.*(Detached)' | sed 's/\.\..*//') quit
+
+exit $test_result

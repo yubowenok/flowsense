@@ -38,7 +38,7 @@
 
 # "over" is a specification for series column
 (def @over (string "over"))
-(rule $PrepOverToken ($TOKEN) (FilterTokenFn lemma over by with to against along))
+(rule $PrepOverToken ($TOKEN) (FilterTokenFn lemma over by along))
 (rule $PrepOver ($PrepOverToken) (ConstantFn @over))
 
 # "from" is a specification for diagram connection source

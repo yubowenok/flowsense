@@ -1,52 +1,5 @@
 # Plot drawing
-(example
-  (utterance "show a plot")
-  (targetValue (string "chart:default"))
-)
-(example
-  (utterance "draw a plot of mpg")
-  (targetValue (string "chart:default:mpg"))
-)
-(example
-  (utterance "scatterplot mpg and horsepower")
-  (targetValue (string "create:scatterplot;columns:mpg&horsepower"))
-)
-(example
-  (utterance "scatterplot of mpg")
-  (targetValue (string "chart:scatterplot;columns:mpg"))
-)
-(example
-  (utterance "create a heatmap with mpg, horsepower and cylinders")
-  (targetValue (string "chart:heatmap:mpg&horsepower&cylinders"))
-)
-(example
-  (utterance "visualize all the dimensions in a heatmap")
-  (targetValue (string "chart:heatmap:all_columns"))
-)
-(example
-  (utterance "mpg cylinders scatterplot")
-  (targetValue (string "chart:scatterplot:mpg&cylinders"))
-)
-(example
-  (utterance "mpg distribution")
-  (targetValue (string "chart:histogram:mpg"))
-)
-(example
-  (utterance "show mpg over model.year by origin in a line chart")
-  (targetValue (string "chart:line-chart:mpg:over:model.year:group_by:origin"))
-)
-(example
-  (utterance "show mpg series")
-  (targetValue (string "chart:line-chart:mpg"))
-)
-(example
-  (utterance "show mpg series over model.year")
-  (targetValue (string "chart:line-chart:mpg:over:model.year"))
-)
-(example
-  (utterance "show mpg series over model.year by origin")
-  (targetValue (string "chart:line-chart:mpg:over:model.year:group_by:origin"))
-)
+
 # With filters
 #(example
 #  (utterance "show cars with name containing buick")

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { checkQuery, injectedValue } from '../util';
 
 /*
+This query is so far not supported because 5% by mpg is not a well-defined action.
 (example
   (utterance "find 5 percent of cars by mpg")
   (targetValue (string "filter:mpg:sampling:0.05_%"))
@@ -19,8 +20,8 @@ describe('attribute filter: sampling', () => {
         sampling: 'random',
           amount: 5,
           amountType: 'percentage',
-          groupBy: injectedValue('origin'),
         }],
+        groupByColumn: injectedValue('origin'),
       });
   });
 
@@ -46,8 +47,8 @@ describe('attribute filter: sampling', () => {
           sampling: 'random',
           amount: 5,
           amountType: 'percentage',
-          groupBy: injectedValue('origin'),
         }],
+        groupByColumn: injectedValue('origin'),
       });
   });
 });

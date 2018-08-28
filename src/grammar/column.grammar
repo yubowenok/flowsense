@@ -1,10 +1,11 @@
-(rule $ColumnToken ($TOKEN) (FilterTokenFn lemma r_column_1 r_column_2 r_column_3 r_column_4 r_column_5 r_column_6 r_column_7 r_column_8 r_column_9 r_column_10))
+(rule $ColumnToken ($TOKEN) (FilterTokenFn lemma column attribute dimension))
+(rule $ColumnMarker ($TOKEN) (FilterTokenFn lemma r_column_1 r_column_2 r_column_3 r_column_4 r_column_5 r_column_6 r_column_7 r_column_8 r_column_9 r_column_10))
 
 # Injected column names.
 (rule $ColumnInjected ($TOKEN) (FilterTokenFn token r_placeholder))
 
 # Single column
-(rule $Column ($ColumnToken) (IdentityFn))
+(rule $Column ($ColumnMarker) (IdentityFn))
 (rule $Column ($ColumnInjected) (IdentityFn))
 (rule $Column ($QuantAny $Column) (SelectFn 1))
 
@@ -12,7 +13,7 @@
 (rule $Columns ($Column) (IdentityFn))
 (rule $Columns ($Column ($Conj optional) $Columns) (ConcatFn "&"))
 
-(rule $AllColumns (all ($Prep optional) ($Det optional) $TOKEN) (ConstantFn "all_columns"))
+(rule $AllColumns (all ($Prep optional) ($Det optional) $ColumnToken) (ConstantFn (string "_all_columns")))
 
 (rule $Columns ($AllColumns) (IdentityFn))
 
@@ -21,3 +22,7 @@
 (rule $GroupToken (for each) (IdentityFn))
 (rule $GroupByColumn_ ($GroupToken ($Prep optional) $Column) (SelectFn 1))
 (rule $GroupByColumn ($GroupByColumn_) (ConcatFn prepend "group_by:"))
+
+# Series column
+(rule $SeriesColumn_  ($PrepOver $Column) (SelectFn 1))
+(rule $SeriesColumn ($SeriesColumn_) (ConcatFn prepend "series:"))

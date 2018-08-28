@@ -8,11 +8,6 @@
 #  (utterance "load the car dataset")
 #  (targetValue (string "load:car"))
 #)
-# Avoid recognizing "r_column_*" as stop noun.
-#(example
-#  (utterance "map r_column_1 to red green color")
-#  (targetValue (string "visual:r_column_1:color:red-green"))
-#)
 # Always expand to columns rather than take columns as stop nouns.
 # Always consider specific chart types (instead of use "default").
 #(example

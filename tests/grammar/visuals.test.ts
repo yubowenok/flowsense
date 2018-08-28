@@ -10,10 +10,10 @@ describe('visuals assignment', () => {
       },
     }],
   };
-  it('set color', done => {
+  it('set color #1', done => {
     checkQuery('set blue color', done, 'visuals:assignment:color:blue', colorAnswer);
   });
-  it('set color', done => {
+  it('set color #2', done => {
     checkQuery('color by blue', done, 'visuals:assignment:color:blue', colorAnswer);
   });
 

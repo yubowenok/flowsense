@@ -20,7 +20,6 @@ interface FilterSpecification {
   };
   amount?: number;
   amountType?: 'percentage' | 'count';
-  groupBy?: string;
 }
 
 interface SetOperatorSpecification {
@@ -32,6 +31,8 @@ export interface QueryValue {
   loadDataset?: string;
   autoLayout?: boolean;
   columns?: string[];
+  seriesColumn?: string;
+  groupByColumn?: string;
   visuals?: VisualsSpecification[];
   filters?: FilterSpecification[];
   setOperator?: SetOperatorSpecification;
@@ -64,6 +65,20 @@ const parseAmount = (value: string): { amount: number, amountType: 'count' | 'pe
     amountType = 'count';
   }
   return { amount, amountType };
+};
+
+/**
+ * Adds a series column specification to the result.
+ */
+const addSeriesColumn = (result: QueryValue, values: string[]) => {
+  result.seriesColumn = values[0];
+};
+
+/**
+ * Adds a group by column specification to the result.
+ */
+const addGroupByColumn = (result: QueryValue, values: string[]) => {
+  result.groupByColumn = values[0];
 };
 
 /**
@@ -104,7 +119,9 @@ const addFilter = (result: QueryValue, values: string[]) => {
     }
     _.extend(spec, parseAmount(values[0]));
     values.shift();
-    spec.groupBy = values[0] === 'group_by' ? values[1] : undefined;
+    if (values[0] === 'group_by') {
+      addGroupByColumn(result, values.slice(1));
+    }
   }
   result.filters.push(spec);
 };
@@ -166,7 +183,7 @@ const addTarget = (result: QueryValue, values: string[]) => {
   }
   result.target.push({
     id: values[0],
-    isCreate: values[1] === 'create',
+    isCreate: values[1] !== 'no_create',
   });
 };
 
@@ -178,6 +195,29 @@ const addSetOperator = (result: QueryValue, values: string[]) => {
     type: values[0],
     nodes: values.slice(1),
   };
+};
+
+/**
+ * Adds a list of columns to the result.
+ * The column specification may contain series and groupBy column specifications.
+ */
+const addColumns = (result: QueryValue, values: string[]) => {
+  if (result.columns) {
+    console.error('duplicate configuration of columns');
+  }
+  result.columns = values[0].split('&');
+  values = values.slice(1);
+  while (values.length) {
+    if (values[0] === 'series') {
+      addSeriesColumn(result, values.slice(1));
+    } else if (values[0] === 'group_by') {
+      addGroupByColumn(result, values.slice(1));
+    } else {
+      console.error(`unknown columns specification ${values[0]}`);
+      break;
+    }
+    values = values.slice(2);
+  }
 };
 
 /**
@@ -213,12 +253,24 @@ export const parseQueryValue = (value: string): QueryValue => {
         result.autoLayout = true;
         break;
       case 'columns':
-        if (result[key]) {
-          console.error(`duplicate configuration of result property "${key}"`);
-        }
-        result[key] = values;
+        addColumns(result, values);
+        break;
+      case 'series':
+        addSeriesColumn(result, values);
+        break;
+      case 'group_by':
+        addGroupByColumn(result, values);
         break;
     }
   }
+
+  // If there are columns set but no target, the default action is to fill in a chart creation.
+  if (result.columns && !result.target) {
+    result.target = [{
+      id: '_chart_type_default',
+      isCreate: true,
+    }];
+  }
+
   return result;
 };

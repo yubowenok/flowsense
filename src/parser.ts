@@ -105,6 +105,7 @@ export const sanitizeQuery = (html: string): Promise<string> => {
   if (result === null) {
     return Promise.reject('sempre server returns no result');
   }
+
   const tokens: Array<string | null> = [];
   result.lemmatizedTokens.forEach((token, index) => {
     if (isStopToken(token, result.posTags[index])) {
@@ -181,11 +182,11 @@ export const sanitizeQuery = (html: string): Promise<string> => {
           done();
         });
       }
-
-      if (!hasRequest) {
-        done();
-      }
     });
+
+    if (!hasRequest) {
+      done();
+    }
   });
 };
 

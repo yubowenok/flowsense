@@ -33,6 +33,7 @@ export const VERB_POS_TAGS = ['VB', 'VBN', 'VBP'];
  */
 export const STOP_TOKEN_POS_EXCEPTIONS = [
   'all',
+  'each',
 ];
 
 
@@ -69,6 +70,9 @@ export const SPECIAL_NOUNS = [
   'maximum',
   'min',
   'minimum',
+  // tokens of chart types
+  'series',
+  'distribution',
 ];
 // Be conservative to keep most nouns, instead of filtering out useful nouns as stop nouns.
 // Prefer to have the user disambiguiate in the UI.
@@ -85,7 +89,6 @@ export const SPECIAL_MARKER_VERBS = {
 };
 // Be conservative so as not to easily consider new verbs as special markers.
 export const VERB_WUP_THRESHOLD = 0.9;
-
 
 /** A list of verbs that may be recognized as NN, JJ. */
 export const SPECIAL_VERBS = [

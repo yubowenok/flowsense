@@ -10,11 +10,14 @@ const INJECT_VALUES: { [w: string]: string } = {
   'scatterplot': 'r_chart_type_1',
   'histogram': 'r_chart_type_2',
   'heatmap': 'r_chart_type_3',
+  'line chart': 'r_chart_type_4',
   // columns
   'mpg': 'r_column_1',
   'cylinders': 'r_column_2',
   'origin': 'r_column_3',
   'name': 'r_column_4',
+  'horsepower': 'r_column_5',
+  'model.year': 'r_column_6',
   // nodes
   'node-1': 'r_node_1',
   'chart-1': 'r_node_2',

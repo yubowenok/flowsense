@@ -1,11 +1,12 @@
 # Charts
+(def @chart_type_default (string "_chart_type_default"))
 (rule $ChartToken ($TOKEN) (FilterTokenFn lemma plot chart visualization graph drawing series))
-(rule $ChartDescriptor (($Det optional) $ChartToken ($ChartToken optional)) (ConstantFn (string "default")))
-#(rule $ChartDescriptor ($ChartDescriptor ($Prep optional) $StopNoun) (SelectFn 0))
+(rule $ChartDescriptor ($ChartToken) (ConstantFn @chart_type_default))
+(rule $ChartDescriptor (($Det optional) $ChartType ($ChartToken optional)) (IdentityFn))
 (rule $ChartDescriptor ($Prep ($Det optional) $ChartDescriptor) (SelectFn 1))
 (rule $ChartDescriptor ($ChartType) (IdentityFn))
 
-(rule $ChartType ($TOKEN) (FilterTokenFn token chart_type_1 chart_type_2 chart_type_3 chart_type_4 chart_type_5))
+(rule $ChartType ($TOKEN) (FilterTokenFn token r_chart_type_1 r_chart_type_2 r_chart_type_3 r_chart_type_4 r_chart_type_5))
 
 # Chart types can be injected
 (rule $ChartTypeInjected ($TOKEN) (FilterTokenFn token r_placeholder))
@@ -14,28 +15,33 @@
 
 (rule $ChartType ($ChartTypeInjected) (IdentityFn))
 
-(rule $ChartVerb ($TOKEN) (FilterTokenFn lemma show chart create draw illustrate present render show visualize view see))
-# (rule $ChartVerb ($Verb) (IdentityFn))
-#(rule $ChartVerb ($ChartVerb $StopNoun) (IdentityFn))
+(rule $ChartVerb ($TOKEN) (FilterTokenFn lemma r_chart show chart create draw illustrate present render show visualize view see))
 
 # mpg (just column names)
-(rule $ChartColumns ($Columns) (ConcatFn prepend "columns:"))
+(rule $ChartColumns ($Columns ($ChartToken optional)) (ConcatFn prepend "columns:"))
 # mpg series over time
-(rule $ChartColumns ($ChartColumns ($PrepOver optional) $Column) (ConcatFn ";series:"))
+(rule $ChartColumns ($ChartColumns $SeriesColumn) (ConcatFn ":"))
+# mpg series by origin
+(rule $ChartColumns ($ChartColumns $GroupByColumn) (ConcatFn ":"))
 
 # show mpg and cylinders
 (rule $ChartWithColumns ($ChartDescriptor ($Prep optional) $ChartColumns) (ConcatFn ";"))
 # mpg series
-(rule $ChartWithColumns ($Columns $ChartDescriptor) (ConcatFn reverse ";columns:"))
-
+(rule $ChartWithColumns ($ChartColumns $ChartDescriptor) (ConcatFn reverse ";"))
 
 # scatterplot
 (rule $ChartPhrase ($ChartDescriptor) (IdentityFn))
 # show a scatterplot (of) mpg
 (rule $ChartPhrase ($ChartWithColumns) (IdentityFn))
+# show mpg
+(rule $OnlyChartColumns ($ChartColumns) (IdentityFn))
 
-(rule $Chart (($ChartVerb optional) $ChartPhrase) (ConcatFn prepend "create:"))
+(rule $Chart ($ChartPhrase) (ConcatFn prepend "target:"))
+# Do not prepend target because only columns are specified, and chart target is parsed with $Target clause.
+(rule $Chart ($OnlyChartColumns) (IdentityFn))
+
 # show
-(rule $Chart ($ChartVerb) (ConstantFn (string "create:default_chart")))
+(rule $ChartShortcut ($ChartVerb) (ConstantFn @chart_type_default))
+(rule $Chart ($ChartShortcut) (ConcatFn prepend "target:"))
 
-(rule $Command ($Chart) (IdentityFn))
+(rule $Command (($ChartVerb optional) $Chart) (IdentityFn))

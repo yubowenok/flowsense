@@ -13,8 +13,8 @@
 (rule $Target_ ($ChartTarget) (IdentityFn))
 (rule $Source_ ($ChartSource) (IdentityFn))
 
-(rule $Target ($Target_) (ConcatFn prepend "to:"))
-(rule $Source ($Source_) (ConcatFn prepend "from:"))
+(rule $Target ($Target_) (ConcatFn prepend "target:"))
+(rule $Source ($Source_) (ConcatFn prepend "source:"))
 
 (rule $SourceTarget ($Source) (IdentityFn))
 (rule $SourceTarget ($Target) (IdentityFn))
