@@ -22,7 +22,6 @@
 (rule $StopNoun ($Prep ($StopNoun optional)) (IdentityFn))
 (rule $StopNoun ($StopNoun $StopNoun) (IdentityFn))
 
-
 (rule $StopPhrase ($StopNoun) (ConstantFn (string "")))
 (rule $StopPhrase ($StopToken) (ConstantFn (string "")))
 (rule $StopPhrase ($StopToken $StopPhrase) (ConstantFn (string "")))

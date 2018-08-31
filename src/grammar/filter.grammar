@@ -1,5 +1,5 @@
 (def @filter_marker (string "r_filter"))
-(rule $FilterVerb_ ($TOKEN) (FilterTokenFn token r_filter r_chart))
+(rule $FilterVerb_ ($TOKEN) (FilterTokenFn token r_filter r_select))
 (rule $FilterVerb_ ($Verb) (FilterTokenFn lemma sample find get))
 (rule $FilterVerb ($FilterVerb_) (ConstantFn @filter_marker))
 
@@ -10,12 +10,14 @@
 (def @between "[]")
 (def @pattern (string "pattern"))
 
+(rule $InverseToken ($TOKEN) (FilterTokenFn lemma no not))
+
 (rule $EqualToken ($TOKEN) (FilterTokenFn lemma be equal =))
 (rule $EqualPhrase ($EqualToken ($Prep optional)) (ConstantFn @eq))
 
 (rule $GreaterToken ($TOKEN) (FilterTokenFn lemma after greater larger more >))
 (rule $GreaterToken (> =) (ConstantFn @geq))
-(rule $GreaterToken (no $LessToken) (ConstantFn @geq))
+(rule $GreaterToken ($InverseToken $LessToken) (ConstantFn @geq))
 (rule $GreaterToken ($GreaterToken $Prep) (SelectFn 0))
 
 (rule $GreaterPhrase ($GreaterToken) (ConstantFn @geq))
@@ -23,7 +25,7 @@
 
 (rule $LessToken ($TOKEN) (FilterTokenFn lemma before less fewer smaller <))
 (rule $LessToken (< =) (ConstantFn @leq))
-(rule $LessToken (no $GreaterToken) (ConstantFn @leq))
+(rule $LessToken ($InverseToken $GreaterToken) (ConstantFn @leq))
 (rule $LessToken ($LessToken $Prep) (SelectFn 0))
 
 (rule $LessPhrase ($LessToken) (ConstantFn @leq))
@@ -47,8 +49,9 @@
 (rule $Compare ($Compare ($Conj optional) $Compare) (ConcatFn ":"))
 
 (rule $PatternOrRangeCondition (($Prep optional) $Column $Compare) (ConcatFn ":"))
-# with name (of) amc
-(rule $PatternOrRangeCondition (($Prep optional) $Column ($Prep optional) $Value) (ConcatFn ":=:"))
+# with name of amc
+(rule $EqualValue ($Prep $StringValue) (SelectFn 1))
+(rule $PatternOrRangeCondition (($Prep optional) $Column $EqualValue) (ConcatFn ":=:"))
 
 (rule $PatternOrRange ($PatternOrRangeCondition) (IdentityFn))
 
@@ -98,3 +101,6 @@
 (rule $Filter (($FilterVerb optional) ($StopNoun optional) ($Descriptor optional) $Filter_) (ConcatFn prepend "filter:"))
 
 (rule $Command ($Filter) (IdentityFn))
+
+# Chart creation with filter
+(rule $Command ($Chart $Filter) (ConcatFn ";"))

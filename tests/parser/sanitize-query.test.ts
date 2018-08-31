@@ -38,7 +38,7 @@ describe('sanitize query', () => {
     });
   });
 
-  it('should remove special stop word VB "please" and PRP', (done) => {
+  it('should remove special stop word VB "please" and PRP', done => {
     sendQuery('please show it', (err, sempreRes) => {
       sanitizeQuery(sempreRes.body).then(sanitized => {
         expect(sanitized).toBe('r_chart');
@@ -47,10 +47,37 @@ describe('sanitize query', () => {
     });
   });
 
-  it('should keep injected tokens r_*', (done) => {
+  it('should keep injected tokens r_*', done => {
     sendQuery('draw r_column_1 and r_column_2 in a plot', (err, sempreRes) => {
       sanitizeQuery(sempreRes.body).then(sanitized => {
         expect(sanitized).toBe('r_chart r_column_1 and r_column_2 in plot');
+        done();
+      });
+    });
+  });
+
+  it('select -> r_select', done => {
+    sendQuery('show r_column_1 of the selected cars in a r_chart_type_2', (err, sempreRes) => {
+      sanitizeQuery(sempreRes.body).then(sanitized => {
+        expect(sanitized).toBe('r_chart r_column_1 of r_select in r_chart_type_2');
+        done();
+      });
+    });
+  });
+
+  it('filter -> r_filter, group -> r_group', done => {
+    sendQuery('filter 5 percent of cars grouped by r_column_1', (err, sempreRes) => {
+      sanitizeQuery(sempreRes.body).then(sanitized => {
+        expect(sanitized).toBe('r_filter 5 percent of r_group by r_column_1');
+        done();
+      });
+    });
+  });
+
+  it('should keep inverse token', done => {
+    sendQuery('show cars with r_column_1 no larger than 15', (err, sempreRes) => {
+      sanitizeQuery(sempreRes.body).then(sanitized => {
+        expect(sanitized).toBe('r_chart with r_column_1 no larger than 15');
         done();
       });
     });

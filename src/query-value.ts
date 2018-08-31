@@ -1,4 +1,9 @@
 import _ from 'lodash';
+
+const SELECTION = '_selection';
+const DEFAULT_SOURCE = '_default_source';
+const DEFAULT_CHART_TYPE = '_default_chart_type';
+
 interface VisualsSpecification {
   assignment?: { [prop: string]: string | number };
   encoding?: {
@@ -44,6 +49,10 @@ export interface QueryValue {
     id: string; // node label or node type
     isCreate: boolean;
   }>;
+
+  // special operation flags
+  highlight?: boolean;
+  select?: boolean;
 }
 
 /**
@@ -168,10 +177,17 @@ const addSource = (result: QueryValue, values: string[]) => {
   if (!result.source) {
     result.source = [];
   }
-  result.source.push({
-    id: values[0],
-    isSelection: values[1] === 'selection',
-  });
+  if (values[0] === SELECTION) {
+    result.source.push({
+      id: DEFAULT_SOURCE,
+      isSelection: true,
+    });
+  } else {
+    result.source.push({
+      id: values[0],
+      isSelection: values[1] === SELECTION,
+    });
+  }
 };
 
 /**
@@ -181,9 +197,20 @@ const addTarget = (result: QueryValue, values: string[]) => {
   if (!result.target) {
     result.target = [];
   }
+  const isCreate = values[1] !== 'no_create';
+  if (values[0] !== DEFAULT_CHART_TYPE) {
+    // If the value is not default chart type, and a default chart type is present.
+    // We replace it with a more specific chart type.
+    for (const target of result.target) {
+      if (target.id === DEFAULT_CHART_TYPE) {
+        target.id = values[0];
+        return;
+      }
+    }
+  }
   result.target.push({
     id: values[0],
-    isCreate: values[1] !== 'no_create',
+    isCreate,
   });
 };
 
@@ -218,6 +245,20 @@ const addColumns = (result: QueryValue, values: string[]) => {
     }
     values = values.slice(2);
   }
+};
+
+/**
+ * Turns on highlight flag in the result.
+ */
+const addHighlight = (result: QueryValue, values: string[]) => {
+  result.highlight = true;
+};
+
+/**
+ * Turns on select flag in the result.
+ */
+const addSelect = (result: QueryValue, values: string[]) => {
+  result.select = true;
 };
 
 /**
@@ -261,13 +302,19 @@ export const parseQueryValue = (value: string): QueryValue => {
       case 'group_by':
         addGroupByColumn(result, values);
         break;
+      case 'highlight':
+        addHighlight(result, values);
+        break;
+      case 'select':
+        addSelect(result, values);
+        break;
     }
   }
 
   // If there are columns set but no target, the default action is to fill in a chart creation.
   if (result.columns && !result.target) {
     result.target = [{
-      id: '_chart_type_default',
+      id: DEFAULT_CHART_TYPE,
       isCreate: true,
     }];
   }

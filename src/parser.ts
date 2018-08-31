@@ -157,9 +157,9 @@ export const sanitizeQuery = (html: string): Promise<string> => {
             if (err) {
               return reject(err);
             }
-            const similarity = +res.body;
-            if (similarity >= def.VERB_WUP_THRESHOLD && similarity > maxVerbSimilarity) {
-              maxVerbSimilarity = similarity;
+            const similarity: { wup: number, lch: number } = JSON.parse(res.body);
+            if (similarity.wup >= def.VERB_WUP_THRESHOLD && similarity.wup > maxVerbSimilarity) {
+              maxVerbSimilarity = similarity.wup;
               mostSimilarMarker = marker;
             }
             doneVerb();
@@ -174,9 +174,9 @@ export const sanitizeQuery = (html: string): Promise<string> => {
           if (err) {
             return reject(err);
           }
-          const similarity = +res.body;
+          const similarity = JSON.parse(res.body);
           // Verb check may have processed this token. Avoid overwriting. Verb check has higher priority.
-          if (similarity < def.STOP_NOUN_WUP_THRESHOLD && tokens[index] === token) {
+          if (similarity.wup < def.STOP_NOUN_WUP_THRESHOLD && tokens[index] === token) {
             tokens[index] = null;
           }
           done();

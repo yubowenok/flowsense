@@ -34,6 +34,8 @@ export const VERB_POS_TAGS = ['VB', 'VBN', 'VBP'];
 export const STOP_TOKEN_POS_EXCEPTIONS = [
   'all',
   'each',
+  'no',
+  'not',
 ];
 
 
@@ -73,6 +75,8 @@ export const SPECIAL_NOUNS = [
   // tokens of chart types
   'series',
   'distribution',
+  // selection
+  'selection',
 ];
 // Be conservative to keep most nouns, instead of filtering out useful nouns as stop nouns.
 // Prefer to have the user disambiguiate in the UI.
@@ -86,6 +90,9 @@ export const SPECIAL_MARKER_VERBS = {
   r_load: ['load', 'open'],
   r_chart: ['show', 'draw', 'visualize'],
   r_filter: ['filter', 'find', 'search', 'sample', 'sampling'],
+  r_select: ['select', 'selection', 'choose'],
+  r_highlight: ['highlight'],
+  r_group: ['group'],
 };
 // Be conservative so as not to easily consider new verbs as special markers.
 export const VERB_WUP_THRESHOLD = 0.9;
@@ -95,8 +102,17 @@ export const SPECIAL_VERBS = [
   'show',
   'load',
   'open',
+  'group',
+  'select',
+  'selection',
   'increase',
   'decrease',
+  'filter',
   'sample',
   'sampling',
 ];
+
+export const DEFAULT_CHART_TYPE = '_default_chart_type';
+export const DEFAULT_SOURCE = '_default_source';
+export const SELECTION = '_selection';
+export const ALL_COLUMNS = '_all_columns';

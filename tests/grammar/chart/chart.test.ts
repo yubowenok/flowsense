@@ -1,8 +1,7 @@
 import _ from 'lodash';
 
-import { checkQuery, injectedValue } from './util';
-
-const CHART_TYPE_DEFAULT = '_chart_type_default';
+import { checkQuery, injectedValue } from '../util';
+import { DEFAULT_CHART_TYPE, ALL_COLUMNS } from '@src/def';
 
 describe('charts', () => {
   const injectedMpg = injectedValue('mpg');
@@ -35,19 +34,19 @@ describe('charts', () => {
   });
 
   it('default chart with a column', done => {
-    checkQuery('draw a plot of mpg', done, `target:${CHART_TYPE_DEFAULT};columns:${injectedMpg}`, {
+    checkQuery('draw a plot of mpg', done, `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg}`, {
       columns: [injectedMpg],
       target: [{
-        id: CHART_TYPE_DEFAULT,
+        id: DEFAULT_CHART_TYPE,
         isCreate: true,
       }],
     });
   });
 
   it('default chart', done => {
-    checkQuery('show a plot', done, `target:${CHART_TYPE_DEFAULT}`, {
+    checkQuery('show a plot', done, `target:${DEFAULT_CHART_TYPE}`, {
       target: [{
-        id: CHART_TYPE_DEFAULT,
+        id: DEFAULT_CHART_TYPE,
         isCreate: true,
       }],
     });
@@ -67,23 +66,33 @@ describe('charts', () => {
 
   it('all columns', done => {
     checkQuery('visualize all dimensions in a heatmap', done,
-      `columns:_all_columns;target:${injectedValue('heatmap')}`, {
+      `target:${injectedValue('heatmap')};columns:${ALL_COLUMNS}`, {
         target: [{
           id: injectedValue('heatmap'),
           isCreate: true,
         }],
-        columns: ['_all_columns'],
+        columns: [ALL_COLUMNS],
       });
   });
 
-  it('only columns', done => {
-    checkQuery('mpg and horsepower', done,
-    `columns:${injectedMpg}&${injectedHorsepower}`, {
+  it('chart verb with column', done => {
+    checkQuery('show mpg', done,
+    `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg}`, {
       target: [{
-        id: CHART_TYPE_DEFAULT,
+        id: DEFAULT_CHART_TYPE,
         isCreate: true,
       }],
-      columns: [injectedMpg, injectedHorsepower],
+      columns: [injectedMpg],
+    });
+  });
+
+  it('only chart verb', done => {
+    checkQuery('show', done,
+    `target:${DEFAULT_CHART_TYPE}`, {
+      target: [{
+        id: DEFAULT_CHART_TYPE,
+        isCreate: true,
+      }],
     });
   });
 
@@ -111,9 +120,9 @@ describe('charts', () => {
 
   it('draw series', done => {
     checkQuery('show mpg series', done,
-    `target:${CHART_TYPE_DEFAULT};columns:${injectedMpg}`, {
+    `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg}`, {
       target: [{
-        id: CHART_TYPE_DEFAULT,
+        id: DEFAULT_CHART_TYPE,
         isCreate: true,
       }],
       columns: [injectedMpg],
@@ -122,8 +131,7 @@ describe('charts', () => {
 
   it('specify series with group by column and chart type', done => {
     checkQuery('show mpg over model.year group by origin in a line chart', done,
-      `columns:${injectedMpg}:series:${injectedModelYear}:group_by:${injectedOrigin};` +
-      `target:${injectedLineChart}`, {
+      `target:${injectedLineChart};columns:${injectedMpg}:series:${injectedModelYear}:group_by:${injectedOrigin}`, {
         target: [{
           id: injectedLineChart,
           isCreate: true,
@@ -136,9 +144,9 @@ describe('charts', () => {
 
   it('specify series without chart type', done => {
     checkQuery('show mpg series over model.year', done,
-      `columns:${injectedMpg}:series:${injectedModelYear}`, {
+      `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg}:series:${injectedModelYear}`, {
         target: [{
-          id: CHART_TYPE_DEFAULT,
+          id: DEFAULT_CHART_TYPE,
           isCreate: true,
         }],
         columns: [injectedMpg],
@@ -148,9 +156,9 @@ describe('charts', () => {
 
   it('specify series with group by column, without chart type', done => {
     checkQuery('show mpg series over model.year for each origin', done,
-      `columns:${injectedMpg}:series:${injectedModelYear}:group_by:${injectedOrigin}`, {
+      `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg}:series:${injectedModelYear}:group_by:${injectedOrigin}`, {
         target: [{
-          id: CHART_TYPE_DEFAULT,
+          id: DEFAULT_CHART_TYPE,
           isCreate: true,
         }],
         columns: [injectedMpg],

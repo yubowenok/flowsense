@@ -15,12 +15,12 @@
 (rule $SetPhrase ($SetToken) (IdentityFn))
 
 (rule $TwoNodes (($Prep optional) $Node ($Conj optional) $Node) (ConcatFn ":"))
-(rule $SourceNode (($Prep optional) $Node) (IdentityFn))
+(rule $SetSourceNode (($Prep optional) $Node) (IdentityFn))
 
 (rule $Set ($SetPhrase $TwoNodes) (ConcatFn ":"))
 (rule $Set ($SetPhrase $Node) (ConcatFn ":"))
-(rule $Set ($SetPhrase $SourceNode ($Prep optional) $SourceNode) (ConcatFn ":"))
-(rule $Set ($SetPhrase $SourceNode) (ConcatFn ":"))
+(rule $Set ($SetPhrase $SetSourceNode ($Prep optional) $SetSourceNode) (ConcatFn ":"))
+(rule $Set ($SetPhrase $SetSourceNode) (ConcatFn ":"))
 (rule $Set ($SetPhrase) (IdentityFn))
 
 (rule $SetMarker ($Marker) (IdentityFn))

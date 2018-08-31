@@ -41,6 +41,5 @@
 (rule $Link ($LinkHighlight $LinkSource $LinkTarget) (ConcatFn " "))
 
 
-### Application
 (rule $Command ($Extract) (IdentityFn))
 (rule $Command ($Link) (IdentityFn))

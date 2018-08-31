@@ -1,14 +1,19 @@
 import _ from 'lodash';
 
 import { checkQuery, injectedValue } from '../util';
+import { DEFAULT_CHART_TYPE } from '@src/def';
 
 describe('attribute filter: range filter', () => {
   it('range with one side', done => {
     checkQuery('show only cars with mpg greater than 15', done,
-      `filter:${injectedValue('mpg')}:>=:15.0`, {
+      `target:${DEFAULT_CHART_TYPE};filter:${injectedValue('mpg')}:>=:15.0`, {
         filters: [{
           column: injectedValue('mpg'),
           range: { min: '15.0' },
+        }],
+        target: [{
+          id: DEFAULT_CHART_TYPE,
+          isCreate: true,
         }],
       });
   });

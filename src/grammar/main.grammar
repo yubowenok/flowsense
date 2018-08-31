@@ -2,7 +2,7 @@
 (include column.grammar)
 (include visuals.grammar)
 (include chart.grammar)
-#(include selection.grammar)
+(include selection.grammar)
 (include filter.grammar)
 (include load.grammar)
 (include set.grammar)

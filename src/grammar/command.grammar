@@ -1,10 +1,12 @@
 ### Wrap up everything ###
 (rule $Command ($StopToken $Command) (SelectFn 1))
 (rule $Command ($Command $StopToken) (SelectFn 0))
-# (rule $CommandWithConnector ($Connector $Command) (SelectFn 1))
-# (rule $Command ($Command $CommandWithConnector) (ConcatFn ";;"))
 
 (rule $Command ($SourceTarget $Command) (ConcatFn ";"))
 (rule $Command ($Command $SourceTarget) (ConcatFn ";"))
+# (rule $Command ($Command ($Connector optional) $Command) (ConcatFn ";"))
 
 (rule $ROOT ($Command) (IdentityFn))
+
+# Single command prevents concatenation
+# (rule $ROOT ($SingleCommand) (IdentityFn))

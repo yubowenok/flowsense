@@ -1,18 +1,30 @@
 import _ from 'lodash';
 
 import { checkQuery, injectedValue } from '../util';
+import { DEFAULT_CHART_TYPE } from '@src/def';
 
 describe('attribute filter: pattern matching', () => {
-  const equalityStringAnswer = `filter:${injectedValue('name')}:=:buick`;
+  it('equality using "equal"', done => {
+    checkQuery('find name equals buick', done,
+    `filter:${injectedValue('name')}:=:buick`, {
+      filters: [{
+        column: injectedValue('name'),
+        pattern: 'buick',
+      }],
+    });
+  });
+
+  const equalityStringAnswer = `target:${DEFAULT_CHART_TYPE};filter:${injectedValue('name')}:=:buick`;
   const equalityAnswer = {
     filters: [{
       column: injectedValue('name'),
       pattern: 'buick',
     }],
+    target: [{
+      id: DEFAULT_CHART_TYPE,
+      isCreate: true,
+    }],
   };
-  it('equality using "equal"', done => {
-    checkQuery('find name equals buick', done, equalityStringAnswer, equalityAnswer);
-  });
   it('equality using "being"', done => {
     checkQuery('draw only name being buick', done, equalityStringAnswer, equalityAnswer);
   });

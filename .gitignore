@@ -11,6 +11,8 @@ dist/
 all.result
 all.test
 src/grammar/main_test.grammar
+# debug only test
+tests/grammar/debug.test.ts
 
 # .env files
 .env*

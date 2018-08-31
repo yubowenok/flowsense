@@ -1,77 +1,32 @@
-### Selection and highlighting ###
 (def @highlight (string "highlight"))
-(def @selection (string "selection"))
-(rule $HighlightToken ($TOKEN) (FilterTokenFn lemma highlight brush))
+(def @selection (string "_selection"))
 
-(rule $HighlightVerb ($HighlightToken) (ConstantFn @highlight))
-(rule $HighlightVerb ((make optional) prominent) (ConstantFn @highlight))
+(rule $HighlightVerb ($TOKEN) (FilterTokenFn lemma highlight brush r_highlight))
+(rule $SelectVerb ($TOKEN) (FilterTokenFn lemma select choose r_select))
 
-(rule $Selection (chosen) (ConstantFn @selection))
-(rule $Selection (select) (ConstantFn @selection))
-(rule $Selection (selected) (ConstantFn @selection))
-(rule $Selection (selection) (ConstantFn @selection))
-(rule $Selection ($Selection $StopNoun) (SelectFn 0))
-(rule $Selection ($Det $Selection) (ConstantFn @selection))
+(rule $SelectToken_ ($SelectVerb) (IdentityFn))
+(rule $SelectToken_ ($TOKEN) (FilterTokenFn lemma chosen selected selection))
+(rule $SelectToken ($SelectToken_) (ConstantFn "select"))
 
-# Selection with dimensions
-(rule $SelectionDimsPartial (($Prep optional) $Selection) (ConstantFn (lambda x (call + (string "selection ") (var x)))))
-(rule $SelectionDimsPartial2 (($Prep optional) $Selection) (ConstantFn (lambda x (call + (string "chart_type selection ") (var x)))))
-(rule $SelectionDims ($Dims $SelectionDimsPartial) (JoinFn backward))
-(rule $SelectionDims ($Selection $Dims) (ConcatFn " "))
+(rule $SelectionPhrase (($Prep optional) $SelectToken ($StopNoun optional)) (ConstantFn @selection))
 
-# highlight selected
-(rule $HighlightSelection ($HighlightVerb $Selection) (ConcatFn " "))
-# highlight the selected data
-(rule $Highlight ($HighlightSelection) (IdentityFn))
+(rule $SelectionSource ($SelectionPhrase) (ConcatFn prepend "source:"))
 
-# highlight selection of scatterplot
-(rule $Highlight ($HighlightSelection $PrepFrom $Plot) (ConcatFn " "))
+# from node.grammar
+(rule $Source_ ($SelectionPhrase $Source_) (ConcatFn reverse ":"))
+(rule $Source_ ($SelectionPhrase) (IdentityFn))
 
-# highlight selection in a scatterplot
-(rule $HighlightFromTo ($Highlight $InChart) (ConcatFn " "))
+(rule $Chart_ ($Chart_ $SelectionSource) (ConcatFn ";"))
+(rule $Chart_ ($SelectionSource $Chart_) (ConcatFn reverse ";"))
+(rule $ChartShortcut ($ChartShortcut $SelectionSource) (ConcatFn ";"))
 
 # highlight
-(rule $Highlight ($HighlightVerb) (IdentityFn))
+(rule $Highlight ($HighlightVerb) (ConstantFn @highlight))
 
-# show a scatterplot (of) selection
-(rule $Plot ($PlotPhrase ($Prep optional) $Selection) (ConcatFn " "))
-# show selection in a parallel coordinates
-(rule $Plot ($PlotPhrase $Selection ($Prep optional) ($Chart optional)) (ConcatFn " "))
+(rule $Node ($SelectionPhrase $Node) (ConcatFn reverse ":"))
+(rule $Node ($Node $SelectionPhrase) (ConcatFn ":"))
 
-# show mpg of selected cars in a scatterplot
-# Note that ConcatFn was initially not working here because of an unintuitive behavior:
-# https://github.com/percyliang/sempre/issues/60
-# We hacked the ConcatFn to handle this special case.
-(rule $Plot ($PlotPhrase $SelectionDims ($Prep optional) ($Chart optional)) (ConcatFn " "))
+(rule $SelectWithCondition ($SelectToken $Filter) (ConcatFn ";"))
 
-# mpg of selection in scatterplot
-(rule $Plot ($SelectionDims $InChart) (ConcatFn reverse " "))
-# selection in scatterplot
-(rule $Plot ($Selection $InChart) (ConcatFn reverse " "))
-
-# selection
-(rule $Plot ($Selection) (ConstantFn (string "chart_type selection")))
-
-# mpg of selected (add chart_type in the beginning)
-(rule $Plot ($Dims $SelectionDimsPartial2) (JoinFn backward))
-
-(rule $Plot ($PlotPhrase $Selection ($StopNoun optional) $FilterCondition ($Chart optional)) (ConcatFn " "))
-(rule $Plot ($PlotPhrase $SelectionDims ($StopNoun optional) $FilterCondition ($Prep optional) ($Chart optional)) (ConcatFn " "))
-
-
-# Make selection
-(def @select (string "select"))
-(rule $SelectToken ($TOKEN) (FilterTokenFn lemma select choose circle))
-(rule $SelectVerb ($SelectToken) (ConstantFn @select))
-
-(rule $Select ($SelectVerb ($StopNoun optional) ($Prep optional) $Condition) (ConcatFn " "))
-(rule $SelectCondition ($SelectVerb ($StopNoun optional) ($Prep optional) $Condition) (SelectFn 1))
-
-(rule $FilterToken ($TOKEN) (FilterTokenFn lemma filter))
-(rule $FilterSelection (($PrepTo optional) ($Det optional) $FilterToken) (ConstantFn (string "filter selection")))
-(rule $Select ($SelectCondition $FilterSelection) (ConcatFn reverse " "))
-
-### Application ###
-(rule $Command ($HighlightFromTo) (IdentityFn)) 
-(rule $Command ($Highlight) (IdentityFn)) 
-(rule $Command ($Select) (IdentityFn)) 
+(rule $Command ($SelectWithCondition) (IdentityFn))
+(rule $Command ($Highlight) (IdentityFn))

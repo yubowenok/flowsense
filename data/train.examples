@@ -1,32 +1,5 @@
-# Include all stop words as one command, instead of several commands.
-#(example
-#  (utterance "the car")
-#  (targetValue (string "the car"))
-#)
-# Ignore leading $Det in the load command. Ignore trailing dataset stop word.
-#(example
-#  (utterance "load the car dataset")
-#  (targetValue (string "load:car"))
-#)
-# Always expand to columns rather than take columns as stop nouns.
-# Always consider specific chart types (instead of use "default").
-#(example
-#  (utterance "a scatterplot of mpg")
-#  (targetValue (string "chart:scatterplot:mpg"))
-#)
-# Take "over" as signal for series.
-#(example
-#  (utterance "show mpg over model.year")
-#  (targetValue (string "chart:default:mpg:series:model.year"))
-#)
-# Prefer visual encoding rules to pattern matching (mpg in "size")
-#(example
-#  (utterance "r_column_1 by size")
-#  (targetValue (string "visual:mpg:size:1:10"))
-#)
-# Prefer value parser (like NumberFn) to ValueToken (parses as string).
-# Note that ranges are exceptions than cannot be parsed by NumberFn.
-#(example
-#  (utterance "r_column_1 greater than 15")
-#  (targetValue (string "filter:r_column_1:>=:15.0"))
-#)
+# Prefer specific select operation, than source:_selection
+(example
+  (utterance "r_select with r_column_1 greater than 15")
+  (targetValue (string "select;filter:r_column_1:>=:15.0"))
+)

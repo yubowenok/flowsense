@@ -8,8 +8,8 @@
 
 main_grammar="../src/grammar/main.grammar"
 test_grammar="../src/grammar/main_test.grammar"
-wup_server="../src/script/wup.py"
-wup_server_addr="http://localhost:7473"
+similarity_server="../src/script/similarity.py"
+similarity_server_addr="http://localhost:7473"
 
 cp $main_grammar $test_grammar
 echo "(include test.grammar)" >> $test_grammar
@@ -19,14 +19,12 @@ screen -d -m java -cp libsempre/*:lib/* -ea edu.stanford.nlp.sempre.Main\
     -languageAnalyzer corenlp.CoreNLPAnalyzer\
     -Grammar.inPaths $test_grammar\
     -FeatureExtractor.featureDomains rule\
-    -Learner.maxTrainIters 3\
-    -server true\
-    -Dataset.inPaths\
-     train:../data/train.examples
+    -Builder.inParamsPath ../data/params.txt\
+    -server true
 
 semprePid=$(screen -ls | grep '[0-9]*.*(Detached)' | sed 's/\.\..*//')
 
-screen -d -m python $wup_server
+screen -d -m python $similarity_server
 
 # Wait for Sempre to launch and train
 echo 'waiting for sempre initialization'
@@ -37,18 +35,18 @@ do
   sleep 1
 done
 # Call sempre server once. This blocks before CoreNLP is loaded.
-curl http://localhost:8400/sempre
+curl http://localhost:8400/sempre &> /dev/null
 echo 'sempre is ready'
 
-# Wait for wup server to import nltk
-echo 'waiting for wup server initialization'
+# Wait for similarity server to import nltk
+echo 'waiting for similarity server initialization'
 while [ 1 ]
 do
-  curl -I $wup_server_addr'/x/y' &> /dev/null
+  curl -I $similarity_server_addr'/x/y' &> /dev/null
   if [ $? -eq 0 ]; then break; fi
   sleep 1
 done
-echo 'wup server is ready'
+echo 'similarity server is ready'
 
 # Run tests via jest
 yarn test
@@ -56,7 +54,7 @@ test_result=$?
 
 # Kill the screen that runs sempre
 screen -X -S $semprePid quit
-# Kill the screen that runs wup_server
+# Kill the screen that runs similarity server
 screen -X -S $(screen -ls | grep '[0-9]*.*(Detached)' | sed 's/\.\..*//') quit
 
 exit $test_result

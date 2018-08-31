@@ -1,0 +1,50 @@
+rule :: $Value -> $Number (IdentityFn)	1.0097460896730412
+rule :: $Number -> $NumberPhrase (NumberFn)	1.0097460896730412
+rule :: $NumberPhrase -> $PHRASE (FilterPosTagFn token LS CD)	1.0097460896730412
+rule :: $Intermediate202 -> $Filter_ (SelectFn 0)	1.0005723779291325
+rule :: $Intermediate188 -> $Prep $Column (SelectFn 1)	1.000247827368884
+rule :: $SelectVerb -> $TOKEN (FilterTokenFn lemma select choose r_select)	1.0000722019929822
+rule :: $SelectToken_ -> $SelectVerb (IdentityFn)	1.0000722019929822
+rule :: $SelectToken -> $SelectToken_ (ConstantFn select)	1.0000722019929822
+rule :: $SelectWithCondition -> $SelectToken $Filter (ConcatFn ;)	1.0000312659273003
+rule :: $Command -> $SelectWithCondition (IdentityFn)	1.0000312659273003
+rule :: $Intermediate201 -> $Descriptor (ConstantFn null)	1.0000193534996222
+rule :: $Intermediate200 -> $StopNoun (ConstantFn null)	1.0000000064936705
+rule :: $Intermediate3 -> $Descriptor_ (SelectFn 0)	0.9997529658320159
+rule :: $Descriptor -> $Intermediate3 (ConstantFn "")	0.9997529658320159
+rule :: $Descriptor_ -> $TOKEN (FilterTokenFn lemma with that satisfy have)	0.9997529658320159
+rule :: $Prep -> $TOKEN (FilterPosTagFn token IN TO VBG)	-0.9997529658320322
+rule :: $Intermediate181 -> $Intermediate180 $StopNoun (SelectFn 0)	-1.0000000049132434
+rule :: $Intermediate200 -> $FilterVerb $StopNoun (ConstantFn null)	-1.0000002681452957
+rule :: $StopNoun -> $Intermediate4 (IdentityFn)	-1.0000003966004678
+rule :: $Intermediate4 -> $Prep (SelectFn 0)	-1.0000003966004678
+rule :: $Source_ -> $SelectionPhrase (IdentityFn)	-1.000000563877996
+rule :: $Command -> $SourceTarget $Command (ConcatFn ;)	-1.000000563877996
+rule :: $SelectionPhrase -> $Intermediate181 (ConstantFn (string _selection))	-1.000000563877996
+rule :: $Intermediate180 -> $SelectToken (SelectFn 0)	-1.000000563877996
+rule :: $Source -> $Source_ (ConcatFn prepend source:)	-1.000000563877996
+rule :: $SourceTarget -> $Source (IdentityFn)	-1.000000563877996
+rule :: $Intermediate181 -> $Intermediate180 (SelectFn 0)	-1.0000007501995802
+rule :: fire	-1.0000073998066377
+rule :: $Command -> $Filter (IdentityFn)	-1.0000312659273007
+rule :: $FilterVerb_ -> $TOKEN (FilterTokenFn token r_filter r_select)	-1.000072201992983
+rule :: $FilterVerb -> $FilterVerb_ (ConstantFn (string r_filter))	-1.000072201992983
+rule :: $Intermediate201 -> $Intermediate200 $Descriptor (ConstantFn null)	-1.0001081493895312
+rule :: $Intermediate200 -> $FilterVerb (ConstantFn null)	-1.0001081689166953
+rule :: $Intermediate201 -> $Intermediate200 (ConstantFn null)	-1.0001626718959402
+rule :: $Intermediate188 -> $Column (SelectFn 0)	-1.000247827368892
+rule :: $Intermediate202 -> $Intermediate201 $Filter_ (SelectFn 1)	-1.0005723779291404
+rule :: $ValueToken_ -> $TOKEN (FilterPosTagFn token reverse IN DT CC)	-1.0097460896730417
+rule :: $Value -> $ValueToken (IdentityFn)	-1.0097460896730417
+rule :: $ValueToken -> $ValueToken_ (FilterMarkerFn reject)	-1.0097460896730417
+rule :: $Filter -> $Intermediate202 (ConcatFn prepend filter:)	-1.682459535971602
+rule :: $ColumnMarker -> $TOKEN (FilterTokenFn lemma r_column_1 r_column_2 r_column_3 r_column_4 r_column_5 r_column_6 r_column_7 r_column_8 r_column_9 r_column_10)	-1.682459535971602
+rule :: $Compare -> $GreaterPhrase $Value (ConcatFn :)	-1.682459535971602
+rule :: $PatternOrRange -> $PatternOrRangeCondition (IdentityFn)	-1.682459535971602
+rule :: $Filter_ -> $PatternOrRange (IdentityFn)	-1.682459535971602
+rule :: $Column -> $ColumnMarker (IdentityFn)	-1.682459535971602
+rule :: $GreaterPhrase -> $GreaterToken (ConstantFn >=)	-1.682459535971602
+rule :: $PatternOrRangeCondition -> $Intermediate188 $Compare (ConcatFn :)	-1.682459535971602
+rule :: $ROOT -> $Command (IdentityFn)	-1.682459535971602
+rule :: $GreaterToken -> $TOKEN (FilterTokenFn lemma after greater larger more >)	-1.682459535971602
+rule :: $GreaterToken -> $GreaterToken $Prep (SelectFn 0)	-1.682459535971602

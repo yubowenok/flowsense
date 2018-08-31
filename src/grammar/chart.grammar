@@ -1,7 +1,7 @@
 # Charts
-(def @chart_type_default (string "_chart_type_default"))
+(def @default_chart_type (string "_default_chart_type"))
 (rule $ChartToken ($TOKEN) (FilterTokenFn lemma plot chart visualization graph drawing series))
-(rule $ChartDescriptor ($ChartToken) (ConstantFn @chart_type_default))
+(rule $ChartDescriptor ($ChartToken) (ConstantFn @default_chart_type))
 (rule $ChartDescriptor (($Det optional) $ChartType ($ChartToken optional)) (IdentityFn))
 (rule $ChartDescriptor ($Prep ($Det optional) $ChartDescriptor) (SelectFn 1))
 (rule $ChartDescriptor ($ChartType) (IdentityFn))
@@ -33,15 +33,16 @@
 (rule $ChartPhrase ($ChartDescriptor) (IdentityFn))
 # show a scatterplot (of) mpg
 (rule $ChartPhrase ($ChartWithColumns) (IdentityFn))
-# show mpg
-(rule $OnlyChartColumns ($ChartColumns) (IdentityFn))
-
-(rule $Chart ($ChartPhrase) (ConcatFn prepend "target:"))
-# Do not prepend target because only columns are specified, and chart target is parsed with $Target clause.
-(rule $Chart ($OnlyChartColumns) (IdentityFn))
 
 # show
-(rule $ChartShortcut ($ChartVerb) (ConstantFn @chart_type_default))
-(rule $Chart ($ChartShortcut) (ConcatFn prepend "target:"))
+(rule $ChartShortcut_ ($ChartVerb) (ConstantFn @default_chart_type))
+(rule $ChartShortcut ($ChartShortcut_) (ConcatFn prepend "target:"))
 
-(rule $Command (($ChartVerb optional) $Chart) (IdentityFn))
+# show mpg
+(rule $Chart_ ($ChartShortcut_ $ChartColumns) (ConcatFn ";"))
+(rule $Chart_ ($ChartPhrase) (IdentityFn))
+
+(rule $Chart (($ChartVerb optional) $Chart_) (ConcatFn prepend "target:"))
+(rule $Chart ($ChartShortcut) (IdentityFn))
+
+(rule $Command ($Chart) (IdentityFn))
