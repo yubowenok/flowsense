@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import { checkQuery, injectedValue } from '../util';
 import { DEFAULT_CHART_TYPE, ALL_COLUMNS } from '@src/def';
 

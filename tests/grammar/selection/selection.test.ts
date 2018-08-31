@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import { checkQuery, injectedValue } from '../util';
 import { SELECTION, DEFAULT_SOURCE, DEFAULT_CHART_TYPE } from '@src/def';
 
@@ -119,7 +117,7 @@ describe('interactive selection and selection port', () => {
 
   it('show columns for selection with chart target', done => {
     checkQuery('show mpg of the selected cars in a histogram', done,
-      `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg};source:${SELECTION};target:${injectedHistogram}`, {
+      `target:${injectedHistogram};columns:${injectedMpg}:${SELECTION}`, {
         columns: [injectedMpg],
         source: [{
           id: DEFAULT_SOURCE,

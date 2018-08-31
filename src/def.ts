@@ -11,8 +11,9 @@
  * PRP: it, they
  * UH: hi, hello
  * DT: a, the
+ * POS: 's
  */
-export const STOP_TOKEN_POS_TAGS = ['WRB', 'WDT', 'VBD-AUX', 'WP', 'PRP', 'RB', 'UH', 'DT'];
+export const STOP_TOKEN_POS_TAGS = ['WRB', 'WDT', 'VBD-AUX', 'WP', 'PRP', 'RB', 'UH', 'DT', 'POS'];
 
 /**
  * Stop nouns are removed if they are not close to any special words by wup similarity.
@@ -93,6 +94,8 @@ export const SPECIAL_MARKER_VERBS = {
   r_select: ['select', 'selection', 'choose'],
   r_highlight: ['highlight'],
   r_group: ['group'],
+  r_extract: ['extract'],
+  r_link: ['link'],
 };
 // Be conservative so as not to easily consider new verbs as special markers.
 export const VERB_WUP_THRESHOLD = 0.9;
@@ -105,6 +108,8 @@ export const SPECIAL_VERBS = [
   'group',
   'select',
   'selection',
+  'extract',
+  'link',
   'increase',
   'decrease',
   'filter',
@@ -116,3 +121,4 @@ export const DEFAULT_CHART_TYPE = '_default_chart_type';
 export const DEFAULT_SOURCE = '_default_source';
 export const SELECTION = '_selection';
 export const ALL_COLUMNS = '_all_columns';
+export const LINK_OF = '_link_of';

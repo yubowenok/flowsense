@@ -6,7 +6,7 @@
 (include filter.grammar)
 (include load.grammar)
 (include set.grammar)
-#(include link.grammar)
+(include link.grammar)
 (include layout.grammar)
 (include injected.grammar)
 (include command.grammar)

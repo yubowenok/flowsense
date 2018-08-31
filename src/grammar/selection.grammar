@@ -1,7 +1,11 @@
 (def @highlight (string "highlight"))
 (def @selection (string "_selection"))
 
+# highlight
 (rule $HighlightVerb ($TOKEN) (FilterTokenFn lemma highlight brush r_highlight))
+(rule $Highlight ($HighlightVerb) (ConstantFn @highlight))
+
+# selection
 (rule $SelectVerb ($TOKEN) (FilterTokenFn lemma select choose r_select))
 
 (rule $SelectToken_ ($SelectVerb) (IdentityFn))
@@ -20,13 +24,15 @@
 (rule $Chart_ ($SelectionSource $Chart_) (ConcatFn reverse ";"))
 (rule $ChartShortcut ($ChartShortcut $SelectionSource) (ConcatFn ";"))
 
-# highlight
-(rule $Highlight ($HighlightVerb) (ConstantFn @highlight))
-
 (rule $Node ($SelectionPhrase $Node) (ConcatFn reverse ":"))
 (rule $Node ($Node $SelectionPhrase) (ConcatFn ":"))
 
+(rule $SelectionDescriptor ($SelectionPhrase) (ConstantFn @selection))
+(rule $SelectionColumns ($Columns $SelectionDescriptor) (ConcatFn ":"))
+(rule $SelectionColumns ($SelectionDescriptor $Columns) (ConcatFn reverse ":"))
+(rule $Columns ($SelectionColumns) (IdentityFn))
+
 (rule $SelectWithCondition ($SelectToken $Filter) (ConcatFn ";"))
 
-(rule $Command ($SelectWithCondition) (IdentityFn))
 (rule $Command ($Highlight) (IdentityFn))
+(rule $Command ($SelectWithCondition) (IdentityFn))

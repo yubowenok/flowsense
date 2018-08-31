@@ -4,14 +4,19 @@
 # Nodes
 (rule $Node (($Det optional) $TOKEN) (FilterTokenFn token r_node_1 r_node_2 r_node_3 r_node_4 r_node_5))
 # (rule $Node (($Det optional) $StopNoun ($Prep optional) $Node) (SelectFn 1))
-(rule $Node ($NodeInjected) (IdentityFn))
+(rule $Node ($StopNoun ($Prep optional) $Node) (SelectFn 1))
+(rule $Node ($Node ($Conj optional) $Node) (ConcatFn ":"))
 
 ## Command source/target ##
+(rule $NodeTarget ($PrepTo $Node) (SelectFn 1))
+(rule $NodeSource ($PrepFrom $Node) (SelectFn 1))
 (rule $ChartTarget ($PrepTo $ChartDescriptor) (SelectFn 1))
 (rule $ChartSource ($PrepFrom $ChartDescriptor) (SelectFn 1))
 
 (rule $Target_ ($ChartTarget) (IdentityFn))
+(rule $Target_ ($NodeTarget) (IdentityFn))
 (rule $Source_ ($ChartSource) (IdentityFn))
+(rule $Source_ ($NodeSource) (IdentityFn))
 
 (rule $Target ($Target_) (ConcatFn prepend "target:"))
 (rule $Source ($Source_) (ConcatFn prepend "source:"))

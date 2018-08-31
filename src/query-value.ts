@@ -1,8 +1,5 @@
 import _ from 'lodash';
-
-const SELECTION = '_selection';
-const DEFAULT_SOURCE = '_default_source';
-const DEFAULT_CHART_TYPE = '_default_chart_type';
+import { SELECTION, DEFAULT_SOURCE, DEFAULT_CHART_TYPE, LINK_OF } from './def';
 
 interface VisualsSpecification {
   assignment?: { [prop: string]: string | number };
@@ -32,6 +29,15 @@ interface SetOperatorSpecification {
   nodes: string[]; // node labels
 }
 
+interface ExtractSpecification {
+  column: string;
+}
+
+interface LinkSpecification {
+  extractColumn: string;
+  filterColumn: string;
+}
+
 export interface QueryValue {
   loadDataset?: string;
   autoLayout?: boolean;
@@ -40,6 +46,8 @@ export interface QueryValue {
   groupByColumn?: string;
   visuals?: VisualsSpecification[];
   filters?: FilterSpecification[];
+  extract?: ExtractSpecification;
+  link?: LinkSpecification;
   setOperator?: SetOperatorSpecification;
   source?: Array<{
     id: string; // node label or node type
@@ -177,16 +185,12 @@ const addSource = (result: QueryValue, values: string[]) => {
   if (!result.source) {
     result.source = [];
   }
-  if (values[0] === SELECTION) {
-    result.source.push({
-      id: DEFAULT_SOURCE,
-      isSelection: true,
-    });
-  } else {
-    result.source.push({
-      id: values[0],
-      isSelection: values[1] === SELECTION,
-    });
+  const id = values[0] === SELECTION ? DEFAULT_SOURCE : values[0];
+  const isSelection = values[0] === SELECTION || values[1] === SELECTION;
+  result.source.push({ id, isSelection });
+  values = values.slice(values[1] === SELECTION ? 2 : 1);
+  if (values.length) {
+    addSource(result, values);
   }
 };
 
@@ -239,6 +243,8 @@ const addColumns = (result: QueryValue, values: string[]) => {
       addSeriesColumn(result, values.slice(1));
     } else if (values[0] === 'group_by') {
       addGroupByColumn(result, values.slice(1));
+    } else if (values[0] === SELECTION) {
+      addSource(result, [SELECTION]);
     } else {
       console.error(`unknown columns specification ${values[0]}`);
       break;
@@ -259,6 +265,44 @@ const addHighlight = (result: QueryValue, values: string[]) => {
  */
 const addSelect = (result: QueryValue, values: string[]) => {
   result.select = true;
+};
+
+/**
+ * Adds constant extraction to the result.
+ */
+const addExtract = (result: QueryValue, values: string[]) => {
+  result.extract = {
+    column: values[0],
+  };
+  if (values[1] === SELECTION) {
+    addSource(result, [SELECTION]);
+  }
+};
+
+/**
+ * Adds node linking to the result.
+ */
+const addLink = (result: QueryValue, values: string[]) => {
+  let extractColumn: string = '';
+  let filterColumn: string = '';
+  const columns: string[] = [];
+  while (values.length) {
+    const column: string = values[0];
+    if (values.length >= 3 && values[1] === LINK_OF) {
+      addSource(result, [values[2]]);
+      values = values.slice(3);
+    } else {
+      values.shift();
+    }
+    columns.push(column);
+  }
+  if (columns.length >= 2) {
+    extractColumn = columns[0];
+    filterColumn = columns[1];
+  } else {
+    extractColumn = filterColumn = columns[0];
+  }
+  result.link = { extractColumn, filterColumn };
 };
 
 /**
@@ -308,16 +352,13 @@ export const parseQueryValue = (value: string): QueryValue => {
       case 'select':
         addSelect(result, values);
         break;
+      case 'extract':
+        addExtract(result, values);
+        break;
+      case 'link':
+        addLink(result, values);
+        break;
     }
   }
-
-  // If there are columns set but no target, the default action is to fill in a chart creation.
-  if (result.columns && !result.target) {
-    result.target = [{
-      id: DEFAULT_CHART_TYPE,
-      isCreate: true,
-    }];
-  }
-
   return result;
 };

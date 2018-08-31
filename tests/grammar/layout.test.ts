@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import { checkQuery } from './util';
 
 describe('automatic layout', () => {

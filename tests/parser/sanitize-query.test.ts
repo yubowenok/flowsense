@@ -74,6 +74,15 @@ describe('sanitize query', () => {
     });
   });
 
+  it('extract -> r_extract', done => {
+    sendQuery('extract r_column_1 values', (err, sempreRes) => {
+      sanitizeQuery(sempreRes.body).then(sanitized => {
+        expect(sanitized).toBe('r_extract r_column_1 value');
+        done();
+      });
+    });
+  });
+
   it('should keep inverse token', done => {
     sendQuery('show cars with r_column_1 no larger than 15', (err, sempreRes) => {
       sanitizeQuery(sempreRes.body).then(sanitized => {
