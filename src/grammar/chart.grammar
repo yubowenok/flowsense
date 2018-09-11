@@ -6,7 +6,7 @@
 (rule $ChartDescriptor ($Prep ($Det optional) $ChartDescriptor) (SelectFn 1))
 (rule $ChartDescriptor ($ChartType) (IdentityFn))
 
-(rule $ChartType ($TOKEN) (FilterTokenFn token r_chart_type_1 r_chart_type_2 r_chart_type_3 r_chart_type_4 r_chart_type_5))
+(rule $ChartType ($NodeType) (IdentityFn))
 
 # Chart types can be injected
 (rule $ChartTypeInjected ($TOKEN) (FilterTokenFn token r_placeholder))

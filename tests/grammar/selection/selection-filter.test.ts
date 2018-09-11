@@ -6,6 +6,22 @@ describe('apply filter on interactive selection', () => {
   const injectedMpg = injectedValue('mpg');
   const injectedCylinders = injectedValue('cylinders');
 
+  it('create filter for selection', done => {
+    checkQuery('find selected cars with mpg greater than 5', done,
+      `source:${SELECTION};filter:${injectedMpg}:>=:5.0`, {
+        source: [{
+          id: DEFAULT_SOURCE,
+          isSelection: true,
+        }],
+        filters: [{
+          column: injectedMpg,
+          range: {
+            min: '5.0',
+          },
+        }],
+      });
+  });
+
   it('chart selection with filter', done => {
     checkQuery('show selected cars with mpg greater than 5', done,
       `target:${DEFAULT_CHART_TYPE};source:${SELECTION};filter:${injectedMpg}:>=:5.0`, {

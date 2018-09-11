@@ -220,7 +220,7 @@ export const preParse = (req: Request, res: Response, next: NextFunction) => {
 export const parse = (req: Request, res: Response, next: NextFunction) => {
   const query = req.body.sanitizedQuery;
   console.log('sanitized query:', query, '/', req.body.query);
-  if (!query) {
+  if (typeof query !== 'string') {
     // Fatal unknown error
     res.status(500).send('cannot sanitize query');
     return;

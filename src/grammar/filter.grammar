@@ -1,7 +1,7 @@
 (def @filter_marker (string "r_filter"))
 (rule $FilterVerb_ ($TOKEN) (FilterTokenFn token r_filter r_select))
 (rule $FilterVerb_ ($Verb) (FilterTokenFn lemma sample find get))
-(rule $FilterVerb ($FilterVerb_) (ConstantFn @filter_marker))
+(rule $FilterVerb ($FilterVerb_ ($Rp optional)) (ConstantFn @filter_marker))
 
 ### Range, pattern
 (def @geq ">=")
@@ -72,7 +72,6 @@
 (rule $Extremum_ ($CountOrPercent ($StopNoun optional) ($Descriptor optional) $ExtremumCondition) (ConcatFn reverse ":"))
 # shortcut: car with max mpg, default count = 1
 (rule $Extremum_ (($StopNoun optional) ($Descriptor optional) $ExtremumCondition) (ConcatFn append ":1"))
-# (rule $Extremum_ ($ExtremumCondition $CountOrPercent ($StopNoun optional)) (ConcatFn ":extremum:"))
 
 (rule $Extremum_ ($Extremum_ $GroupByColumn) (ConcatFn ":"))
 

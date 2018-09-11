@@ -54,12 +54,5 @@
 (rule $CountOrPercent ($PercentPhrase) (ConcatFn append "_%")) # _% indicate raw percent, which should be between [0, 1].
 (rule $CountOrPercent ($Number $PercentToken) (ConcatFn ""))
 
-# Phrase with length constraint
-# (rule $ValuePhrase ($PHRASE) (FilterPosTagFn span reverse IN TO DT WDT))
-
-# Passive Objects
-# (def @passive_object (string "(object)"))
-# (rule $PassiveObject ($TOKEN) (FilterPosTagFn token DT WDT PRP PRP$))
-
 # Utils
 # (rule $NumberToString ($Number) (lambda x (call .toString (var x))))

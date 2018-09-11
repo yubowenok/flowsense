@@ -7,10 +7,10 @@ import { QueryValue } from '@/query-value';
 
 const INJECT_VALUES: { [w: string]: string } = {
   // chart types
-  'scatterplot': 'r_chart_type_1',
-  'histogram': 'r_chart_type_2',
-  'heatmap': 'r_chart_type_3',
-  'line chart': 'r_chart_type_4',
+  'scatterplot': 'r_node_type_1',
+  'histogram': 'r_node_type_2',
+  'heatmap': 'r_node_type_3',
+  'line chart': 'r_node_type_4',
   // columns
   'mpg': 'r_column_1',
   'cylinders': 'r_column_2',
@@ -19,9 +19,9 @@ const INJECT_VALUES: { [w: string]: string } = {
   'horsepower': 'r_column_5',
   'model.year': 'r_column_6',
   // nodes
-  'node-1': 'r_node_1',
-  'chart-1': 'r_node_2',
-  'filter-1': 'r_node_3',
+  'node-1': 'r_node_label_1',
+  'chart-1': 'r_node_label_2',
+  'filter-1': 'r_node_label_3',
   // datasets:
   'iris': 'r_dataset_1',
 };

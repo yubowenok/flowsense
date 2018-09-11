@@ -91,4 +91,13 @@ describe('sanitize query', () => {
       });
     });
   });
+
+  it('should sanitize meaningless query that gives empty string', done => {
+    sendQuery('x', (err, sempreRes) => {
+      sanitizeQuery(sempreRes.body).then(sanitized => {
+        expect(sanitized).toBe('');
+        done();
+      });
+    });
+  });
 });

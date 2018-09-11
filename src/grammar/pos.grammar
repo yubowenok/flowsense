@@ -68,6 +68,9 @@
 (rule $QuantAll_ ($TOKEN) (FilterTokenFn lemma every all))
 (rule $QuantAll ($QuantAll_) (ConstantFn @quant_all))
 
+# RP: take "down", bring "up"
+(rule $Rp ($TOKEN) (FilterPosTagFn token RP))
+
 # Descriptor
 # e.g. that has, that satisfy
 (rule $Descriptor_ ($TOKEN) (FilterTokenFn lemma with that satisfy have))

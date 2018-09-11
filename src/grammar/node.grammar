@@ -1,8 +1,13 @@
 # Node labels can be injected.
 (rule $NodeInjected ($TOKEN) (FilterTokenFn token r_placeholder))
 
+# Node types
+(rule $NodeType ($TOKEN) (FilterTokenFn token r_node_type_1 r_node_type_2 r_node_type_3 r_node_type_4 r_node_type_5))
+# Node labels
+(rule $NodeLabel ($TOKEN) (FilterTokenFn token r_node_label_1 r_node_label_2 r_node_label_3 r_node_label_4 r_node_label_5))
+
 # Nodes
-(rule $Node (($Det optional) $TOKEN) (FilterTokenFn token r_node_1 r_node_2 r_node_3 r_node_4 r_node_5))
+(rule $Node ($NodeLabel) (IdentityFn))
 # (rule $Node (($Det optional) $StopNoun ($Prep optional) $Node) (SelectFn 1))
 (rule $Node ($StopNoun ($Prep optional) $Node) (SelectFn 1))
 (rule $Node ($Node ($Conj optional) $Node) (ConcatFn ":"))

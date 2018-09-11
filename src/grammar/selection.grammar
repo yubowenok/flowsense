@@ -34,5 +34,9 @@
 
 (rule $SelectWithCondition ($SelectToken $Filter) (ConcatFn ";"))
 
+# find selected
+(rule $FilterSelection ($FilterVerb r_select) (ConstantFn @selection))
+(rule $Source_ ($FilterSelection) (IdentityFn))
+
 (rule $Command ($Highlight) (IdentityFn))
 (rule $Command ($SelectWithCondition) (IdentityFn))
