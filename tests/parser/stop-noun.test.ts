@@ -5,7 +5,7 @@ describe('stop nouns', () => {
   it('singular: car', done => {
     sendQuery('car', (err, sempreRes) => {
       sanitizeQuery(sempreRes.body).then(sanitized => {
-        expect(sanitized).toBe('');
+        expect(sanitized).toBe('car');
         done();
       });
     });
@@ -14,7 +14,7 @@ describe('stop nouns', () => {
   it('plural: cars', done => {
     sendQuery('cars', (err, sempreRes) => {
       sanitizeQuery(sempreRes.body).then(sanitized => {
-        expect(sanitized).toBe('');
+        expect(sanitized).toBe('car');
         done();
       });
     });

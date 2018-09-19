@@ -34,8 +34,8 @@ interface ExtractSpecification {
 }
 
 interface LinkSpecification {
-  extractColumn: string;
-  filterColumn: string;
+  extractColumn?: string;
+  filterColumn?: string;
 }
 
 export interface QueryValue {
@@ -287,20 +287,26 @@ const addLink = (result: QueryValue, values: string[]) => {
   let filterColumn: string = '';
   const columns: string[] = [];
   while (values.length) {
-    const column: string = values[0];
-    if (values.length >= 3 && values[1] === LINK_OF) {
-      addSource(result, [values[2]]);
-      values = values.slice(3);
-    } else {
+    if (values[0] === SELECTION) {
+      addSource(result, [values[0]]);
       values.shift();
+    } else {
+      const column: string = values[0];
+      if (values.length >= 3 && values[1] === LINK_OF) {
+        addSource(result, [values[2]]);
+        values = values.slice(3);
+      } else {
+        values.shift();
+      }
+      columns.push(column);
     }
-    columns.push(column);
   }
   if (columns.length >= 2) {
     extractColumn = columns[0];
     filterColumn = columns[1];
   } else {
-    extractColumn = filterColumn = columns[0];
+    extractColumn = columns[0];
+    filterColumn = undefined;
   }
   result.link = { extractColumn, filterColumn };
 };

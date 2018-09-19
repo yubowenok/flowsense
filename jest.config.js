@@ -20,4 +20,5 @@ module.exports = {
 		'^@src(.*)$': '<rootDir>/src$1',
 	},
 	testEnvironment: 'node',
+	setupTestFrameworkScriptFile: '<rootDir>/tests/config.ts',
 };

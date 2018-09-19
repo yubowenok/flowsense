@@ -1,5 +1,5 @@
 import { checkQuery, injectedValue } from '../util';
-import { SELECTION, DEFAULT_SOURCE, LINK_OF } from '@src/def';
+import { LINK_OF, DEFAULT_SOURCE, SELECTION } from '@src/def';
 
 describe('constant extraction', () => {
   const injectedName = injectedValue('name');
@@ -13,7 +13,6 @@ describe('constant extraction', () => {
       `link:${injectedName}`, {
         link: {
           extractColumn: injectedName,
-          filterColumn: injectedName,
         },
       });
   });
@@ -23,17 +22,6 @@ describe('constant extraction', () => {
       `link:${injectedName}`, {
         link: {
           extractColumn: injectedName,
-          filterColumn: injectedName,
-        },
-      });
-  });
-
-  it('link by a column #2', done => {
-    checkQuery('link the cars with a same name', done,
-      `link:${injectedName}`, {
-        link: {
-          extractColumn: injectedName,
-          filterColumn: injectedName,
         },
       });
   });
@@ -43,7 +31,6 @@ describe('constant extraction', () => {
       `link:${injectedName};source:${injectedChart}`, {
         link: {
           extractColumn: injectedName,
-          filterColumn: injectedName,
         },
         source: [
           { id: injectedChart, isSelection: false },
@@ -56,11 +43,22 @@ describe('constant extraction', () => {
       `link:${injectedName};source:${injectedChart}:${injectedFilter}`, {
         link: {
           extractColumn: injectedName,
-          filterColumn: injectedName,
         },
         source: [
           { id: injectedChart, isSelection: false },
           { id: injectedFilter, isSelection: false },
+        ],
+      });
+  });
+
+  it('link selection', done => {
+    checkQuery('link the selected cars by name', done,
+      `link:${SELECTION}:${injectedName}`, {
+        link: {
+          extractColumn: injectedName,
+        },
+        source: [
+          { id: DEFAULT_SOURCE, isSelection: true },
         ],
       });
   });
@@ -70,7 +68,6 @@ describe('constant extraction', () => {
       `link:${injectedName};source:${injectedChart}:${injectedFilter};target:${injectedScatterplot}`, {
         link: {
           extractColumn: injectedName,
-          filterColumn: injectedName,
         },
         source: [
           { id: injectedChart, isSelection: false },

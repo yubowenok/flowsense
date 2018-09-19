@@ -2,7 +2,7 @@ import request, { RequestCallback } from 'request';
 import { Response, Request, NextFunction } from 'express';
 import _ from 'lodash';
 
-import { SEMPRE_URL, WUP_URL } from './env';
+import { SEMPRE_URL, SIMILARITY_URL } from './env';
 import { parseQueryValue, QueryValue } from './query-value';
 import * as def from './def';
 
@@ -29,12 +29,15 @@ const isInjectedToken = (token: string): boolean => {
  * Parses Sempre parsing result in HTML.
  */
 export const parseSempreResult = (html: string): SempreResult | null => {
-  const pre = html.match(/<pre>([\S\s]*)<\/pre>/)[1];
+  const matchedPre = html.match(/<pre>([\S\s]*)<\/pre>/);
+  if (matchedPre === null) {
+    return null; // Unexpected error occurred: special characters?
+  }
+  const pre = matchedPre[1];
   const success = pre.match(/ 0 candidates/) === null;
   const matchedQuery = pre.match(/Example:\s(.*)\s{/);
   if (matchedQuery === null) {
-    // Sempre server errored.
-    return null;
+    return null; // Sempre server errored.
   }
   const query = matchedQuery[1];
   const example = pre.match(success ? /Example:.*{([\S\s]*)}[\S\s]*Pred features/ : /Example:.*{([\S\s]*)}[\S\s]*/)[1];
@@ -94,7 +97,8 @@ export const isVerb = (token: string, posTag: string): boolean => {
  * - It is not an NN verb (special verbs that may be considered verbs).
  */
 export const isProbablyStopNoun = (token: string, posTag: string): boolean => {
-  return def.STOP_NOUN_POS_TAGS.indexOf(posTag) !== -1 && def.SPECIAL_VERBS.indexOf(token) === -1;
+  return false; // disable aggressive stop noun filtering
+  // return def.STOP_NOUN_POS_TAGS.indexOf(posTag) !== -1 && def.SPECIAL_VERBS.indexOf(token) === -1;
 };
 
 /**
@@ -153,7 +157,7 @@ export const sanitizeQuery = (html: string): Promise<string> => {
         };
         _.each(def.SPECIAL_MARKER_VERBS, (verbs: string[], marker: string) => {
           verbAsyncCount++;
-          request.get(`${WUP_URL}/${token}/${verbs.join(',')}`, (err, res) => {
+          request.get(`${SIMILARITY_URL}/${token}/${verbs.join(',')}`, (err, res) => {
             if (err) {
               return reject(err);
             }
@@ -170,7 +174,7 @@ export const sanitizeQuery = (html: string): Promise<string> => {
       // Remove a stop noun if it is not close to any meaningful nouns.
       if (isProbablyStopNoun(token, posTag)) {
         addRequest();
-        request.get(`${WUP_URL}/${token}/${def.SPECIAL_NOUNS.join(',')}`, (err, res) => {
+        request.get(`${SIMILARITY_URL}/${token}/${def.SPECIAL_NOUNS.join(',')}`, (err, res) => {
           if (err) {
             return reject(err);
           }

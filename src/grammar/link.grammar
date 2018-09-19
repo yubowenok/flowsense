@@ -3,7 +3,7 @@
 (rule $ExtractToken ($TOKEN) (FilterTokenFn lemma r_extract get retrieve))
 (rule $ExtractVerb ($ExtractToken) (ConstantFn @extract))
 
-(rule $Extract ($ExtractVerb (value optional) ($Prep optional) $Columns) (ConcatFn ":"))
+(rule $Extract ($ExtractVerb (value optional) ($Prep optional) $Columns ($StopNoun optional)) (ConcatFn ":"))
 
 # Linking
 (def @link (string "link"))
@@ -16,9 +16,15 @@
 (rule $LinkColumn (($Prep optional) $Column) (IdentityFn))
 (rule $LinkColumn ($LinkSameColumn) (IdentityFn))
 
+(rule $LinkSource ($SelectionPhrase) (ConcatFn ":"))
+(rule $LinkSource ($SelectionPhrase $Column) (ConcatFn ":"))
 (rule $LinkSource ($Column $Node) (ConcatFn ":_link_of:"))
+
+(rule $LinkTarget ($SelectionPhrase) (ConcatFn ":"))
+(rule $LinkTarget ($SelectionPhrase $Column) (ConcatFn ":"))
 (rule $LinkTarget ($Column $Node) (ConcatFn ":_link_of:"))
 
+(rule $Link ($LinkVerb $LinkSource) (ConcatFn ":"))
 (rule $Link ($LinkVerb $LinkSource ($Prep optional) $LinkTarget) (ConcatFn ":"))
 (rule $Link ($LinkPhrase $LinkColumn) (ConcatFn ":"))
 

@@ -15,7 +15,7 @@
 # NN: car
 # NNS: cars
 # PRP: I, you, we
-(rule $StopNoun_ ($TOKEN) (FilterPosTagFn token DT NN NNS PRP)) # NNP NNPS
+(rule $StopNoun_ ($TOKEN) (FilterPosTagFn token DT NN NNS PRP NNP NNPS))
 (rule $StopNoun ($StopNoun_) (FilterMarkerFn reject))
 
 # of (cars), stop nouns may have been filtered before passing to the grammar

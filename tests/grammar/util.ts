@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import request from 'supertest';
-import app from '@src/app';
 
-import { SempreResult } from '@src/parser';
-import { QueryValue } from '@/query-value';
+import app from '../../src/app';
+import { SempreResult } from '../../src/parser';
+import { QueryValue } from '../../src/query-value';
 
 const INJECT_VALUES: { [w: string]: string } = {
   // chart types
@@ -49,7 +49,7 @@ export const injectedValue = (token: string): string => {
  */
 export const checkQuery = (query: string, done: jest.DoneCallback, stringAnswer: string, answer: QueryValue) => {
   query = injectTestValues(query);
-  request(app).post('/')
+  request(app).post('/query')
     .send({ query })
     .expect((res: { body: SempreResult }) => {
       expect(res.body.stringValue).toEqual(stringAnswer);

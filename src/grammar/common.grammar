@@ -10,12 +10,16 @@
 (rule $Date ($PHRASE) (DateFn))
 
 # Number
+(def @number_marker (string "r_number"))
 (rule $NumberPhrase ($PHRASE) (FilterPosTagFn token LS CD))
 (rule $Number ($NumberPhrase) (NumberFn))
+(rule $Number (r_number) (ConstantFn @number_marker))
 
 # Values
+(def @string_marker (string "r_string"))
 (rule $ValueToken_ ($TOKEN) (FilterPosTagFn token reverse IN DT CC)) # Avoid using prep, det, conj as values
 (rule $ValueToken ($ValueToken_) (FilterMarkerFn reject))
+(rule $ValueToken (r_string) (ConstantFn @string_marker))
 
 (rule $RangeValue ($Number) (IdentityFn))
 (rule $RangeValue ($Date) (IdentityFn))
@@ -23,6 +27,7 @@
 (rule $Value ($Date) (IdentityFn))
 (rule $Value ($Number) (IdentityFn))
 (rule $Value ($ValueToken) (IdentityFn))
+
 # Enforce value when it is expressed as "value {some_value}", "a value of {some_value}", etc.
 (rule $Value (value ($Prep optional) $Value) (IdentityFn))
 

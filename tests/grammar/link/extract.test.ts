@@ -23,6 +23,15 @@ describe('constant extraction', () => {
       });
   });
 
+  it('extract column #3', done => {
+    checkQuery('extract mpg of the cars', done,
+      `extract:${injectedMpg}`, {
+        extract: {
+          column: injectedMpg,
+        },
+      });
+  });
+
   it('extract column from selection #1', done => {
     checkQuery('extract mpg from selected cars', done,
       `extract:${injectedMpg}:${SELECTION}`, {
