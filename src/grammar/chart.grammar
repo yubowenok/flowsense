@@ -35,7 +35,7 @@
 (rule $ChartPhrase ($ChartWithColumns) (IdentityFn))
 
 # show
-(rule $ChartShortcut_ ($ChartVerb) (ConstantFn @default_chart_type))
+(rule $ChartShortcut_ ($ChartVerb ($StopNoun optional)) (ConstantFn @default_chart_type))
 (rule $ChartShortcut ($ChartShortcut_) (ConcatFn prepend "target:"))
 
 # show mpg

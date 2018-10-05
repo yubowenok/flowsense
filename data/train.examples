@@ -3,3 +3,9 @@
   (utterance "r_select with r_column_1 greater than 15")
   (targetValue (string "select;filter:r_column_1:>=:15.0"))
 )
+
+# Avoid treating charting content as stop noun
+(example
+  (utterance "r_chart all dimension")
+  (targetValue (string "target:_default_chart_type;columns:_all_columns"))
+)

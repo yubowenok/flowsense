@@ -48,9 +48,10 @@ export const injectedValue = (token: string): string => {
  * Sends a query and checks its return value.
  */
 export const checkQuery = (query: string, done: jest.DoneCallback, stringAnswer: string, answer: QueryValue) => {
+  const rawQuery = query;
   query = injectTestValues(query);
   request(app).post('/query')
-    .send({ query })
+    .send({ query, rawQuery })
     .expect((res: { body: SempreResult }) => {
       expect(res.body.stringValue).toEqual(stringAnswer);
       expect(res.body.value).toEqual(answer);

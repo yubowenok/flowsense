@@ -103,6 +103,7 @@ export const VERB_WUP_THRESHOLD = 0.9;
 /** A list of verbs that may be recognized as NN, JJ. */
 export const SPECIAL_VERBS = [
   'show',
+  'draw',
   'load',
   'open',
   'group',

@@ -11,13 +11,8 @@ const app = express();
 app.set('port', PORT);
 app.use(cors({
   origin: (origin: string, callback: (err: Error, allow?: boolean) => void) => {
-    if (process.env.NODE_ENV === 'test' || (origin && origin.match('^http://localhost'))) {
-      callback(null, true);
-    } else {
-      callback(new Error('not allowed by CORS'));
-    }
+    callback(null, true);
   },
-  credentials: true,
 }));
 
 app.use(bodyParser.json());

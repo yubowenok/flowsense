@@ -9,6 +9,16 @@ describe('charts', () => {
   const injectedModelYear = injectedValue('model.year');
   const injectedLineChart = injectedValue('line chart');
 
+  it('draw a plot without specification', done => {
+    checkQuery('show the cars', done,
+      `target:${DEFAULT_CHART_TYPE}`, {
+        target: [{
+          id: DEFAULT_CHART_TYPE,
+          isCreate: true,
+        }],
+      });
+  });
+
   it('specified chart type with one column', done => {
     checkQuery('scatterplot of mpg', done,
       `target:${injectedScatterplot};columns:${injectedMpg}`, {
@@ -62,9 +72,20 @@ describe('charts', () => {
       });
   });
 
-  it('all columns', done => {
+  it('all columns #1', done => {
+    checkQuery('show all columns', done,
+      `target:${DEFAULT_CHART_TYPE};columns:${ALL_COLUMNS}`, {
+        target: [{
+          id: DEFAULT_CHART_TYPE,
+          isCreate: true,
+        }],
+        columns: [ALL_COLUMNS],
+      });
+  });
+
+  it('all columns #2', done => {
     checkQuery('visualize all dimensions in a heatmap', done,
-      `target:${injectedValue('heatmap')};columns:${ALL_COLUMNS}`, {
+      `target:${DEFAULT_CHART_TYPE};columns:${ALL_COLUMNS};target:${injectedValue('heatmap')}`, {
         target: [{
           id: injectedValue('heatmap'),
           isCreate: true,
@@ -129,7 +150,8 @@ describe('charts', () => {
 
   it('specify series with group by column and chart type', done => {
     checkQuery('show mpg over model.year group by origin in a line chart', done,
-      `target:${injectedLineChart};columns:${injectedMpg}:series:${injectedModelYear}:group_by:${injectedOrigin}`, {
+      `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg}:series:${injectedModelYear}:group_by:${injectedOrigin};` +
+      `target:${injectedLineChart}`, {
         target: [{
           id: injectedLineChart,
           isCreate: true,
