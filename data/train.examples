@@ -9,3 +9,15 @@
   (utterance "r_chart all dimension")
   (targetValue (string "target:_default_chart_type;columns:_all_columns"))
 )
+
+# Prefer to place column information in the filter column rather than separate
+(example
+  (utterance "r_chart with r_column_1 of 15")
+  (targetValue (string "target:_default_chart_type;filter:r_column_1:=:15"))
+)
+
+# Prefer making selection a source attribute.
+#(example
+#  (utterance "r_chart r_column_1 of r_select in r_node_type_1")
+#  (targetValue (string "target:_default_chart_type;columns:r_column_1:_selection;target:r_node_type_1"))
+#)

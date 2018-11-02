@@ -117,7 +117,7 @@ describe('interactive selection and selection port', () => {
 
   it('show columns for selection with chart target', done => {
     checkQuery('show mpg of the selected cars in a histogram', done,
-      `target:${injectedHistogram};columns:${injectedMpg}:${SELECTION}`, {
+    `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg};source:${SELECTION};target:${injectedHistogram}`, {
         columns: [injectedMpg],
         source: [{
           id: DEFAULT_SOURCE,
