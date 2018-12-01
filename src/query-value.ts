@@ -111,6 +111,10 @@ const addFilter = (result: QueryValue, values: string[]) => {
   const spec: FilterSpecification = {
     column: values[0],
   };
+  if (type === undefined) { // only column is given, no filter type
+    result.filters.push(spec);
+    return;
+  }
   values = values.slice(2);
   if (type === 'pattern' || type === '=') { // '=' is pattern matching
     spec.pattern = values[0];

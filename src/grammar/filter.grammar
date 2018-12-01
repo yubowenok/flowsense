@@ -1,7 +1,6 @@
-(def @filter_marker (string "r_filter"))
 (rule $FilterVerb_ ($TOKEN) (FilterTokenFn token r_filter))
 (rule $FilterVerb_ ($Verb) (FilterTokenFn lemma sample find get))
-(rule $FilterVerb ($FilterVerb_ ($Rp optional)) (ConstantFn @filter_marker))
+(rule $FilterVerb ($FilterVerb_ ($Rp optional)) (ConstantFn (string "filter")))
 
 ### Range, pattern
 (def @geq ">=")
@@ -94,10 +93,16 @@
 
 (rule $Sample ($Sample_) (IdentityFn))
 
+# shortcut: filter by column
+(rule $ByColumn (($Prep optional) $Column) (IdentityFn))
+
 (rule $Filter_ ($PatternOrRange) (IdentityFn))
 (rule $Filter_ ($Extremum) (IdentityFn))
 (rule $Filter_ ($Sample) (IdentityFn))
 (rule $Filter (($FilterVerb optional) ($StopNoun optional) ($Descriptor optional) $Filter_) (ConcatFn prepend "filter:"))
+
+# Verb required. Otherwise ByColumn is too general and mess up with other grammar.
+(rule $Filter ($FilterVerb ($StopNoun optional) $ByColumn) (ConcatFn ":"))
 
 (rule $Command ($Filter) (IdentityFn))
 
