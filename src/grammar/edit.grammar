@@ -1,0 +1,8 @@
+# diagram edit commands
+(rule $Undo ($TOKEN) (FilterTokenFn lemma r_undo cancel))
+(rule $Redo ($TOKEN) (FilterTokenFn lemma r_redo))
+
+(rule $Edit ($Undo) (ConstantFn (string "undo")))
+(rule $Edit ($Redo) (ConstantFn (string "redo")))
+
+(rule $Command ($Edit) (IdentityFn))

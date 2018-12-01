@@ -1,11 +1,16 @@
 # Charts
 (def @default_chart_type (string "_default_chart_type"))
+(def @series_chart_type (string "_series_chart_type"))
 (rule $ChartToken ($TOKEN) (FilterTokenFn lemma plot chart visualization graph drawing series))
 (rule $ChartDescriptor ($ChartToken) (ConstantFn @default_chart_type))
 (rule $ChartDescriptor (($Det optional) $ChartType ($ChartToken optional)) (IdentityFn))
 (rule $ChartDescriptor ($Prep ($Det optional) $ChartDescriptor) (SelectFn 1))
 (rule $ChartDescriptor ($ChartType) (IdentityFn))
 
+(rule $SeriesChartToken ($TOKEN) (FilterTokenFn lemma series))
+(rule $ChartDescriptor ($SeriesChartToken) (ConstantFn @series_chart_type))
+
+# TODO: accept only chart node types
 (rule $ChartType ($NodeType) (IdentityFn))
 
 # Chart types can be injected

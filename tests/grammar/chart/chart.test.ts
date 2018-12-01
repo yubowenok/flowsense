@@ -1,5 +1,5 @@
 import { checkQuery, injectedValue } from '../util';
-import { DEFAULT_CHART_TYPE, ALL_COLUMNS } from '@src/def';
+import { DEFAULT_CHART_TYPE, ALL_COLUMNS, SERIES_CHART_TYPE } from '@src/def';
 
 describe('charts', () => {
   const injectedMpg = injectedValue('mpg');
@@ -85,7 +85,7 @@ describe('charts', () => {
 
   it('all columns #2', done => {
     checkQuery('visualize all dimensions in a heatmap', done,
-      `target:${DEFAULT_CHART_TYPE};columns:${ALL_COLUMNS};target:${injectedValue('heatmap')}`, {
+      `target:${injectedValue('heatmap')};columns:${ALL_COLUMNS}`, {
         target: [{
           id: injectedValue('heatmap'),
           isCreate: true,
@@ -139,9 +139,9 @@ describe('charts', () => {
 
   it('draw series', done => {
     checkQuery('show mpg series', done,
-    `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg}`, {
+    `target:${SERIES_CHART_TYPE};columns:${injectedMpg}`, {
       target: [{
-        id: DEFAULT_CHART_TYPE,
+        id: SERIES_CHART_TYPE,
         isCreate: true,
       }],
       columns: [injectedMpg],
@@ -149,9 +149,8 @@ describe('charts', () => {
   });
 
   it('specify series with group by column and chart type', done => {
-    checkQuery('show mpg over model.year group by origin in a line chart', done,
-      `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg}:series:${injectedModelYear}:group_by:${injectedOrigin};` +
-      `target:${injectedLineChart}`, {
+    checkQuery('show mpg over model.year grouped by origin in a line chart', done,
+      `target:${injectedLineChart};columns:${injectedMpg}:series:${injectedModelYear}:group_by:${injectedOrigin}`, {
         target: [{
           id: injectedLineChart,
           isCreate: true,

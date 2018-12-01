@@ -21,3 +21,9 @@
 #  (utterance "r_chart r_column_1 of r_select in r_node_type_1")
 #  (targetValue (string "target:_default_chart_type;columns:r_column_1:_selection;target:r_node_type_1"))
 #)
+
+# Prefer specific series chart type than default chart type
+(example
+  (utterance "r_chart r_column_1 series")
+  (targetValue (string "target:_series_chart_type;columns:r_column_1"))
+)

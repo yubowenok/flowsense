@@ -8,12 +8,15 @@
 
 # Nodes
 (rule $Node ($NodeLabel) (IdentityFn))
-# (rule $Node (($Det optional) $StopNoun ($Prep optional) $Node) (SelectFn 1))
 (rule $Node ($StopNoun ($Prep optional) $Node) (SelectFn 1))
 (rule $Node ($Node ($Conj optional) $Node) (ConcatFn ":"))
 
+(rule $NewNode ($StopNoun ($Prep optional) $NewNode) (SelectFn 1))
+(rule $NewNode ($NewNode ($Conj optional) $NewNode) (ConcatFn ":"))
+
 ## Command source/target ##
-(rule $NodeTarget ($PrepTo $Node) (SelectFn 1))
+# Avoid target being an existing node. It is unclear how to change the diagram to dump output to a connected node.
+(rule $NodeTarget ($PrepTo $NewNode) (SelectFn 1))
 (rule $NodeSource ($PrepFrom $Node) (SelectFn 1))
 (rule $ChartTarget ($PrepTo $ChartDescriptor) (SelectFn 1))
 (rule $ChartSource ($PrepFrom $ChartDescriptor) (SelectFn 1))

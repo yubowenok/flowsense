@@ -96,6 +96,8 @@ export const SPECIAL_MARKER_VERBS = {
   r_group: ['group'],
   r_extract: ['extract'],
   r_link: ['link'],
+  r_undo: ['undo', 'cancel'],
+  r_redo: ['redo'],
 };
 // Be conservative so as not to easily consider new verbs as special markers.
 export const VERB_WUP_THRESHOLD = 0.9;
@@ -119,6 +121,7 @@ export const SPECIAL_VERBS = [
 ];
 
 export const DEFAULT_CHART_TYPE = '_default_chart_type';
+export const SERIES_CHART_TYPE = '_series_chart_type';
 export const DEFAULT_SOURCE = '_default_source';
 export const SELECTION = '_selection';
 export const ALL_COLUMNS = '_all_columns';

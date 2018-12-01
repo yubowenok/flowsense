@@ -98,7 +98,7 @@ describe('visuals encoding', () => {
   });
 
   it('numerical scale default range', done => {
-    checkQuery('mpg by size', done, `visuals:encoding:${injectedValue('mpg')}:size:1:10`, {
+    checkQuery('encode mpg by size', done, `visuals:encoding:${injectedValue('mpg')}:size:1:10`, {
       visuals: [{
         encoding: {
           column: injectedValue('mpg'),

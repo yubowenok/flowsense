@@ -61,6 +61,8 @@ export interface QueryValue {
   // special operation flags
   highlight?: boolean;
   select?: boolean;
+  undo?: boolean;
+  redo?: boolean;
 }
 
 /**
@@ -363,6 +365,12 @@ export const parseQueryValue = (value: string): QueryValue => {
         break;
       case 'link':
         addLink(result, values);
+        break;
+      case 'undo':
+        result.undo = true;
+        break;
+      case 'redo':
+        result.redo = true;
         break;
     }
   }

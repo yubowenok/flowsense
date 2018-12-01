@@ -1,5 +1,5 @@
 (def @filter_marker (string "r_filter"))
-(rule $FilterVerb_ ($TOKEN) (FilterTokenFn token r_filter r_select))
+(rule $FilterVerb_ ($TOKEN) (FilterTokenFn token r_filter))
 (rule $FilterVerb_ ($Verb) (FilterTokenFn lemma sample find get))
 (rule $FilterVerb ($FilterVerb_ ($Rp optional)) (ConstantFn @filter_marker))
 
