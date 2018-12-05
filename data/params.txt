@@ -10,7 +10,7 @@ rule :: $ChartWithColumns -> $ChartColumns $ChartDescriptor (ConcatFn reverse ;)
 rule :: $Chart_ -> $ChartPhrase (IdentityFn)	1.001034395176496
 rule :: $ChartPhrase -> $ChartWithColumns (IdentityFn)	1.001034395176496
 rule :: $Descriptor -> $Intermediate3 (ConstantFn "")	1.0001426100133288
-rule :: $Intermediate206 -> $Descriptor (ConstantFn null)	1.0001426100133288
+rule :: $Intermediate207 -> $Descriptor (ConstantFn null)	1.0001426100133288
 rule :: $Descriptor_ -> $TOKEN (FilterTokenFn lemma with that satisfy have)	1.0001426100133288
 rule :: $Intermediate3 -> $Descriptor_ (SelectFn 0)	1.0001426100133288
 rule :: $Intermediate8 -> $Intermediate7 $ColumnToken (SelectFn 1)	1.0000024152318265
@@ -30,7 +30,7 @@ rule :: $PatternOrRangeCondition -> $Intermediate194 $EqualValue (ConcatFn :=:)	
 rule :: $Filter_ -> $PatternOrRange (IdentityFn)	1.0000000000106386
 rule :: $PatternOrRange -> $PatternOrRangeCondition (IdentityFn)	1.0000000000106386
 rule :: $Intermediate194 -> $Prep $Column (SelectFn 1)	1.0000000000026419
-rule :: $Intermediate207 -> $Filter_ (SelectFn 0)	0.9999286915509399
+rule :: $Intermediate208 -> $Filter_ (SelectFn 0)	0.9999286915509399
 rule :: $Command -> $Chart (IdentityFn)	0.8635486819414075
 rule :: $ChartVerb -> $TOKEN (FilterTokenFn lemma r_chart show chart create draw illustrate present render show visualize view see)	0.6613035024600888
 rule :: $Intermediate180 -> $Columns (SelectFn 0)	0.5199897448447056
@@ -49,9 +49,9 @@ rule :: $ValueToken -> $ValueToken_ (FilterMarkerFn reject)	-0.3334655791044615
 rule :: $Intermediate183 -> $Chart_ (SelectFn 0)	-0.6228029617382662
 rule :: $Chart_ -> $ChartShortcut_ $ChartColumns (ConcatFn ;)	-0.6228029617382662
 rule :: $ChartShortcut_ -> $Intermediate182 (ConstantFn (string _default_chart_type))	-0.8954615861764122
-rule :: $Intermediate207 -> $Intermediate206 $Filter_ (SelectFn 1)	-0.9999286915509703
-rule :: $Intermediate205 -> $StopNoun (ConstantFn null)	-0.9999999977054184
-rule :: $Intermediate206 -> $Intermediate205 (ConstantFn null)	-0.9999999977054184
+rule :: $Intermediate208 -> $Intermediate207 $Filter_ (SelectFn 1)	-0.9999286915509703
+rule :: $Intermediate207 -> $Intermediate206 (ConstantFn null)	-0.9999999977054184
+rule :: $Intermediate206 -> $StopNoun (ConstantFn null)	-0.9999999977054184
 rule :: $Columns -> $Column (IdentityFn)	-1.0000000000106457
 rule :: $Intermediate204 -> $Intermediate203 (SelectFn 0)	-1.0000000000106541
 rule :: $Filter_ -> $Sample (IdentityFn)	-1.0000000000106541
@@ -85,7 +85,7 @@ rule :: $ChartTypeInjected -> series (ConstantFn (string line-chart))	-1.2957424
 rule :: $ChartType -> $ChartTypeInjected (IdentityFn)	-1.2957424126270474
 rule :: $Value -> $ValueToken (IdentityFn)	-1.4076488130952645
 rule :: $ChartDescriptor -> $ChartType (IdentityFn)	-1.4387206908209962
-rule :: $Filter -> $Intermediate207 (ConcatFn prepend filter:)	-1.4592820796212382
+rule :: $Filter -> $Intermediate208 (ConcatFn prepend filter:)	-1.4592820796212382
 rule :: $Compare -> $GreaterPhrase $Value (ConcatFn :)	-1.5017013187514985
 rule :: $GreaterPhrase -> $GreaterToken (ConstantFn >=)	-1.5017013187514985
 rule :: $PatternOrRangeCondition -> $Intermediate193 $Compare (ConcatFn :)	-1.5017013187514985

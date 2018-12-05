@@ -4,7 +4,7 @@
 
 (rule $DatasetMarker ($TOKEN) (FilterTokenFn token r_dataset_1 r_dataset_2 r_dataset_3))
 
-(rule $LoadDataset_ ($LoadMarker $DatasetMarker ($DataToken optional)) (SelectFn 1))
+(rule $LoadDataset_ (($LoadMarker optional) $DatasetMarker ($DataToken optional)) (IdentityFn))
 (rule $LoadDataset ($LoadDataset_) (ConcatFn prepend "load:"))
 
 ### Application

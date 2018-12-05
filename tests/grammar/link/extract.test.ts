@@ -34,7 +34,7 @@ describe('constant extraction', () => {
 
   it('extract column from selection #1', done => {
     checkQuery('extract mpg from selected cars', done,
-      `extract:${injectedMpg}:${SELECTION}`, {
+      `extract:${injectedMpg};source:${SELECTION}`, {
         source: [{
           id: DEFAULT_SOURCE,
           isSelection: true,
@@ -47,7 +47,7 @@ describe('constant extraction', () => {
 
   it('extract column from selection #2', done => {
     checkQuery('extract selected cars\' mpg', done,
-      `extract:${injectedMpg}:${SELECTION}`, {
+      `extract:${injectedMpg};source:${SELECTION}`, {
         source: [{
           id: DEFAULT_SOURCE,
           isSelection: true,
@@ -60,7 +60,7 @@ describe('constant extraction', () => {
 
   it('extract column from selection #3', done => {
     checkQuery('extract mpg of the selection', done,
-      `extract:${injectedMpg}:${SELECTION}`, {
+      `extract:${injectedMpg};source:${SELECTION}`, {
         source: [{
           id: DEFAULT_SOURCE,
           isSelection: true,

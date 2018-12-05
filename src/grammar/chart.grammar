@@ -48,6 +48,7 @@
 (rule $Chart_ ($ChartPhrase) (IdentityFn))
 
 (rule $Chart (($ChartVerb optional) $Chart_) (ConcatFn prepend "target:"))
+#(rule $Chart (($ChartVerb optional) $ChartSource) (IdentityFn))
 (rule $Chart ($ChartShortcut) (IdentityFn))
 
 (rule $Command ($Chart) (IdentityFn))

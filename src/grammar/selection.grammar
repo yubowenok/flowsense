@@ -14,22 +14,22 @@
 
 (rule $SelectionPhrase (($Prep optional) $SelectToken ($StopNoun optional)) (ConstantFn @selection))
 
+(rule $SelectionSource_ ($ChartDescriptor $SelectionPhrase) (ConcatFn ":"))
+(rule $SelectionSource_ ($SelectionPhrase $ChartDescriptor) (ConcatFn reverse ":"))
+(rule $SelectionSource ($SelectionSource_) (ConcatFn prepend "source:"))
 (rule $SelectionSource ($SelectionPhrase) (ConcatFn prepend "source:"))
 
 # from node.grammar
 (rule $Source_ ($SelectionPhrase $Source_) (ConcatFn reverse ":"))
 (rule $Source_ ($SelectionPhrase) (IdentityFn))
-
-(rule $Chart_ ($Chart_ $SelectionSource) (ConcatFn ";"))
-(rule $Chart_ ($SelectionSource $Chart_) (ConcatFn reverse ";"))
 (rule $ChartShortcut ($ChartShortcut $SelectionSource) (ConcatFn ";"))
 
 (rule $Node ($SelectionPhrase $Node) (ConcatFn reverse ":"))
 (rule $Node ($Node $SelectionPhrase) (ConcatFn ":"))
 
-(rule $SelectionDescriptor ($SelectionPhrase) (ConstantFn @selection))
-(rule $SelectionColumns ($Columns $SelectionDescriptor) (ConcatFn ":"))
-(rule $SelectionColumns ($SelectionDescriptor $Columns) (ConcatFn reverse ":"))
+(rule $SelectionDescriptor ($SelectionPhrase) (ConcatFn prepend "source:"))
+(rule $SelectionColumns ($Columns $SelectionDescriptor) (ConcatFn ";"))
+(rule $SelectionColumns ($SelectionDescriptor $Columns) (ConcatFn reverse ";"))
 (rule $Columns ($SelectionColumns) (IdentityFn))
 
 (rule $SelectWithCondition ($SelectToken $Filter) (ConcatFn ";"))

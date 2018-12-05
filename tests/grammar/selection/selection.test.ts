@@ -88,7 +88,7 @@ describe('interactive selection and selection port', () => {
 
   it('show selection with chart target', done => {
     checkQuery('show selection in a histogram', done,
-      `target:${injectedHistogram};source:${SELECTION}`, {
+      `target:${DEFAULT_CHART_TYPE};source:${SELECTION};target:${injectedHistogram}`, {
         source: [{
           id: DEFAULT_SOURCE,
           isSelection: true,
@@ -117,10 +117,24 @@ describe('interactive selection and selection port', () => {
 
   it('show columns for selection with chart target', done => {
     checkQuery('show mpg of the selected cars in a histogram', done,
-    `target:${injectedHistogram};columns:${injectedMpg}:${SELECTION}`, {
+    `target:${injectedHistogram};columns:${injectedMpg};source:${SELECTION}`, {
         columns: [injectedMpg],
         source: [{
           id: DEFAULT_SOURCE,
+          isSelection: true,
+        }],
+        target: [{
+          id: injectedHistogram,
+          isCreate: true,
+        }],
+      });
+  });
+
+  it('show selection from a chart in a chart', done => {
+    checkQuery('show selected cars from the scatterplot in a histogram', done,
+    `target:${DEFAULT_CHART_TYPE};source:${injectedScatterplot}:${SELECTION};target:${injectedHistogram}`, {
+        source: [{
+          id: injectedScatterplot,
           isSelection: true,
         }],
         target: [{
