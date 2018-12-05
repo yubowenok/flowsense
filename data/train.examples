@@ -27,3 +27,15 @@
   (utterance "r_chart r_column_1 series")
   (targetValue (string "target:_series_chart_type;columns:r_column_1"))
 )
+
+# Prefer to group selection with node
+(example
+  (utterance "union r_select of r_node_label_1 with r_select of r_node_label_2")
+  (targetValue (string "set:union:r_node_label_1:_selection:r_node_label_2:_selection"))
+)
+
+# Prefer a chart target than a source
+(example
+  (utterance "r_chart r_select in r_node_type_1")
+  (targetValue (string "target:_default_chart_type;source:_selection;target:r_node_type_1"))
+)

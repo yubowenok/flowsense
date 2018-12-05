@@ -13,10 +13,11 @@
 (rule $SelectToken ($SelectToken_) (ConstantFn "select"))
 
 (rule $SelectionPhrase (($Prep optional) $SelectToken ($StopNoun optional)) (ConstantFn @selection))
+(rule $SelectionPhraseImmediate ($SelectToken ($StopNoun optional)) (ConstantFn @selection))
 
-(rule $SelectionSource_ ($ChartDescriptor $SelectionPhrase) (ConcatFn ":"))
-(rule $SelectionSource_ ($SelectionPhrase $ChartDescriptor) (ConcatFn reverse ":"))
-(rule $SelectionSource ($SelectionSource_) (ConcatFn prepend "source:"))
+(rule $ChartSelection ($ChartDescriptor $SelectionPhrase) (ConcatFn ":"))
+(rule $ChartSelection ($SelectionPhrase $ChartDescriptor) (ConcatFn reverse ":"))
+(rule $SelectionSource ($ChartSelection) (ConcatFn prepend "source:"))
 (rule $SelectionSource ($SelectionPhrase) (ConcatFn prepend "source:"))
 
 # from node.grammar
@@ -25,7 +26,7 @@
 (rule $ChartShortcut ($ChartShortcut $SelectionSource) (ConcatFn ";"))
 
 (rule $Node ($SelectionPhrase $Node) (ConcatFn reverse ":"))
-(rule $Node ($Node $SelectionPhrase) (ConcatFn ":"))
+(rule $Node ($Node $SelectionPhraseImmediate) (ConcatFn ":"))
 
 (rule $SelectionDescriptor ($SelectionPhrase) (ConcatFn prepend "source:"))
 (rule $SelectionColumns ($Columns $SelectionDescriptor) (ConcatFn ";"))

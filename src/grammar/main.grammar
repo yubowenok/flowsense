@@ -9,4 +9,5 @@
 (include link.grammar)
 (include layout.grammar)
 (include edit.grammar)
+(include edge.grammar)
 (include command.grammar)

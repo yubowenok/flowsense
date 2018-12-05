@@ -84,8 +84,10 @@ describe('charts', () => {
   });
 
   it('all columns #2', done => {
-    checkQuery('visualize all dimensions in a heatmap', done,
-      `target:${injectedValue('heatmap')};columns:${ALL_COLUMNS}`, {
+    checkQuery('visualize all dimensions in a heatmap', done, [
+      `target:${injectedValue('heatmap')};columns:${ALL_COLUMNS}`,
+      `target:${DEFAULT_CHART_TYPE};columns:${ALL_COLUMNS};target:${injectedValue('heatmap')}`,
+    ], {
         target: [{
           id: injectedValue('heatmap'),
           isCreate: true,
@@ -149,8 +151,11 @@ describe('charts', () => {
   });
 
   it('specify series with group by column and chart type', done => {
-    checkQuery('show mpg over model.year grouped by origin in a line chart', done,
-      `target:${injectedLineChart};columns:${injectedMpg}:series:${injectedModelYear}:group_by:${injectedOrigin}`, {
+    checkQuery('show mpg over model.year grouped by origin in a line chart', done, [
+      `target:${injectedLineChart};columns:${injectedMpg}:series:${injectedModelYear}:group_by:${injectedOrigin}`,
+      `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg}:series:${injectedModelYear}:group_by:${injectedOrigin};` +
+        `target:${injectedLineChart}`,
+    ], {
         target: [{
           id: injectedLineChart,
           isCreate: true,

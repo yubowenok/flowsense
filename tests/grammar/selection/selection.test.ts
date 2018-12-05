@@ -116,8 +116,10 @@ describe('interactive selection and selection port', () => {
   });
 
   it('show columns for selection with chart target', done => {
-    checkQuery('show mpg of the selected cars in a histogram', done,
-    `target:${injectedHistogram};columns:${injectedMpg};source:${SELECTION}`, {
+    checkQuery('show mpg of the selected cars in a histogram', done, [
+      `target:${injectedHistogram};columns:${injectedMpg};source:${SELECTION}`,
+      `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg};source:${SELECTION};target:${injectedHistogram}`,
+    ], {
         columns: [injectedMpg],
         source: [{
           id: DEFAULT_SOURCE,
@@ -131,8 +133,10 @@ describe('interactive selection and selection port', () => {
   });
 
   it('show selection from a chart in a chart', done => {
-    checkQuery('show selected cars from the scatterplot in a histogram', done,
-    `target:${DEFAULT_CHART_TYPE};source:${injectedScatterplot}:${SELECTION};target:${injectedHistogram}`, {
+    checkQuery('show selected cars from the scatterplot in a histogram', done, [
+      `target:${DEFAULT_CHART_TYPE};source:${injectedScatterplot}:${SELECTION};target:${injectedHistogram}`,
+      `target:${DEFAULT_CHART_TYPE};source:${SELECTION};source:${injectedScatterplot};target:${injectedHistogram}`,
+    ], {
         source: [{
           id: injectedScatterplot,
           isSelection: true,

@@ -7,10 +7,15 @@
 (rule $NodeLabel ($TOKEN) (FilterTokenFn token r_node_label_1 r_node_label_2 r_node_label_3 r_node_label_4 r_node_label_5))
 
 # Nodes
-#(rule $Node ($NodeType) (IdentityFn))
 (rule $Node ($NodeLabel) (IdentityFn))
 (rule $Node ($StopNoun ($Prep optional) $Node) (SelectFn 1))
 (rule $Node ($Node ($Conj optional) $Node) (ConcatFn ":"))
+
+(rule $NodePort ($Node) (IdentityFn))
+(rule $NodePort ($ChartSelection) (IdentityFn))
+(rule $NodePort ($NodeType) (IdentityFn))
+
+(rule $TwoNodes (($Prep optional) $NodePort ($Prep optional) ($Conj optional) $NodePort) (ConcatFn ":"))
 
 (rule $NewNode ($StopNoun ($Prep optional) $NewNode) (SelectFn 1))
 (rule $NewNode ($NewNode ($Conj optional) $NewNode) (ConcatFn ":"))

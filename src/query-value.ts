@@ -1,6 +1,16 @@
 import _ from 'lodash';
 import { SELECTION, DEFAULT_SOURCE, DEFAULT_CHART_TYPE, LINK_OF } from './def';
 
+interface SourceNodeDescriptor {
+  id: string; // node label, node type
+  isSelection?: boolean;
+}
+
+interface TargetNodeDescriptor {
+  id: string; // node label, node type
+  isCreate?: boolean;
+}
+
 interface VisualsSpecification {
   assignment?: { [prop: string]: string | number };
   encoding?: {
@@ -26,7 +36,7 @@ interface FilterSpecification {
 
 interface SetOperatorSpecification {
   type: string; // union, intersection, difference
-  nodes: string[]; // node labels
+  nodes: SourceNodeDescriptor[];
 }
 
 interface ExtractSpecification {
@@ -36,6 +46,11 @@ interface ExtractSpecification {
 interface LinkSpecification {
   extractColumn?: string;
   filterColumn?: string;
+}
+
+export interface EdgeSpecification {
+  type: 'connect' | 'disconnect';
+  nodes: Array<SourceNodeDescriptor | TargetNodeDescriptor>;
 }
 
 export interface QueryValue {
@@ -49,15 +64,9 @@ export interface QueryValue {
   extract?: ExtractSpecification;
   link?: LinkSpecification;
   setOperator?: SetOperatorSpecification;
-  source?: Array<{
-    id: string; // node label or node type
-    isSelection?: boolean;
-  }>;
-  target?: Array<{
-    id: string; // node label or node type
-    isCreate: boolean;
-  }>;
-
+  edge?: EdgeSpecification;
+  source?: SourceNodeDescriptor[];
+  target?: TargetNodeDescriptor[];
   // special operation flags
   highlight?: boolean;
   select?: boolean;
@@ -191,6 +200,38 @@ const addSource = (result: QueryValue, values: string[]) => {
   if (!result.source) {
     result.source = [];
   }
+  if (!values.length) {
+    return;
+  }
+  while (values.length > 0) {
+    if (values[0] !== SELECTION) {
+      const sourceId = values[0];
+      values.shift();
+      let isSelection: boolean | undefined;
+      if (values[0] === SELECTION) {
+        values.shift();
+        isSelection = true;
+      }
+      if (result.source.length && result.source[0].id === DEFAULT_SOURCE) {
+        result.source[0].id = sourceId;
+        result.source[0].isSelection = result.source[0].isSelection || isSelection ? true : undefined;
+        addSource(result, values);
+        return;
+      } else {
+        result.source.push({
+          id: sourceId,
+          isSelection,
+        });
+      }
+    } else {
+      values.shift();
+      result.source.push({
+        id: DEFAULT_SOURCE,
+        isSelection: true,
+      });
+    }
+  }
+  /*
   const id = values[0] === SELECTION ? DEFAULT_SOURCE : values[0];
   const isSelection = values[0] === SELECTION || values[1] === SELECTION;
   result.source.push({ id, isSelection });
@@ -198,6 +239,7 @@ const addSource = (result: QueryValue, values: string[]) => {
   if (values.length) {
     addSource(result, values);
   }
+  */
 };
 
 /**
@@ -224,13 +266,30 @@ const addTarget = (result: QueryValue, values: string[]) => {
   });
 };
 
+const getNodes = (values: string[]): Array<SourceNodeDescriptor | TargetNodeDescriptor> => {
+  const nodes = [];
+  while (values.length) {
+    nodes.push({
+      id: values[0],
+      isSelection: values[1] === SELECTION ? true : undefined,
+    });
+    values.shift();
+    if (values[0] === SELECTION) {
+      values.shift();
+    }
+  }
+  return nodes;
+};
+
 /**
  * Adds set operator specification to the result.
  */
 const addSetOperator = (result: QueryValue, values: string[]) => {
+  const type = values[0];
+  values.shift();
   result.setOperator = {
-    type: values[0],
-    nodes: values.slice(1),
+    type,
+    nodes: getNodes(values),
   };
 };
 
@@ -283,6 +342,22 @@ const addExtract = (result: QueryValue, values: string[]) => {
   if (values[1] === SELECTION) {
     addSource(result, [SELECTION]);
   }
+};
+
+/**
+ * Handles edge connection and disconnection.
+ */
+const addEdge = (result: QueryValue, values: string[]) => {
+  const type = values[0];
+  if (type !== 'connect' && type !== 'disconnect') {
+    console.error('addEdge type is neither "connect" nor "disconnect"');
+    return;
+  }
+  values.shift();
+  result.edge = {
+    type,
+    nodes: getNodes(values),
+  };
 };
 
 /**
@@ -369,6 +444,9 @@ export const parseQueryValue = (value: string): QueryValue => {
         break;
       case 'link':
         addLink(result, values);
+        break;
+      case 'edge':
+        addEdge(result, values);
         break;
       case 'undo':
         result.undo = true;

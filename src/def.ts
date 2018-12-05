@@ -98,6 +98,8 @@ export const SPECIAL_MARKER_VERBS = {
   r_link: ['link'],
   r_undo: ['undo', 'cancel'],
   r_redo: ['redo'],
+  r_connect: ['connect'],
+  r_disconnect: ['disconnect'],
 };
 // Be conservative so as not to easily consider new verbs as special markers.
 export const VERB_WUP_THRESHOLD = 0.9;

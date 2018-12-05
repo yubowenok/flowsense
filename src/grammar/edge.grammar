@@ -1,0 +1,13 @@
+(rule $ConnectToken ($TOKEN) (FilterTokenFn lemma connect r_connect))
+(rule $ConnectPhrase ($ConnectToken) (ConstantFn "connect"))
+
+(rule $DisconnectToken ($TOKEN) (FilterTokenFn lemma disconnect separate r_disconnect))
+(rule $DisconnectPhrase ($DisconnectToken) (ConstantFn "disconnect"))
+
+(rule $Connect ($ConnectPhrase $TwoNodes) (ConcatFn ":"))
+(rule $Disconnect ($DisconnectPhrase $TwoNodes) (ConcatFn ":"))
+
+(rule $Edge ($Connect) (IdentityFn))
+(rule $Edge ($Disconnect) (IdentityFn))
+
+(rule $Command ($Edge) (ConcatFn prepend "edge:"))

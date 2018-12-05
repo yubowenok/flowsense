@@ -1,4 +1,7 @@
-import { checkQuery, injectedValue } from './util';
+import { checkQuery, injectedValue } from '../util';
+
+const injectedScatterplot = injectedValue('scatterplot');
+const injectedHistogram = injectedValue('histogram');
 
 describe('set operator', () => {
   it('union with node labels', done => {
@@ -7,7 +10,24 @@ describe('set operator', () => {
       {
         setOperator: {
           type: 'union',
-          nodes: [injectedValue('chart-1'), injectedValue('filter-1')],
+          nodes: [
+            { id: injectedValue('chart-1') },
+            { id: injectedValue('filter-1') },
+          ],
+        },
+      });
+  });
+
+  it('union with node types', done => {
+    checkQuery('union the scatterplot with the histogram', done,
+      `set:union:${injectedScatterplot}:${injectedHistogram}`,
+      {
+        setOperator: {
+          type: 'union',
+          nodes: [
+            { id: injectedScatterplot },
+            { id: injectedHistogram },
+          ],
         },
       });
   });
@@ -18,7 +38,10 @@ describe('set operator', () => {
       {
         setOperator: {
           type: 'difference',
-          nodes: [injectedValue('chart-1'), injectedValue('filter-1')],
+          nodes: [
+            { id: injectedValue('chart-1') },
+            { id: injectedValue('filter-1') },
+          ],
         },
       });
   });
@@ -29,7 +52,10 @@ describe('set operator', () => {
       {
         setOperator: {
           type: 'intersection',
-          nodes: [injectedValue('chart-1'), injectedValue('filter-1')],
+          nodes: [
+            { id: injectedValue('chart-1') },
+            { id: injectedValue('filter-1') },
+          ],
         },
       });
   });
@@ -40,7 +66,9 @@ describe('set operator', () => {
       {
         setOperator: {
           type: 'union',
-          nodes: [injectedValue('chart-1')],
+          nodes: [
+            { id: injectedValue('chart-1') },
+          ],
         },
       });
   });
@@ -51,7 +79,10 @@ describe('set operator', () => {
       {
         setOperator: {
           type: 'union',
-          nodes: [injectedValue('chart-1'), injectedValue('filter-1')],
+          nodes: [
+            { id: injectedValue('chart-1') },
+            { id: injectedValue('filter-1') },
+          ],
         },
       });
   });
@@ -61,7 +92,9 @@ describe('set operator', () => {
     checkQuery('merge into chart-1', done, `set:union:${injectedValue('chart-1')}`, {
       setOperator: {
         type: 'union',
-        nodes: [injectedValue('chart-1')],
+        nodes: [
+          { id: injectedValue('chart-1') },
+        ],
       },
     });
   });
@@ -72,7 +105,10 @@ describe('set operator', () => {
       {
         setOperator: {
           type: 'intersection',
-          nodes: [injectedValue('chart-1'), injectedValue('filter-1')],
+          nodes: [
+            { id: injectedValue('chart-1') },
+            { id: injectedValue('filter-1') },
+          ],
         },
       });
   });
@@ -81,7 +117,9 @@ describe('set operator', () => {
     checkQuery('find different cars from chart-1', done, `set:difference:${injectedValue('chart-1')}`, {
       setOperator: {
         type: 'difference',
-        nodes: [injectedValue('chart-1')],
+        nodes: [
+          { id: injectedValue('chart-1') },
+        ],
       },
     });
   });

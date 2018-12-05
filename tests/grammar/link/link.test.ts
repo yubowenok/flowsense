@@ -33,7 +33,7 @@ describe('constant extraction', () => {
           extractColumn: injectedName,
         },
         source: [
-          { id: injectedChart, isSelection: false },
+          { id: injectedChart },
         ],
       });
   });
@@ -45,8 +45,8 @@ describe('constant extraction', () => {
           extractColumn: injectedName,
         },
         source: [
-          { id: injectedChart, isSelection: false },
-          { id: injectedFilter, isSelection: false },
+          { id: injectedChart },
+          { id: injectedFilter },
         ],
       });
   });
@@ -70,8 +70,8 @@ describe('constant extraction', () => {
           extractColumn: injectedName,
         },
         source: [
-          { id: injectedChart, isSelection: false },
-          { id: injectedFilter, isSelection: false },
+          { id: injectedChart },
+          { id: injectedFilter },
         ],
         target: [ { id: injectedScatterplot, isCreate: true } ],
       });
@@ -85,8 +85,8 @@ describe('constant extraction', () => {
           filterColumn: injectedOrigin,
         },
         source: [
-          { id: injectedChart, isSelection: false },
-          { id: injectedFilter, isSelection: false },
+          { id: injectedChart },
+          { id: injectedFilter },
         ],
       });
   });
