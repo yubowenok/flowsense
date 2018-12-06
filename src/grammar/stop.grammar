@@ -25,3 +25,5 @@
 (rule $StopPhrase ($StopNoun) (ConstantFn (string "")))
 (rule $StopPhrase ($StopToken) (ConstantFn (string "")))
 (rule $StopPhrase ($StopToken $StopPhrase) (ConstantFn (string "")))
+
+(rule $Punctuation ($TOKEN) (FilterTokenFn lemma . , ; ! ?))

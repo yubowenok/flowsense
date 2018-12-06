@@ -6,6 +6,8 @@
 (rule $Command ($Command $SourceTarget) (ConcatFn ";"))
 # (rule $Command ($Command ($Connector optional) $Command) (ConcatFn ";"))
 
+(rule $Command ($Command $Punctuation) (SelectFn 0))
+
 (rule $ROOT ($Command) (IdentityFn))
 
 # Single command prevents concatenation
