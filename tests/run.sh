@@ -24,7 +24,7 @@ screen -d -m java -cp libsempre/*:lib/* -ea edu.stanford.nlp.sempre.Main\
 
 semprePid=$(screen -ls | grep '[0-9]*.*(Detached)' | sed 's/\.\..*//')
 
-screen -d -m python $similarity_server
+screen -d -m python2 $similarity_server
 
 # Wait for Sempre to launch and train
 echo 'waiting for sempre initialization'

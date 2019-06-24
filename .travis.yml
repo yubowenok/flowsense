@@ -3,7 +3,7 @@ sudo: true
 language: java
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 node_js:
   - "8.11.2"
@@ -12,6 +12,8 @@ python:
   - "2.7"
 
 install:
+  - sudo apt-get -qq update
+  - sudo apt-get install ant
   - yarn install # node dependencies
   - pip install --user -r requirements.txt # wup_server python dependencies
   - git clone https://github.com/yubowenok/sempre
