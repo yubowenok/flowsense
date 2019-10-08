@@ -83,6 +83,20 @@ describe('visuals encoding', () => {
     checkQuery('color encode mpg', done, colorScaleStringAnswer, colorScaleAnswer);
   });
 
+  const categoricalScaleAnswer = {
+    visuals: [{
+      encoding: {
+        column: injectedValue('mpg'),
+        type: 'color',
+        scale: 'categorical',
+      },
+    }],
+  };
+  const categoricalScaleStringAnswer = `visuals:encoding:${injectedValue('mpg')}:color:categorical`;
+  it('categorical scale', done => {
+    checkQuery('encode mpg by categorical colors', done, categoricalScaleStringAnswer, categoricalScaleAnswer);
+  });
+
   // The raw received value from Sempre is a range of two strings "5:6" because
   // NumberFn cannot parse "from ... to ...".
   it('numerical scale', done => {

@@ -7,7 +7,7 @@
 (rule $NodeLabel ($TOKEN) (FilterTokenFn token r_node_label_1 r_node_label_2 r_node_label_3 r_node_label_4 r_node_label_5))
 
 # Nodes
-(rule $Node ($NodeLabel) (IdentityFn))
+(rule $Node ($NodeLabel ($StopNoun optional)) (IdentityFn))
 (rule $Node ($StopNoun ($Prep optional) $Node) (SelectFn 1))
 (rule $Node ($Node ($Conj optional) $Node) (ConcatFn ":"))
 
@@ -17,6 +17,7 @@
 
 (rule $TwoNodes (($Prep optional) $NodePort ($Prep optional) ($Conj optional) $NodePort) (ConcatFn ":"))
 
+(rule $NewNode ($NodeType ($StopNoun optional)) (IdentityFn))
 (rule $NewNode ($StopNoun ($Prep optional) $NewNode) (SelectFn 1))
 (rule $NewNode ($NewNode ($Conj optional) $NewNode) (ConcatFn ":"))
 
