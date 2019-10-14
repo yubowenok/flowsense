@@ -57,12 +57,14 @@
 ### Extremum
 (def @max "max")
 (def @min "min")
-(rule $MaxToken ($TOKEN) (FilterTokenFn token max maximal maximum))
+(rule $MaxToken ($TOKEN) (FilterTokenFn token max maximal maximum largest biggest))
 (rule $Maximum ($MaxToken) (ConstantFn @max))
-(rule $MinToken ($TOKEN) (FilterTokenFn token min minimal minimum))
+(rule $MinToken ($TOKEN) (FilterTokenFn token min minimal minimum smallest))
 (rule $Minimum ($MinToken) (ConstantFn @min))
+(rule $MaximumDefault ($Adj) (ConstantFn @max))
 
 (rule $ExtremumCriteria ($Maximum) (IdentityFn))
+(rule $ExtremumCriteria ($MaximumDefault) (IdentityFn))
 (rule $ExtremumCriteria ($Minimum) (IdentityFn))
 (rule $ExtremumCondition ($ExtremumCriteria $Column) (ConcatFn reverse ":extremum:"))
 (rule $ExtremumCondition ($Column $ExtremumCriteria) (ConcatFn ":extremum:"))
@@ -94,7 +96,8 @@
 (rule $Sample ($Sample_) (IdentityFn))
 
 # shortcut: filter by column
-(rule $ByColumn (($Prep optional) $Column) (IdentityFn))
+(rule $ByColumn (($Prep optional) ($Adj optional) $Column) (IdentityFn))
+
 
 (rule $Filter_ ($PatternOrRange) (IdentityFn))
 (rule $Filter_ ($Extremum) (IdentityFn))

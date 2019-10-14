@@ -29,4 +29,13 @@ describe('attribute filter: by column', () => {
       }],
     },
   );
+
+  runQuery(
+    'find cars with very large mpg',
+    `filter:${injectedValue('mpg')}`, {
+      filters: [{
+        column: injectedValue('mpg'),
+      }],
+    },
+  );
 });

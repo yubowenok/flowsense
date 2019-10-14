@@ -27,6 +27,20 @@ describe('attribute filter: pattern matching', () => {
     },
   );
 
+  // max default
+  runQuery(
+    'find 10 cars with extreme mpg',
+    `filter:${injectedValue('mpg')}:extremum:max:10.0`,
+    {
+      filters: [{
+        column: injectedValue('mpg'),
+        extremum: 'maximum',
+        amount: 10,
+        amountType: 'count',
+      }],
+    },
+  );
+
   runQuery(
     'get 5 percent of cars with maximum mpg',
     `filter:${injectedValue('mpg')}:extremum:max:0.05_%`,

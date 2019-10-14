@@ -1,175 +1,192 @@
-rule :: $Descriptor -> $Intermediate3 (ConstantFn "")	1.9999978133356038
-rule :: $Intermediate216 -> $Descriptor (ConstantFn null)	1.9999978133356038
-rule :: $Descriptor_ -> $TOKEN (FilterTokenFn lemma with that satisfy have)	1.9999978133356038
-rule :: $Intermediate3 -> $Descriptor_ (SelectFn 0)	1.9999978133356038
-rule :: $Intermediate194 -> $SelectToken $StopNoun (SelectFn 0)	1.7812758695666104
-rule :: $Set -> $SetPhrase $SetSourceNode (ConcatFn :)	1.6729187572813107
-rule :: $Intermediate13 -> $Node (SelectFn 0)	1.6527692382824142
-rule :: $Node -> $Intermediate13 $Node (ConcatFn :)	1.6477680943919013
-rule :: $Set -> $SetPhrase $Node (ConcatFn :)	1.6205076558370908
-rule :: $Value -> $Number (IdentityFn)	1.5282764150966235
-rule :: $Node -> $Intermediate12 $Node (SelectFn 1)	1.306051120719847
-rule :: $Intermediate12 -> $StopNoun (SelectFn 0)	1.306051120719847
-rule :: $ChartDescriptor -> $SeriesChartToken (ConstantFn (string _series_chart_type))	1.1865297016466365
-rule :: $SeriesChartToken -> $TOKEN (FilterTokenFn lemma series)	1.1865297016466365
-rule :: $Intermediate16 -> $Intermediate15 $Conj (SelectFn 0)	1.024035636015178
-rule :: $Conj -> $TOKEN (FilterTokenFn lemma and with , ;)	1.0112859334955828
-rule :: $Intermediate13 -> $Node $Conj (SelectFn 0)	1.0045306266192848
-rule :: $Node -> $SelectionPhrase $Node (ConcatFn reverse :)	1.0004462355098698
-rule :: $ChartWithColumns -> $ChartColumns $ChartDescriptor (ConcatFn reverse ;)	1.0004171597127856
-rule :: $Chart_ -> $ChartPhrase (IdentityFn)	1.0004171597127856
-rule :: $Intermediate190 -> $ChartVerb $Chart_ (SelectFn 1)	1.0004171597127856
-rule :: $ChartPhrase -> $ChartWithColumns (IdentityFn)	1.0004171597127856
-rule :: $Intermediate183 -> $Verb $NumericalVisualShortcut (SelectFn 1)	1.0002464285213866
-rule :: $NewNode -> $Intermediate17 (IdentityFn)	1.0001824467648024
-rule :: $Intermediate17 -> $NodeType (SelectFn 0)	1.0001824467648024
-rule :: $Target_ -> $NodeTarget (IdentityFn)	1.0001824467648024
-rule :: $NodeTarget -> $PrepTo $NewNode (SelectFn 1)	1.0001824467648024
-rule :: $NumericalVisualType -> $TOKEN (FilterTokenFn lemma size width opacity)	1.0001407352498786
-rule :: $EncodeVisual -> $Intermediate183 (IdentityFn)	1.0001407352498786
-rule :: $Intermediate181 -> $Intermediate180 $Prep (SelectFn 0)	1.0001407352498786
-rule :: $NumericalVisualShortcut_ -> $Intermediate181 $NumericalVisualType (ConcatFn :)	1.0001407352498786
-rule :: $Intermediate180 -> $Column (SelectFn 0)	1.0001407352498786
-rule :: $Command -> $Visual (IdentityFn)	1.0001407352498786
-rule :: $NumericalVisualShortcut -> $NumericalVisualShortcut_ (ConcatFn append :1:10)	1.0001407352498786
-rule :: $Visual -> $EncodeVisual (ConcatFn prepend visuals:encoding:)	1.0001407352498786
-rule :: $SelectionSource -> $SelectionPhrase (ConcatFn prepend source:)	1.0001210536838245
-rule :: $Intermediate8 -> $Intermediate7 $ColumnToken (SelectFn 1)	1.000079784192105
-rule :: $Intermediate31 -> all (ConstantFn null)	1.000079784192105
-rule :: $Intermediate32 -> $Intermediate31 (ConstantFn null)	1.000079784192105
-rule :: $AllColumns -> $Intermediate33 (ConstantFn (string _all_columns))	1.000079784192105
-rule :: $Intermediate7 -> $Intermediate6 (ConstantFn null)	1.000079784192105
-rule :: $Columns -> $AllColumns (IdentityFn)	1.000079784192105
-rule :: $ColumnToken -> $TOKEN (FilterTokenFn lemma column attribute dimension)	1.000079784192105
-rule :: $Intermediate33 -> $Intermediate32 $ColumnToken (SelectFn 1)	1.000079784192105
-rule :: $Intermediate6 -> all (ConstantFn null)	1.000079784192105
-rule :: $AllColumns -> $Intermediate8 (ConstantFn (string _all_columns))	1.000079784192105
-rule :: $Target -> $Target_ (ConcatFn prepend target:)	1.0000612641559452
-rule :: $PrepTo_ -> $TOKEN (FilterTokenFn lemma in to onto into)	1.0000612641559452
-rule :: $SourceTarget -> $Target (IdentityFn)	1.0000612641559452
-rule :: $PrepTo -> $PrepTo_ (ConstantFn (string to))	1.0000612641559452
-rule :: $Intermediate183 -> $NumericalVisualShortcut (SelectFn 0)	1.0000349678349274
-rule :: $ChartTarget -> $PrepTo $ChartDescriptor (SelectFn 1)	1.0000006728514212
-rule :: $Target_ -> $ChartTarget (IdentityFn)	1.0000006728514212
-rule :: $SelectWithCondition -> $SelectToken $Filter (ConcatFn ;)	1.0000000228094619
-rule :: $Command -> $SelectWithCondition (IdentityFn)	1.0000000228094619
-rule :: $Intermediate203 -> $Prep $Column (SelectFn 1)	1.0000000012572872
-rule :: $Intermediate202 -> $Prep $Column (SelectFn 1)	1.0000000008945855
-rule :: $Node -> $Node $SelectionPhraseImmediate (ConcatFn :)	0.9980940013867863
-rule :: $SelectionPhraseImmediate -> $Intermediate194 (ConstantFn (string _selection))	0.9980940013867863
-rule :: $Intermediate11 -> $NodeLabel $StopNoun (SelectFn 0)	0.998084467289671
-rule :: $Intermediate187 -> $Columns (SelectFn 0)	0.7076885679022045
-rule :: $Chart -> $Intermediate190 (ConcatFn prepend target:)	0.7068110009819526
-rule :: $ChartColumns -> $Intermediate187 (ConcatFn prepend columns:)	0.7068110009819526
-rule :: $Intermediate223 -> $Node (SelectFn 0)	0.4053242590668444
-rule :: $Number -> $NumberPhrase (NumberFn)	0.3452560884552653
-rule :: $NumberPhrase -> $PHRASE (FilterPosTagFn token LS CD)	0.3452560884552653
-rule :: $SetSourceNode -> $Intermediate223 (IdentityFn)	0.2397185786375694
-rule :: $Intermediate15 -> $Intermediate14 (SelectFn 0)	0.04070077208379367
-rule :: $Command -> $Command $SourceTarget (ConcatFn ;)	0.02056712963626287
-rule :: $NodePort -> $Node (IdentityFn)	0.0011007731499758045
-rule :: $Set -> $SetPhrase $TwoNodes (ConcatFn :)	0.0011007731499758045
-rule :: $Intermediate14 -> $NodePort (SelectFn 0)	0.0011007731499758045
-rule :: $TwoNodes -> $Intermediate16 $NodePort (ConcatFn :)	0.0011007731499758045
-rule :: $Intermediate217 -> $Intermediate216 $Filter_ (SelectFn 1)	9.680285642146363E-4
-rule :: $Intermediate215 -> $StopNoun (ConstantFn null)	3.1896525726111995E-8
-rule :: $Intermediate216 -> $Intermediate215 (ConstantFn null)	3.1896525726111995E-8
-rule :: $Columns -> $Column (IdentityFn)	-3.95654231626413E-9
-rule :: $EqualValue -> $Prep $StringValue (SelectFn 1)	-1.6355365681706045E-7
-rule :: $PatternOrRangeCondition -> $Intermediate203 $EqualValue (ConcatFn :=:)	-1.6355365681706045E-7
-rule :: $StringValue -> $ValueToken (IdentityFn)	-1.6355365681706045E-7
-rule :: $Intermediate203 -> $Column (SelectFn 0)	-1.7075559585494234E-7
-rule :: $Intermediate16 -> $Intermediate15 (SelectFn 0)	-5.725066845141606E-4
-rule :: $Intermediate15 -> $Intermediate14 $Prep (SelectFn 0)	-9.41420678285561E-4
-rule :: $Intermediate223 -> $Prep $Node (SelectFn 1)	-0.0022755909549516517
-rule :: $Intermediate225 -> $Intermediate224 $Prep (SelectFn 0)	-0.0034358339484152275
-rule :: $Set -> $Intermediate225 $SetSourceNode (ConcatFn :)	-0.005440105396334449
-rule :: $Intermediate224 -> $SetPhrase $SetSourceNode (ConcatFn :)	-0.005440105396334449
-rule :: $Intermediate225 -> $Intermediate224 (SelectFn 0)	-0.006175174499846298
-rule :: $Intermediate192 -> $Intermediate191 (SelectFn 0)	-0.02903101209520547
-rule :: $Compare -> $GreaterPhrase $Value (ConcatFn :)	-0.059677871722032316
-rule :: $GreaterPhrase -> $GreaterToken (ConstantFn >=)	-0.059677871722032316
-rule :: $PatternOrRangeCondition -> $Intermediate202 $Compare (ConcatFn :)	-0.059677871722032316
-rule :: $GreaterToken -> $TOKEN (FilterTokenFn lemma after greater larger more >)	-0.059677871722032316
-rule :: $GreaterToken -> $GreaterToken $Prep (SelectFn 0)	-0.059677871722032316
-rule :: $Intermediate217 -> $Filter_ (SelectFn 0)	-0.21185042809713828
-rule :: $Intermediate189 -> $ChartVerb (SelectFn 0)	-0.28725679168940943
-rule :: $Command -> $Chart $Filter (ConcatFn ;)	-0.31093965415163427
-rule :: $ValueToken_ -> $TOKEN (FilterPosTagFn token reverse IN DT CC)	-0.346166070016053
-rule :: $ValueToken -> $ValueToken_ (FilterMarkerFn reject)	-0.346166070016053
-rule :: $Prep -> $TOKEN (FilterPosTagFn token IN TO VBG)	-0.43776195541526586
-rule :: $StopNoun -> $Intermediate4 (IdentityFn)	-0.4575643467888478
-rule :: $Intermediate4 -> $Prep (SelectFn 0)	-0.4575643467888478
-rule :: $Source_ -> $SelectionPhrase (IdentityFn)	-0.6709377814830867
-rule :: $Chart -> $ChartShortcut (IdentityFn)	-0.7068110009819548
-rule :: $ChartShortcut -> $ChartShortcut_ (ConcatFn prepend target:)	-0.7068110009819548
-rule :: $NodeType -> $TOKEN (FilterTokenFn token r_node_type_1 r_node_type_2 r_node_type_3 r_node_type_4 r_node_type_5)	-0.7801709300661468
-rule :: $Verb -> $TOKEN (FilterPosTagFn token VB VBN VBP)	-0.8580557588405232
-rule :: $Source -> $Source_ (ConcatFn prepend source:)	-0.9244315311014687
-rule :: $SourceTarget -> $Source (IdentityFn)	-0.9244315311014687
-rule :: fire	-0.9419732226423283
-rule :: $Intermediate11 -> $NodeLabel (SelectFn 0)	-0.9980844672896889
-rule :: $Intermediate191 -> $Prep $SelectToken (SelectFn 1)	-0.9994500432448872
-rule :: $Intermediate202 -> $Column (SelectFn 0)	-1.0000000008035974
-rule :: $Filter_ -> $Sample (IdentityFn)	-1.0000000039565398
-rule :: $CountOrPercent -> $Number (IdentityFn)	-1.0000000039565398
-rule :: $SampleShortcut -> $Intermediate213 (ConcatFn prepend _index:sampling:)	-1.0000000039565398
-rule :: $Sample_ -> $SampleShortcut (IdentityFn)	-1.0000000039565398
-rule :: $Intermediate213 -> $Intermediate212 (SelectFn 0)	-1.0000000039565398
-rule :: $Sample -> $Sample_ (IdentityFn)	-1.0000000039565398
-rule :: $Intermediate212 -> $CountOrPercent (SelectFn 0)	-1.0000000039565398
-rule :: $Command -> $SourceTarget $Command (ConcatFn ;)	-1.0000000228094592
-rule :: $Filter_ -> $PatternOrRange (IdentityFn)	-1.0000001635536537
-rule :: $PatternOrRange -> $PatternOrRangeCondition (IdentityFn)	-1.0000001635536537
-rule :: $Set -> $SetPhrase (IdentityFn)	-1.0000014479573207
-rule :: $ChartShortcut -> $ChartShortcut $SelectionSource (ConcatFn ;)	-1.0000014746280201
-rule :: $Source_ -> $SelectionPhrase $Source_ (ConcatFn reverse :)	-1.0000041010589418
-rule :: $NodeSource -> $PrepFrom $Node (SelectFn 1)	-1.0000064297242814
-rule :: $Source_ -> $NodeSource (IdentityFn)	-1.0000064297242814
-rule :: $PrepFrom -> $PrepFrom_ (ConstantFn (string from))	-1.0000064297242814
-rule :: $PrepFrom_ -> $TOKEN (FilterTokenFn lemma from of)	-1.0000064297242814
-rule :: $Intermediate186 -> $Prep (SelectFn 0)	-1.0000599909397343
-rule :: $ChartDescriptor -> $Intermediate186 $ChartDescriptor (SelectFn 1)	-1.0000599909397343
-rule :: $SelectionSource -> $ChartSelection (ConcatFn prepend source:)	-1.0000612641559457
-rule :: $ChartSelection -> $SelectionPhrase $ChartDescriptor (ConcatFn reverse :)	-1.0000612641559457
-rule :: $StopNoun -> $StopNoun_ (FilterMarkerFn reject)	-1.0000797841921052
-rule :: $StopNoun_ -> $TOKEN (FilterPosTagFn token DT NN NNS PRP NNP NNPS)	-1.0000797841921052
-rule :: $StopNoun -> $StopNoun $StopNoun (IdentityFn)	-1.0000797841921052
-rule :: $ChartType -> $NodeType (IdentityFn)	-1.0001824467648022
-rule :: $Command -> $Verb $Command (SelectFn 1)	-1.0002464285246904
-rule :: $Intermediate187 -> $Columns $ChartToken (SelectFn 0)	-1.0004171597128386
-rule :: $Command -> $Filter (IdentityFn)	-1.0004551743718824
-rule :: $ChartTypeInjected -> series (ConstantFn (string line-chart))	-1.0441993542639547
-rule :: $ChartType -> $ChartTypeInjected (IdentityFn)	-1.0441993542639547
-rule :: $ColumnMarker -> $TOKEN (FilterTokenFn lemma r_column_1 r_column_2 r_column_3 r_column_4 r_column_5 r_column_6 r_column_7 r_column_8 r_column_9 r_column_10)	-1.2220435302499406
-rule :: $Column -> $ColumnMarker (IdentityFn)	-1.2220435302499406
-rule :: $ChartToken -> $TOKEN (FilterTokenFn lemma plot chart visualization graph drawing series)	-1.2402375355068966
-rule :: $ChartDescriptor -> $ChartToken (ConstantFn (string _default_chart_type))	-1.2718426918346195
-rule :: $Intermediate190 -> $Chart_ (SelectFn 0)	-1.2923419423993858
-rule :: $Chart_ -> $ChartShortcut_ $ChartColumns (ConcatFn ;)	-1.2923419423993858
-rule :: $ChartDescriptor -> $Intermediate185 (IdentityFn)	-1.2989595863066408
-rule :: $Intermediate184 -> $ChartType (SelectFn 0)	-1.2989595863066408
-rule :: $Intermediate185 -> $Intermediate184 (SelectFn 0)	-1.2989595863066408
-rule :: $Value -> $ValueToken (IdentityFn)	-1.5282764150966155
-rule :: $Node -> $Intermediate11 (IdentityFn)	-1.5565873019040342
-rule :: $NodeLabel -> $TOKEN (FilterTokenFn token r_node_label_1 r_node_label_2 r_node_label_3 r_node_label_4 r_node_label_5)	-1.5565873019040342
-rule :: $Intermediate192 -> $Intermediate191 $StopNoun (SelectFn 0)	-1.653349938162427
-rule :: $Intermediate189 -> $ChartVerb $StopNoun (SelectFn 0)	-1.7146430255182954
-rule :: $SetToken -> $UnionToken (ConstantFn (string union))	-1.9351880118943274
-rule :: $SetPhrase -> $SetToken (IdentityFn)	-1.9351880118943274
-rule :: $Command -> $Intermediate226 (ConcatFn prepend set:)	-1.9351880118943274
-rule :: $Intermediate226 -> $Set (SelectFn 0)	-1.9351880118943274
-rule :: $UnionToken -> $TOKEN (FilterTokenFn lemma union merge combine put unify r_union)	-1.9351880118943274
-rule :: $Intermediate194 -> $SelectToken (SelectFn 0)	-1.9457867529033217
-rule :: $ChartDescriptor -> $ChartType (IdentityFn)	-1.9555511998146515
-rule :: $Intermediate191 -> $SelectToken (SelectFn 0)	-1.9798197956513364
-rule :: $Filter -> $Intermediate217 (ConcatFn prepend filter:)	-2.000140735245171
-rule :: $ChartShortcut_ -> $Intermediate189 (ConstantFn (string _default_chart_type))	-2.0004171597128586
-rule :: $ChartVerb -> $TOKEN (FilterTokenFn lemma r_chart show chart draw illustrate present render show visualize view see)	-2.1256272672854526
-rule :: $SelectionPhrase -> $Intermediate193 (ConstantFn (string _selection))	-2.2404837961457593
-rule :: $Intermediate193 -> $Intermediate192 (SelectFn 0)	-2.2404837961457593
-rule :: $Command -> $Chart (IdentityFn)	-2.4345925799231902
-rule :: $SelectVerb -> $TOKEN (FilterTokenFn lemma select choose r_select)	-2.5219473827688135
-rule :: $SelectToken -> $SelectToken_ (ConstantFn select)	-2.5219473827688135
-rule :: $SelectToken_ -> $SelectVerb (IdentityFn)	-2.5219473827688135
-rule :: $ROOT -> $Command (IdentityFn)	-3.3626753858863876
+rule :: $Intermediate16 -> $Intermediate15 $Conj (SelectFn 0)	2.457124816759515
+rule :: $Command -> $Chart (IdentityFn)	2.332053118683274
+rule :: $Intermediate15 -> $Intermediate14 (SelectFn 0)	2.0387634227724134
+rule :: $NodePort -> $Node (IdentityFn)	2.0265481342622467
+rule :: $Set -> $SetPhrase $TwoNodes (ConcatFn :)	2.0265481342622462
+rule :: $Intermediate14 -> $NodePort (SelectFn 0)	2.0265481342622462
+rule :: $TwoNodes -> $Intermediate16 $NodePort (ConcatFn :)	2.0265481342622462
+rule :: $Value -> $Number (IdentityFn)	2.011265040763614
+rule :: $Descriptor -> $Intermediate3 (ConstantFn "")	1.9998233026787737
+rule :: $Descriptor_ -> $TOKEN (FilterTokenFn lemma with that satisfy have)	1.9998233026787737
+rule :: $Intermediate217 -> $Descriptor (ConstantFn null)	1.9998233026787737
+rule :: $Intermediate3 -> $Descriptor_ (SelectFn 0)	1.9998233026787737
+rule :: $ChartVerb -> $TOKEN (FilterTokenFn lemma r_chart show chart draw illustrate present render show visualize view see)	1.7646276957642892
+rule :: $Intermediate11 -> $NodeLabel (SelectFn 0)	1.3357908886071463
+rule :: $ROOT -> $Command (IdentityFn)	1.1205773114148847
+rule :: $Intermediate226 -> $Intermediate225 (SelectFn 0)	1.1175538969985608
+rule :: $Intermediate225 -> $SetPhrase $SetSourceNode (ConcatFn :)	1.1089292625464569
+rule :: $Set -> $Intermediate226 $SetSourceNode (ConcatFn :)	1.1089292625464569
+rule :: $Intermediate16 -> $Intermediate15 (SelectFn 0)	1.0821969959145485
+rule :: $ChartDescriptor -> $SeriesChartToken (ConstantFn (string _series_chart_type))	1.0806019585106883
+rule :: $SeriesChartToken -> $TOKEN (FilterTokenFn lemma series)	1.0806019585106883
+rule :: $ColumnMarker -> $TOKEN (FilterTokenFn lemma r_column_1 r_column_2 r_column_3 r_column_4 r_column_5 r_column_6 r_column_7 r_column_8 r_column_9 r_column_10)	1.0692066696122318
+rule :: $Column -> $ColumnMarker (IdentityFn)	1.0692066696122318
+rule :: $Intermediate187 -> $Columns (SelectFn 0)	1.065881483286842
+rule :: $Conj -> $TOKEN (FilterTokenFn lemma and with , ;)	1.0356708221286148
+rule :: $Node -> $SelectionPhrase $Node (ConcatFn reverse :)	1.0110439518069165
+rule :: $ChartWithColumns -> $ChartColumns $ChartDescriptor (ConcatFn reverse ;)	1.0051485500950423
+rule :: $Chart_ -> $ChartPhrase (IdentityFn)	1.0051485500950423
+rule :: $Intermediate190 -> $ChartVerb $Chart_ (SelectFn 1)	1.0051485500950423
+rule :: $ChartPhrase -> $ChartWithColumns (IdentityFn)	1.0051485500950423
+rule :: $NewNode -> $Intermediate17 (IdentityFn)	1.0001048904356618
+rule :: $Intermediate17 -> $NodeType (SelectFn 0)	1.0001048904356618
+rule :: $Target_ -> $NodeTarget (IdentityFn)	1.0001048904356618
+rule :: $NodeTarget -> $PrepTo $NewNode (SelectFn 1)	1.0001048904356618
+rule :: $SelectionSource -> $SelectionPhrase (ConcatFn prepend source:)	1.0000775121942562
+rule :: $Target -> $Target_ (ConcatFn prepend target:)	1.0000762427155607
+rule :: $PrepTo_ -> $TOKEN (FilterTokenFn lemma in to onto into)	1.0000762427155607
+rule :: $SourceTarget -> $Target (IdentityFn)	1.0000762427155607
+rule :: $PrepTo -> $PrepTo_ (ConstantFn (string to))	1.0000762427155607
+rule :: $Intermediate8 -> $Intermediate7 $ColumnToken (SelectFn 1)	1.0000422126335884
+rule :: $Intermediate31 -> all (ConstantFn null)	1.0000422126335884
+rule :: $Intermediate32 -> $Intermediate31 (ConstantFn null)	1.0000422126335884
+rule :: $AllColumns -> $Intermediate33 (ConstantFn (string _all_columns))	1.0000422126335884
+rule :: $Intermediate7 -> $Intermediate6 (ConstantFn null)	1.0000422126335884
+rule :: $Columns -> $AllColumns (IdentityFn)	1.0000422126335884
+rule :: $ColumnToken -> $TOKEN (FilterTokenFn lemma column attribute dimension)	1.0000422126335884
+rule :: $Intermediate33 -> $Intermediate32 $ColumnToken (SelectFn 1)	1.0000422126335884
+rule :: $Intermediate6 -> all (ConstantFn null)	1.0000422126335884
+rule :: $AllColumns -> $Intermediate8 (ConstantFn (string _all_columns))	1.0000422126335884
+rule :: $ChartTarget -> $PrepTo $ChartDescriptor (SelectFn 1)	1.0000018428075634
+rule :: $Target_ -> $ChartTarget (IdentityFn)	1.0000018428075634
+rule :: $Extremum_ -> $Intermediate205 $ExtremumCondition (ConcatFn reverse :)	1.0000008014954418
+rule :: $Minimum -> $MinToken (ConstantFn min)	1.0000008014954418
+rule :: $MinToken -> $TOKEN (FilterTokenFn token min minimal minimum smallest)	1.0000008014954418
+rule :: $ExtremumCondition -> $ExtremumCriteria $Column (ConcatFn reverse :extremum:)	1.0000008014954418
+rule :: $ExtremumCriteria -> $Minimum (IdentityFn)	1.0000008014954418
+rule :: $Intermediate204 -> $CountOrPercent (SelectFn 0)	1.0000008014954418
+rule :: $Extremum -> $Extremum_ (IdentityFn)	1.0000008014954418
+rule :: $Intermediate205 -> $Intermediate204 (SelectFn 0)	1.0000008014954418
+rule :: $Filter_ -> $Extremum (IdentityFn)	1.0000008014954418
+rule :: $Intermediate183 -> $Verb $NumericalVisualShortcut (SelectFn 1)	1.0000002042663638
+rule :: $NumericalVisualType -> $TOKEN (FilterTokenFn lemma size width opacity)	1.0000001123427358
+rule :: $EncodeVisual -> $Intermediate183 (IdentityFn)	1.0000001123427358
+rule :: $Intermediate181 -> $Intermediate180 $Prep (SelectFn 0)	1.0000001123427358
+rule :: $NumericalVisualShortcut_ -> $Intermediate181 $NumericalVisualType (ConcatFn :)	1.0000001123427358
+rule :: $Intermediate180 -> $Column (SelectFn 0)	1.0000001123427358
+rule :: $Command -> $Visual (IdentityFn)	1.0000001123427358
+rule :: $NumericalVisualShortcut -> $NumericalVisualShortcut_ (ConcatFn append :1:10)	1.0000001123427358
+rule :: $Visual -> $EncodeVisual (ConcatFn prepend visuals:encoding:)	1.0000001123427358
+rule :: $Intermediate183 -> $NumericalVisualShortcut (SelectFn 0)	1.0000000204191084
+rule :: $SelectWithCondition -> $SelectToken $Filter (ConcatFn ;)	1.0000000017158241
+rule :: $Command -> $SelectWithCondition (IdentityFn)	1.0000000017158241
+rule :: $Intermediate202 -> $Prep $Column (SelectFn 1)	1.000000000000008
+rule :: $Intermediate203 -> $Prep $Column (SelectFn 1)	1.0000000000000009
+rule :: $Verb -> $TOKEN (FilterPosTagFn token VB VBN VBP)	0.9983388246732515
+rule :: $Intermediate194 -> $SelectToken $StopNoun (SelectFn 0)	0.9728934566414699
+rule :: $Intermediate13 -> $Node (SelectFn 0)	0.9571594782027079
+rule :: $Node -> $Intermediate12 $Node (SelectFn 1)	0.9365447000902141
+rule :: $Intermediate12 -> $StopNoun (SelectFn 0)	0.9365447000902141
+rule :: $Intermediate189 -> $ChartVerb (SelectFn 0)	0.9341169791715837
+rule :: $Intermediate224 -> $Node (SelectFn 0)	0.8940263027530153
+rule :: $SetSourceNode -> $Intermediate224 (IdentityFn)	0.8913130144721093
+rule :: $Set -> $SetPhrase $SetSourceNode (ConcatFn :)	0.7983197974579029
+rule :: $Node -> $Intermediate13 $Node (ConcatFn :)	0.7779449327735861
+rule :: $Set -> $SetPhrase $Node (ConcatFn :)	0.7419515109834506
+rule :: $Intermediate218 -> $Intermediate217 $Filter_ (SelectFn 1)	0.698383721603185
+rule :: $Intermediate13 -> $Node $Conj (SelectFn 0)	0.4069498795825028
+rule :: $Chart -> $Intermediate190 (ConcatFn prepend target:)	0.25100079524507185
+rule :: $ChartColumns -> $Intermediate187 (ConcatFn prepend columns:)	0.25100079524507185
+rule :: $Number -> $NumberPhrase (NumberFn)	0.14298491382270845
+rule :: $NumberPhrase -> $PHRASE (FilterPosTagFn token LS CD)	0.14298491382270845
+rule :: $Command -> $Command $SourceTarget (ConcatFn ;)	0.05430471008339447
+rule :: $Intermediate216 -> $StopNoun (ConstantFn null)	0.001711986013828922
+rule :: $Intermediate217 -> $Intermediate216 (ConstantFn null)	0.0017119860138280901
+rule :: $Columns -> $Column (IdentityFn)	-5.537468253288762E-15
+rule :: $ChartShortcut_ -> $Intermediate189 (ConstantFn (string _default_chart_type))	-0.0051485500950409465
+rule :: $EqualValue -> $Prep $StringValue (SelectFn 1)	-0.05266471778923474
+rule :: $PatternOrRangeCondition -> $Intermediate203 $EqualValue (ConcatFn :=:)	-0.05266471778923474
+rule :: $StringValue -> $ValueToken (IdentityFn)	-0.05266471778923474
+rule :: $Filter_ -> $PatternOrRange (IdentityFn)	-0.052664717789239306
+rule :: $PatternOrRange -> $PatternOrRangeCondition (IdentityFn)	-0.052664717789239306
+rule :: $Intermediate203 -> $Column (SelectFn 0)	-0.055067909176860955
+rule :: $Intermediate195 -> $FilterVerb_ (SelectFn 0)	-0.16366282133867693
+rule :: $FilterVerb_ -> $TOKEN (FilterTokenFn token r_filter)	-0.16366282133867693
+rule :: $FilterVerb -> $Intermediate195 (ConstantFn (string filter))	-0.16366282133867693
+rule :: $Intermediate216 -> $FilterVerb (ConstantFn null)	-0.16366282133867693
+rule :: $Chart -> $ChartShortcut (IdentityFn)	-0.2510007952450685
+rule :: $ChartShortcut -> $ChartShortcut_ (ConcatFn prepend target:)	-0.2510007952450685
+rule :: $Intermediate190 -> $Chart_ (SelectFn 0)	-0.3281408886239453
+rule :: $Chart_ -> $ChartShortcut_ $ChartColumns (ConcatFn ;)	-0.3281408886239453
+rule :: $Intermediate191 -> $SelectToken (SelectFn 0)	-0.4698887174458922
+rule :: $NodeType -> $TOKEN (FilterTokenFn token r_node_type_1 r_node_type_2 r_node_type_3 r_node_type_4 r_node_type_5)	-0.4860891469992119
+rule :: $Intermediate192 -> $Intermediate191 $StopNoun (SelectFn 0)	-0.5196455185003349
+rule :: $ValueToken_ -> $TOKEN (FilterPosTagFn token reverse IN DT CC)	-0.5242684697122566
+rule :: $ValueToken -> $ValueToken_ (FilterMarkerFn reject)	-0.5242684697122566
+rule :: $Prep -> $TOKEN (FilterPosTagFn token IN TO VBG)	-0.6109839588204286
+rule :: $Intermediate227 -> $Set (SelectFn 0)	-0.7456355607701333
+rule :: $SetToken -> $UnionToken (ConstantFn (string union))	-0.7456355607701333
+rule :: $Command -> $Intermediate227 (ConcatFn prepend set:)	-0.7456355607701333
+rule :: $SetPhrase -> $SetToken (IdentityFn)	-0.7456355607701333
+rule :: $UnionToken -> $TOKEN (FilterTokenFn lemma union merge combine put unify r_union)	-0.7456355607701333
+rule :: $SelectionPhrase -> $Intermediate193 (ConstantFn (string _selection))	-0.8915568137221959
+rule :: $Intermediate193 -> $Intermediate192 (SelectFn 0)	-0.8915568137221959
+rule :: $Intermediate191 -> $Prep $SelectToken (SelectFn 1)	-0.9964403353641453
+rule :: $SampleShortcut -> $Intermediate213 (ConcatFn prepend _index:sampling:)	-1.0000000000000073
+rule :: $Sample_ -> $SampleShortcut (IdentityFn)	-1.0000000000000073
+rule :: $Intermediate213 -> $Intermediate212 (SelectFn 0)	-1.0000000000000073
+rule :: $Intermediate212 -> $CountOrPercent (SelectFn 0)	-1.0000000000000073
+rule :: $Intermediate202 -> $Column (SelectFn 0)	-1.0000000000003344
+rule :: $Command -> $SourceTarget $Command (ConcatFn ;)	-1.0000000017158301
+rule :: $Filter -> $Intermediate218 (ConcatFn prepend filter:)	-1.000000112342752
+rule :: $Command -> $Verb $Command (SelectFn 1)	-1.000000204266367
+rule :: $Set -> $SetPhrase (IdentityFn)	-1.0000002431555572
+rule :: $NodeSource -> $PrepFrom $Node (SelectFn 1)	-1.000000432219727
+rule :: $Source_ -> $NodeSource (IdentityFn)	-1.000000432219727
+rule :: $PrepFrom -> $PrepFrom_ (ConstantFn (string from))	-1.000000432219727
+rule :: $PrepFrom_ -> $TOKEN (FilterTokenFn lemma from of)	-1.000000432219727
+rule :: $Source_ -> $SelectionPhrase $Source_ (ConcatFn reverse :)	-1.0000005216352745
+rule :: $Sample_ -> $SampleAmount (IdentityFn)	-1.0000008014954418
+rule :: $SampleAmount -> $Intermediate209 $Column (ConcatFn reverse :sampling:)	-1.0000008014954418
+rule :: $Intermediate208 -> $CountOrPercent $StopNoun (SelectFn 0)	-1.0000008014954418
+rule :: $Intermediate209 -> $Intermediate208 (SelectFn 0)	-1.0000008014954418
+rule :: $ChartShortcut -> $ChartShortcut $SelectionSource (ConcatFn ;)	-1.0000023113200858
+rule :: $StopNoun -> $StopNoun $StopNoun (IdentityFn)	-1.0000422126335888
+rule :: $Intermediate186 -> $Prep (SelectFn 0)	-1.000048653708479
+rule :: $ChartDescriptor -> $Intermediate186 $ChartDescriptor (SelectFn 1)	-1.000048653708479
+rule :: $SelectionSource -> $ChartSelection (ConcatFn prepend source:)	-1.0000762427155618
+rule :: $ChartSelection -> $SelectionPhrase $ChartDescriptor (ConcatFn reverse :)	-1.0000762427155618
+rule :: $ChartType -> $NodeType (IdentityFn)	-1.0001048904356633
+rule :: $Intermediate187 -> $Columns $ChartToken (SelectFn 0)	-1.0051485500950397
+rule :: $Intermediate194 -> $SelectToken (SelectFn 0)	-1.0589560723632818
+rule :: $ChartTypeInjected -> series (ConstantFn (string line-chart))	-1.0672077876427506
+rule :: $ChartType -> $ChartTypeInjected (IdentityFn)	-1.0672077876427506
+rule :: $ChartToken -> $TOKEN (FilterTokenFn lemma plot chart visualization graph drawing series)	-1.0817734020479794
+rule :: $StopNoun -> $StopNoun_ (FilterMarkerFn reject)	-1.1099213440092355
+rule :: $StopNoun_ -> $TOKEN (FilterPosTagFn token DT NN NNS PRP NNP NNPS)	-1.1099213440092355
+rule :: $Intermediate218 -> $Filter_ (SelectFn 0)	-1.1502854306548516
+rule :: $Source_ -> $SelectionPhrase (IdentityFn)	-1.1566956042785785
+rule :: fire	-1.2938157069212488
+rule :: $Intermediate226 -> $Intermediate225 $Prep (SelectFn 0)	-1.3335746690286738
+rule :: $Intermediate11 -> $NodeLabel $StopNoun (SelectFn 0)	-1.3357908886073762
+rule :: $Intermediate224 -> $Prep $Node (SelectFn 1)	-1.3496546335265123
+rule :: $Node -> $Node $SelectionPhraseImmediate (ConcatFn :)	-1.3547322515509808
+rule :: $SelectionPhraseImmediate -> $Intermediate194 (ConstantFn (string _selection))	-1.3547322515509808
+rule :: $ChartDescriptor -> $Intermediate185 (IdentityFn)	-1.4614175888359529
+rule :: $Intermediate184 -> $ChartType (SelectFn 0)	-1.4614175888359529
+rule :: $Intermediate185 -> $Intermediate184 (SelectFn 0)	-1.4614175888359529
+rule :: $Intermediate192 -> $Intermediate191 (SelectFn 0)	-1.6702554415492903
+rule :: $StopNoun -> $Intermediate4 (IdentityFn)	-1.6837119545705168
+rule :: $Intermediate4 -> $Prep (SelectFn 0)	-1.6837119545705168
+rule :: $Intermediate189 -> $ChartVerb $StopNoun (SelectFn 0)	-1.7490131203884298
+rule :: $Command -> $Filter (IdentityFn)	-1.8641689319844292
+rule :: $Source -> $Source_ (ConcatFn prepend source:)	-1.9346480015795517
+rule :: $SourceTarget -> $Source (IdentityFn)	-1.9346480015795517
+rule :: $Filter_ -> $Sample (IdentityFn)	-1.9814083878362307
+rule :: $Sample -> $Sample_ (IdentityFn)	-1.9814083878362307
+rule :: $CountOrPercent -> $Number (IdentityFn)	-2.0000000000000075
+rule :: $ChartDescriptor -> $ChartType (IdentityFn)	-2.007918485958261
+rule :: $Value -> $ValueToken (IdentityFn)	-2.0112650407636434
+rule :: $Compare -> $GreaterPhrase $Value (ConcatFn :)	-2.105777886120762
+rule :: $GreaterPhrase -> $GreaterToken (ConstantFn >=)	-2.105777886120762
+rule :: $PatternOrRangeCondition -> $Intermediate202 $Compare (ConcatFn :)	-2.105777886120762
+rule :: $GreaterToken -> $TOKEN (FilterTokenFn lemma after greater larger more >)	-2.105777886120762
+rule :: $GreaterToken -> $GreaterToken $Prep (SelectFn 0)	-2.105777886120762
+rule :: $Intermediate15 -> $Intermediate14 $Prep (SelectFn 0)	-2.4400511974122234
+rule :: $ChartDescriptor -> $ChartToken (ConstantFn (string _default_chart_type))	-2.4594049940833913
+rule :: $Node -> $Intermediate11 (IdentityFn)	-2.7288859628807436
+rule :: $NodeLabel -> $TOKEN (FilterTokenFn token r_node_label_1 r_node_label_2 r_node_label_3 r_node_label_4 r_node_label_5)	-2.7288859628807436
+rule :: $Command -> $Chart $Filter (ConcatFn ;)	-2.8101288241214606
+rule :: $SelectVerb -> $TOKEN (FilterTokenFn lemma select choose r_select)	-2.8162194275429724
+rule :: $SelectToken -> $SelectToken_ (ConstantFn select)	-2.8162194275429724
+rule :: $SelectToken_ -> $SelectVerb (IdentityFn)	-2.8162194275429724
