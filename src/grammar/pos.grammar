@@ -27,9 +27,8 @@
 (rule $Verb ($TOKEN) (FilterTokenFn lemma show map change load open sample))
 
 # Adjective
-(rule $Rb ($TOKEN) (FilterPosTagFn token RB))
 (rule $Adj ($TOKEN) (FilterPosTagFn token JJ JJS))
-(rule $Adj ($Rb $Adj) (SelectFn 1))
+(rule $Adj ($Adverb $Adj) (SelectFn 1))
 # Handle special adjectives that can be recognized as NN
 (rule $Adj ($TOKEN) (FilterTokenFn lemma auto))
 

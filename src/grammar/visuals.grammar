@@ -43,6 +43,9 @@
 # mpg by red green color scale
 (rule $ApplyScale ($Column ($Prep optional) $ColorScale) (ConcatFn ":color:"))
 
+(rule $VisualScale ($ColorVisualType) (ConcatFn append @default_color_scale))
+(rule $VisualScale ($NumericalVisualType) (ConcatFn append @default_numerical_scale))
+
 # size from 5 to 6
 (rule $VisualScale ($VisualType $Scale) (ConcatFn ":"))
 # 5 to 6 size

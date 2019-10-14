@@ -24,6 +24,8 @@ export const COLUMN_VERBS = [
 ];
 
 export const NODE_VERBS = [
+  'add',
+  'create',
   'union',
   'merge',
   'r_filter',
@@ -43,6 +45,7 @@ export const COLUMN_OPERANDS = [
 ];
 
 export const NODE_OPERANDS = [
+  'r_node_type_1',
   'r_node_label_1',
   'r_node_label_1 and r_node_label_2',
   'r_node_label_1 with r_node_label_2',
@@ -75,10 +78,10 @@ export const STANDALONE_COMMANDS = [
   'change opacity to r_number',
   'set width r_number and opacity r_number',
   'encode r_column_1 by red green color scale',
-  'map r_column_1 to red green color',
+  'r_column_1 to red green color',
   'color encode r_column_1',
   'encode r_column_1 by size',
-  'map r_column_1 to size from r_number to r_number',
+  'r_column_1 to size from r_number to r_number',
   'layout the diagram',
   'load r_dataset_1 dataset',
   'r_chart distribution of r_column_1',

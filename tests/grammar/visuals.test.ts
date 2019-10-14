@@ -115,6 +115,7 @@ describe('visuals encoding', () => {
       }],
     },
   );
+
   // The verb "map" sometimes gets incorrectly injected by frontend if not enforced by the user.
   // This case is fixed using special rule.
   runQuery(
@@ -125,6 +126,18 @@ describe('visuals encoding', () => {
           column: injectedValue('mpg'),
           type: 'size',
           scale: [5, 6],
+        },
+      }],
+    },
+  );
+  runQuery(
+    'r_chart_type_1 mpg to size', `visuals:encoding:${injectedValue('mpg')}:size:1:10`,
+    {
+      visuals: [{
+        encoding: {
+          column: injectedValue('mpg'),
+          type: 'size',
+          scale: [1, 10],
         },
       }],
     },

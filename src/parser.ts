@@ -236,6 +236,25 @@ export const parse = (req: Request, res: Response, next: NextFunction) => {
     }
     const result = parseSempreResult(sempreRes.body);
     console.log('sempre value:', result.stringValue);
+
+    // If the query gets rejected due to dataset name conflicting with stop nouns,
+    // clear all injected datasets and retry.
+    if (!result.success && query.indexOf('r_dataset') !== -1) {
+      const query2 = query.replace(/r_dataset_\d+/g, '');
+      console.log('sanitized query (2):', query2);
+      sendQuery(query2, (err2, sempreRes2) => {
+        if (err2) {
+          next(err2);
+          return;
+        }
+        const result2 = parseSempreResult(sempreRes2.body);
+        console.log('sempre value (2):', result2.stringValue);
+
+        const value2 = parseQueryValue(result2.stringValue as string);
+        res.json(_.extend(result2, { value: value2 }));
+      });
+      return;
+    }
     const value = parseQueryValue(result.stringValue as string);
     // Replace value by parsed JSON
     res.json(_.extend(result, { value }));
