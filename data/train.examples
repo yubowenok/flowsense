@@ -16,12 +16,6 @@
   (targetValue (string "target:_default_chart_type;filter:r_column_1:=:15"))
 )
 
-# Prefer making selection a source attribute.
-#(example
-#  (utterance "r_chart r_column_1 of r_select in r_node_type_1")
-#  (targetValue (string "target:_default_chart_type;columns:r_column_1:_selection;target:r_node_type_1"))
-#)
-
 # Prefer specific series chart type than default chart type
 (example
   (utterance "r_chart r_column_1 series")
@@ -38,4 +32,16 @@
 (example
   (utterance "r_chart r_select in r_node_type_1")
   (targetValue (string "target:_default_chart_type;source:_selection;target:r_node_type_1"))
+)
+
+# Use default numerical scale
+(example
+  (utterance "encode r_column_1 by size")
+  (targetValue (string "visuals:encoding:r_column_1:size:1:10"))
+)
+
+# Prefer series than conj columns
+(example
+  (utterance "r_chart r_column_1 over r_column_2")
+  (targetValue (string "target:_default_chart_type;columns:r_column_1:series:r_column_2"))
 )

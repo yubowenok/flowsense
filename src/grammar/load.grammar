@@ -1,10 +1,10 @@
 (rule $DataToken ($TOKEN) (FilterTokenFn lemma datum dataset file))
 
-(rule $LoadMarker ($TOKEN) (FilterTokenFn lemma r_load add))
+(rule $LoadMarker (($Verb optional) $TOKEN) (FilterTokenFn lemma r_load r_chart))
 
 (rule $DatasetMarker ($TOKEN) (FilterTokenFn token r_dataset_1 r_dataset_2 r_dataset_3))
 
-(rule $LoadDataset_ (($LoadMarker optional) $DatasetMarker ($DataToken optional)) (IdentityFn))
+(rule $LoadDataset_ (($LoadMarker optional) $DatasetMarker ($DataToken optional) ($StopNoun optional)) (IdentityFn))
 (rule $LoadDataset ($LoadDataset_) (ConcatFn prepend "load:"))
 
 ### Application

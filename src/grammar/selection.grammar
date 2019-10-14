@@ -12,7 +12,7 @@
 (rule $SelectToken_ ($TOKEN) (FilterTokenFn lemma chosen selected selection))
 (rule $SelectToken ($SelectToken_) (ConstantFn "select"))
 
-(rule $SelectionPhrase (($Prep optional) $SelectToken ($StopNoun optional)) (ConstantFn @selection))
+(rule $SelectionPhrase (($Prep optional) $SelectToken ($StopNoun optional) ($DatasetMarker optional)) (ConstantFn @selection))
 (rule $SelectionPhraseImmediate ($SelectToken ($StopNoun optional)) (ConstantFn @selection))
 
 (rule $ChartSelection ($ChartDescriptor $SelectionPhrase) (ConcatFn ":"))

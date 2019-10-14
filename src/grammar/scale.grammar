@@ -11,6 +11,7 @@
 (rule $ColorScaleNoun (color (scale optional)) (ConstantFn ""))
 (rule $ColorScaleNoun (colorscale) (ConstantFn ""))
 
+(rule $ColorScale ($ColorScaleNoun) (ConstantFn "red-green"))
 (rule $ColorScale ($ColorScaleValue ($ColorScaleNoun optional)) (IdentityFn))
 (rule $ColorScale (($ColorScaleNoun optional) $ColorScaleValue) (IdentityFn))
 

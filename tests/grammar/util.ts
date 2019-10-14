@@ -63,3 +63,12 @@ export const checkQuery = (query: string, done: jest.DoneCallback, stringAnswer:
     })
     .expect(200, done);
 };
+
+/**
+ * Tests a query with given string answer and answer object.
+ */
+export const runQuery = (query: string, stringAnswer: string | string[], answer: QueryValue, description?: string)  => {
+  it(query + (description ? ' (' + description + ')' : ''), done => {
+    checkQuery(query, done, stringAnswer, answer);
+  });
+};

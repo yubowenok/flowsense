@@ -1,21 +1,27 @@
-import { checkQuery } from './util';
+import { runQuery } from './util';
 
 describe('diagram edit', () => {
-  it('should undo #1', done => {
-    checkQuery('undo', done, 'undo', {
+  runQuery(
+    'undo',
+    'undo',
+    {
       undo: true,
-    });
-  });
+    },
+  );
 
-  it('should undo #2', done => {
-    checkQuery('cancel', done, 'undo', {
+  runQuery(
+    'cancel',
+    'undo',
+    {
       undo: true,
-    });
-  });
+    },
+  );
 
-  it('should redo', done => {
-    checkQuery('redo', done, 'redo', {
+  runQuery(
+    'redo',
+    'redo',
+    {
       redo: true,
-    });
-  });
+    },
+  );
 });

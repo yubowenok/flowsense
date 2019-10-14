@@ -47,12 +47,16 @@
 (rule $VisualScale ($VisualType $Scale) (ConcatFn ":"))
 # 5 to 6 size
 (rule $VisualScale ($Scale $VisualType) (ConcatFn reverse ":"))
+# default scale
+(rule $VisualScale_ ($Scale) (ConcatFn ":"))
 # size 5 to 6 by mpg
 (rule $ApplyScale ($VisualScale ($Prep optional) $Column) (ConcatFn reverse ":"))
 # mpg to 5 to 6 size
 (rule $ApplyScale ($Column ($Prep optional) $VisualScale) (ConcatFn ":"))
+# default scale
+(rule $ApplyScale (($Prep optional) $VisualScale_) (ConcatFn prepend ":color:"))
 
-(rule $EncodeVisual (($Verb optional) $ApplyScale) (IdentityFn))
+(rule $EncodeVisual (($Marker optional) ($Verb optional) $ApplyScale) (IdentityFn))
 
 # Shortcuts without scales. Use default scale instead.
 # color by mpg, cylinders by width

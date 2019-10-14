@@ -20,7 +20,7 @@
 
 (rule $ChartType ($ChartTypeInjected) (IdentityFn))
 
-(rule $ChartVerb ($TOKEN) (FilterTokenFn lemma r_chart show chart create draw illustrate present render show visualize view see))
+(rule $ChartVerb ($TOKEN) (FilterTokenFn lemma r_chart show chart draw illustrate present render show visualize view see))
 
 # mpg (just column names)
 (rule $ChartColumns ($Columns ($ChartToken optional)) (ConcatFn prepend "columns:"))

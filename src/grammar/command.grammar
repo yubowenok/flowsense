@@ -7,6 +7,7 @@
 # (rule $Command ($Command ($Connector optional) $Command) (ConcatFn ";"))
 
 (rule $Command ($Command $Punctuation) (SelectFn 0))
+(rule $Command ($Verb $Command) (SelectFn 1))
 
 (rule $ROOT ($Command) (IdentityFn))
 

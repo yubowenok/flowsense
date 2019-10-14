@@ -1,15 +1,27 @@
-import { checkQuery, injectedValue } from './util';
+import { runQuery, injectedValue } from './util';
 
 describe('load dataset', () => {
-  it('should load dataset with stop noun "dataset"', done => {
-    checkQuery('load iris dataset', done, `load:${injectedValue('iris')}`, {
+  runQuery(
+    'load iris dataset',
+    `load:${injectedValue('iris')}`,
+    {
       loadDataset: injectedValue('iris'),
-    });
-  });
+    },
+  );
 
-  it('should load dataset only with dataset name', done => {
-    checkQuery('open iris', done, `load:${injectedValue('iris')}`, {
+  runQuery(
+    'open iris',
+    `load:${injectedValue('iris')}`,
+    {
       loadDataset: injectedValue('iris'),
-    });
-  });
+    },
+  );
+
+  runQuery(
+    'show iris',
+    `load:${injectedValue('iris')}`,
+    {
+      loadDataset: injectedValue('iris'),
+    },
+  );
 });

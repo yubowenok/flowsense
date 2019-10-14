@@ -1,4 +1,4 @@
-### Testing only ###   
+### Testing only ###
 (rule $ColumnInjected ($TOKEN) (FilterTokenFn token mpg horsepower cylinders name origin model.year))
 (rule $ChartTypeInjected ($TOKEN) (FilterTokenFn token scatterplot histogram heatmap))
 (rule $NodeInjected ($TOKEN) (FilterTokenFn token node-1 chart-1 filter-1))

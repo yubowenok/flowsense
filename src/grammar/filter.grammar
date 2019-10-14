@@ -1,5 +1,5 @@
 (rule $FilterVerb_ ($TOKEN) (FilterTokenFn token r_filter))
-(rule $FilterVerb_ ($Verb) (FilterTokenFn lemma sample find get))
+(rule $FilterVerb_ ($Verb) (FilterTokenFn lemma filter sample find get))
 (rule $FilterVerb ($FilterVerb_ ($Rp optional)) (ConstantFn (string "filter")))
 
 ### Range, pattern
@@ -100,6 +100,7 @@
 (rule $Filter_ ($Extremum) (IdentityFn))
 (rule $Filter_ ($Sample) (IdentityFn))
 (rule $Filter (($FilterVerb optional) ($StopNoun optional) ($Descriptor optional) $Filter_) (ConcatFn prepend "filter:"))
+(rule $Filter ($FilterVerb) (ConstantFn (string "filter:")))
 
 # Verb required. Otherwise ByColumn is too general and mess up with other grammar.
 (rule $Filter ($FilterVerb ($StopNoun optional) $ByColumn) (ConcatFn ":"))

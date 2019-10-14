@@ -1,21 +1,27 @@
-import { checkQuery } from './util';
+import { runQuery } from './util';
 
 describe('automatic layout', () => {
-  it('should adjust layout', done => {
-    checkQuery('adjust the diagram layout', done, 'auto-layout', {
+  runQuery(
+    'adjust the diagram layout',
+    'auto-layout',
+    {
       autoLayout: true,
-    });
-  });
+    },
+  );
 
-  it('should auto layout', done => {
-    checkQuery('auto layout', done, 'auto-layout', {
+  runQuery(
+    'auto layout',
+    'auto-layout',
+    {
       autoLayout: true,
-    });
-  });
+    },
+  );
 
-  it('should layout with keyword "layout"', done => {
-    checkQuery('layout the graph', done, 'auto-layout', {
+  runQuery(
+    'layout the graph',
+    'auto-layout',
+    {
       autoLayout: true,
-    });
-  });
+    },
+  );
 });
