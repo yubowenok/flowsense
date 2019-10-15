@@ -37,3 +37,15 @@ To verify that SEMPRE is working in the background, go to ``localhost:8400/sempr
 
 
 ## Publication
+Bowen Yu, and Claudio T. Silva.
+_FlowSense: A Natural Language Interface for Visual Data Exploration within a Dataflow System._
+In IEEE Transactions on Visualization and Computer Graphics (Proc. VAST), 2019.
+```
+@ARTICLE{YuB19,
+  author = {B. {Yu} and C. T. {Silva}},
+  journal = {IEEE Transactions on Visualization and Computer Graphics},
+  title = {FlowSense: A Natural Language Interface for Visual Data Exploration within a Dataflow System},
+  year = {2019},
+  doi = {10.1109/TVCG.2019.2934668},
+}
+```

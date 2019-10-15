@@ -27,6 +27,7 @@
 ## Command source/target ##
 # Avoid target being an existing node. It is unclear how to change the diagram to dump output to a connected node.
 (rule $NodeTarget ($PrepTo $NewNode) (SelectFn 1))
+(rule $NodeSource ($Node) (IdentityFn))
 (rule $NodeSource ($PrepFrom $Node) (SelectFn 1))
 (rule $ChartTarget ($PrepTo $ChartDescriptor) (SelectFn 1))
 (rule $ChartSource ($PrepFrom $ChartDescriptor) (SelectFn 1))
