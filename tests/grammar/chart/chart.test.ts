@@ -209,4 +209,16 @@ describe('charts', () => {
       groupByColumn: injectedOrigin,
     },
   );
+
+  runQuery(
+    'compare mpg against horsepower',
+    `target:${DEFAULT_CHART_TYPE};columns:${injectedMpg}&${injectedHorsepower}`,
+    {
+      target: [{
+        id: DEFAULT_CHART_TYPE,
+        isCreate: true,
+      }],
+      columns: [injectedMpg, injectedHorsepower],
+    },
+  );
 });

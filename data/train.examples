@@ -51,3 +51,9 @@
   (utterance "r_filter 5 minimum r_column_1")
   (targetValue (string "filter:r_column_1:extremum:min:5.0"))
 )
+
+# Prefer not to take selection as stop noun
+(example
+  (utterance "union the selection of r_node_type_1")
+  (targetValue (string "set:union;source:r_node_type_1:_selection"))
+)

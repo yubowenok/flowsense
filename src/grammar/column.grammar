@@ -11,7 +11,7 @@
 
 # Multiple columns
 (rule $Columns ($Column) (IdentityFn))
-(rule $Columns ($Column ($Conj optional) $Columns) (ConcatFn "&"))
+(rule $Columns ($Column ($Conj optional) ($Prep optional) $Columns) (ConcatFn "&"))
 
 (rule $AllColumns (all ($Prep optional) ($Det optional) $ColumnToken) (ConstantFn (string "_all_columns")))
 

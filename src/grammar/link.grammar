@@ -18,11 +18,11 @@
 
 (rule $LinkSource ($SelectionPhrase) (ConcatFn ":"))
 (rule $LinkSource ($SelectionPhrase $Column) (ConcatFn ":"))
-(rule $LinkSource ($Column $Node) (ConcatFn ":_link_of:"))
+(rule $LinkSource ($LinkColumn ($Prep optional) $Node) (ConcatFn ":_link_of:"))
 
 (rule $LinkTarget ($SelectionPhrase) (ConcatFn ":"))
 (rule $LinkTarget ($SelectionPhrase $Column) (ConcatFn ":"))
-(rule $LinkTarget ($Column $Node) (ConcatFn ":_link_of:"))
+(rule $LinkTarget ($LinkColumn ($Prep optional) $Node) (ConcatFn ":_link_of:"))
 
 (rule $Link ($LinkVerb $LinkSource) (ConcatFn ":"))
 (rule $Link ($LinkVerb $LinkSource ($Prep optional) $LinkTarget) (ConcatFn ":"))

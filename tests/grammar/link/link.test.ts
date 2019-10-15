@@ -42,6 +42,33 @@ describe('constant extraction', () => {
   );
 
   runQuery(
+    'link by name with chart-1',
+    `link:${injectedName}:_link_of:${injectedChart}`,
+    {
+      link: {
+        extractColumn: injectedName,
+      },
+      source: [
+        { id: injectedChart },
+      ],
+    },
+  );
+
+  runQuery(
+    'link the cars by name from chart-1 scatterplot',
+    `link:${injectedName};source:${injectedChart}`,
+    {
+      link: {
+        extractColumn: injectedName,
+      },
+      source: [
+        { id: injectedChart },
+      ],
+    },
+    'node label immediately followed by node type',
+  );
+
+  runQuery(
     'link the cars by name from chart-1 and filter-1',
     `link:${injectedName};source:${injectedChart}:${injectedFilter}`,
     {

@@ -59,7 +59,7 @@
 # default scale
 (rule $ApplyScale (($Prep optional) $VisualScale_) (ConcatFn prepend ":color:"))
 
-(rule $EncodeVisual (($Marker optional) ($Verb optional) $ApplyScale) (IdentityFn))
+(rule $EncodeVisual (($NodeType optional) ($Verb optional) $ApplyScale) (IdentityFn))
 
 # Shortcuts without scales. Use default scale instead.
 # color by mpg, cylinders by width

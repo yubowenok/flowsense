@@ -1,5 +1,5 @@
-# FlowSense Natural Language Interface for VisFlow
-[![Build Status](https://travis-ci.com/yubowenok/flowsense.svg?token=72Mbb98eevCq6x2s2zUd&branch=master)](https://travis-ci.com/yubowenok/flowsense)
+# FlowSense: A Natural Language Interface for Visual Data Exploration within a Dataflow System
+[![Build Status](https://travis-ci.org/yubowenok/flowsense.svg?branch=master)](https://travis-ci.org/yubowenok/flowsense)
 
 FlowSense is a natural language interface (NLI) that is integrated into the VisFlow dataflow visualization framework to support dataflow diagram editing with natural language (NL).
 The user types or uses voice to input an NL query, which can be parsed by FlowSense and mapped to a VisFlow function to update the dataflow diagrams.
@@ -34,3 +34,6 @@ To verify that SEMPRE is working in the background, go to ``localhost:8400/sempr
 - ``cd sempre`` (make sure the current directory is ``./sempre``)
 - ``yarn build``
 - ``../tests/run.sh``
+
+
+## Publication
