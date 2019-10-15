@@ -1,13 +1,5 @@
 import { runQuery, injectedValue } from '../util';
 
-/*
-This query is so far not supported because 5% by mpg is not a well-defined action.
-(example
-  (utterance "find 5 percent of cars by mpg")
-  (targetValue (string "filter:mpg:sampling:0.05_%"))
-)
-*/
-
 describe('attribute filter: sampling', () => {
   runQuery(
     'find 5 percent of cars by mpg group by origin',
@@ -50,3 +42,11 @@ describe('attribute filter: sampling', () => {
     },
   );
 });
+
+/*
+TODO: This query is so far not supported because 5% by mpg is not a well-defined action.
+(example
+  (utterance "find 5 percent of cars by mpg")
+  (targetValue (string "filter:mpg:sampling:0.05_%"))
+)
+*/

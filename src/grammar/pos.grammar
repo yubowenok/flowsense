@@ -50,7 +50,7 @@
 
 # "to" is a specification for diagram connection target
 (def @to (string "to"))
-(rule $PrepTo_ ($TOKEN) (FilterTokenFn lemma in to onto into))
+(rule $PrepTo_ ($TOKEN) (FilterTokenFn lemma in to onto into as))
 (rule $PrepTo_ (in to) (IdentityFn))
 (rule $PrepTo_ (on to) (IdentityFn))
 (rule $PrepTo ($PrepTo_) (ConstantFn @to))

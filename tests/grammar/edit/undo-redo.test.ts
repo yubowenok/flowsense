@@ -1,6 +1,6 @@
-import { runQuery } from './util';
+import { runQuery } from '../util';
 
-describe('diagram edit', () => {
+describe('undo/redo', () => {
   runQuery(
     'undo',
     'undo',

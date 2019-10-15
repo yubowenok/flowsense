@@ -1,4 +1,4 @@
-import { runQuery, injectedValue } from './util';
+import { runQuery, injectedValue } from '../util';
 import { SELECTION } from '@src/def';
 
 const injectedScatterplot = injectedValue('scatterplot');

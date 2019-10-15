@@ -10,8 +10,8 @@
 (rule $Node_ ($NodeLabel ($StopNoun optional)) (IdentityFn))
 (rule $Node_ ($StopNoun ($Prep optional) $Node_) (SelectFn 1))
 (rule $Node_ ($Node_ ($Conj optional) $Node_) (ConcatFn ":"))
-(rule $Node ($Node_ $Marker) (SelectFn 0))
-(rule $Node ($Marker $Node_) (SelectFn 1))
+(rule $Node ($Node_ $NodeType) (SelectFn 0))
+(rule $Node ($NodeType $Node_) (SelectFn 1))
 (rule $Node ($Node_) (IdentityFn))
 
 (rule $NodePort ($Node) (IdentityFn))
