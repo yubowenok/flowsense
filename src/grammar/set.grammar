@@ -12,7 +12,7 @@
 # common cars
 (rule $SetToken ($SetToken $StopNoun) (SelectFn 0))
 
-(rule $SetPhrase ($SetToken) (IdentityFn))
+(rule $SetPhrase (($FilterVerb optional) $SetToken) (IdentityFn))
 
 (rule $SetSourceNode (($Prep optional) $Node) (IdentityFn))
 

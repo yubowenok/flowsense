@@ -6,6 +6,8 @@
 # Marker
 (rule $Marker ($TOKEN) (FilterMarkerFn accept))
 (rule $NonMarker ($TOKEN) (FilterMarkerFn reject))
+(rule $NonMarkerPhrase ($NonMarker) (IdentityFn))
+(rule $NonMarkerPhrase ($NonMarker $NonMarkerPhrase) (ConstantFn ""))
 
 # Adverb
 (rule $Adverb ($TOKEN) (FilterPosTagFn token RB RBR RBS))

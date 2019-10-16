@@ -2,6 +2,7 @@ import { runQuery, injectedValue } from '../util';
 
 describe('attribute filter: default', () => {
   const injectedChart = injectedValue('chart-1');
+  const injectedScatterplot = injectedValue('scatterplot');
 
   runQuery(
     'filter',
@@ -32,6 +33,19 @@ describe('attribute filter: default', () => {
       }],
       source: [
         { id: injectedChart },
+      ],
+    },
+  );
+
+  runQuery(
+    'filter the scatterplot',
+    `filter:;source:${injectedScatterplot}`,
+    {
+      filters: [{
+        column: '',
+      }],
+      source: [
+        { id: injectedScatterplot },
       ],
     },
   );

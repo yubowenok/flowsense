@@ -70,7 +70,7 @@ describe('visuals encoding', () => {
       }],
     },
   );
-  
+
   runQuery(
     'r_node_type_1 mpg to size',
     `visuals:encoding:${injectedValue('mpg')}:size:1:10`,

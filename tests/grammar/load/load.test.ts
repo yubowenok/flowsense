@@ -1,4 +1,4 @@
-import { runQuery, injectedValue } from './util';
+import { runQuery, injectedValue } from '../util';
 
 describe('load dataset', () => {
   runQuery(

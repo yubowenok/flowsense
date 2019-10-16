@@ -9,3 +9,4 @@
 
 ### Application
 (rule $Command ($LoadDataset) (IdentityFn))
+(rule $Command ($LoadDataset ($NonMarkerPhrase optional) $Command) (ConcatFn ";")) # support composite load data and visualize

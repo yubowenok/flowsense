@@ -57,3 +57,15 @@
   (utterance "union the selection of r_node_type_1")
   (targetValue (string "set:union;source:r_node_type_1:_selection"))
 )
+
+# Use target for load/chart composite
+(example
+  (utterance "r_chart r_dataset_1 r_node_type_1")
+  (targetValue (string "load:r_dataset_1;target:r_node_type_1"))
+)
+
+# Prefer not to handle general plot phrase as stop nouns
+(example
+  (utterance "r_chart r_dataset_1 plot")
+  (targetValue (string "load:r_dataset_1;target:_default_chart_type"))
+)
