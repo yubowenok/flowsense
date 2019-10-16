@@ -1,13 +1,15 @@
 import _ from 'lodash';
 import { SELECTION, DEFAULT_SOURCE, DEFAULT_CHART_TYPE, LINK_OF } from './def';
 
-interface SourceNodeDescriptor {
+interface NodeDescriptor {
   id: string; // node label, node type
+}
+
+interface SourceNodeDescriptor extends NodeDescriptor {
   isSelection?: boolean;
 }
 
-interface TargetNodeDescriptor {
-  id: string; // node label, node type
+interface TargetNodeDescriptor extends NodeDescriptor {
   isCreate?: boolean;
 }
 
@@ -53,6 +55,11 @@ export interface EdgeSpecification {
   nodes: Array<SourceNodeDescriptor | TargetNodeDescriptor>;
 }
 
+export interface NodeSpecification {
+  type: 'remove';
+  nodes: NodeDescriptor[];
+}
+
 export interface QueryValue {
   loadDataset?: string;
   autoLayout?: boolean;
@@ -65,6 +72,7 @@ export interface QueryValue {
   link?: LinkSpecification;
   setOperator?: SetOperatorSpecification;
   edge?: EdgeSpecification;
+  node?: NodeSpecification;
   source?: SourceNodeDescriptor[];
   target?: TargetNodeDescriptor[];
   // special operation flags
@@ -361,6 +369,23 @@ const addEdge = (result: QueryValue, values: string[]) => {
 };
 
 /**
+ * Handles node removal.
+ */
+const addNode = (result: QueryValue, values: string[]) => {
+  const type = values[0];
+  if (type !== 'remove') {
+    console.error('addEdge type can only be "remove"');
+    return;
+  }
+  values.shift();
+  result.node = {
+    type,
+    nodes: getNodes(values),
+  };
+};
+
+
+/**
  * Adds node linking to the result.
  */
 const addLink = (result: QueryValue, values: string[]) => {
@@ -447,6 +472,9 @@ export const parseQueryValue = (value: string): QueryValue => {
         break;
       case 'edge':
         addEdge(result, values);
+        break;
+      case 'node':
+        addNode(result, values);
         break;
       case 'undo':
         result.undo = true;

@@ -69,3 +69,21 @@
   (utterance "r_chart r_dataset_1 plot")
   (targetValue (string "load:r_dataset_1;target:_default_chart_type"))
 )
+
+# Prefer removing multiple nodes to remove edge between
+(example
+  (utterance "r_remove r_node_type_1 and r_node_type_2")
+  (targetValue (string "node:remove:r_node_type_1:r_node_type_2"))
+)
+
+# Avoid dropping criterion
+(example
+  (utterance "r_filter cars with certain r_column_1")
+  (targetValue (string "filter:r_column_1:extremum:max:1"))
+)
+
+# Prefer union
+(example
+  (utterance "r_union r_node_type_1 and r_node_type_2")
+  (targetValue (string "set:union:r_node_type_1:r_node_type_2"))
+)

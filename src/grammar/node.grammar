@@ -8,6 +8,7 @@
 
 # Nodes
 (rule $Node_ ($NodeLabel ($StopNoun optional)) (IdentityFn))
+(rule $Node_ ($NodeType ($StopNoun optional)) (IdentityFn))
 (rule $Node_ ($StopNoun ($Prep optional) $Node_) (SelectFn 1))
 (rule $Node_ ($Node_ ($Conj optional) $Node_) (ConcatFn ":"))
 (rule $Node ($Node_ $NodeType) (SelectFn 0))
@@ -43,3 +44,11 @@
 
 (rule $SourceTarget ($Source) (IdentityFn))
 (rule $SourceTarget ($Target) (IdentityFn))
+
+## Node removal ##
+(rule $RemoveToken ($TOKEN) (FilterTokenFn lemma remove delete r_remove))
+(rule $RemovePhrase ($RemoveToken) (ConstantFn "remove"))
+
+(rule $NodeEdit ($RemovePhrase $Node) (ConcatFn ":"))
+
+(rule $Command ($NodeEdit) (ConcatFn prepend "node:"))

@@ -89,7 +89,7 @@ export const STOP_NOUN_WUP_THRESHOLD = 0.75;
  */
 export const SPECIAL_MARKER_VERBS = {
   r_load: ['load', 'open'],
-  r_chart: ['show', 'draw', 'visualize'],
+  r_chart: ['show', 'draw', 'visualize', 'list', 'display'],
   r_filter: ['filter', 'find', 'search', 'sample', 'sampling'],
   r_select: ['select', 'selection', 'choose'],
   r_highlight: ['highlight'],
@@ -99,6 +99,7 @@ export const SPECIAL_MARKER_VERBS = {
   r_undo: ['undo', 'cancel'],
   r_redo: ['redo'],
   r_connect: ['connect'],
+  r_remove: ['remove', 'delete'],
   r_disconnect: ['disconnect'],
 };
 // Be conservative so as not to easily consider new verbs as special markers.
@@ -120,6 +121,8 @@ export const SPECIAL_VERBS = [
   'filter',
   'sample',
   'sampling',
+  'list',
+  'display',
 ];
 
 export const DEFAULT_CHART_TYPE = '_default_chart_type';

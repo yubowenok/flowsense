@@ -4,7 +4,7 @@ import { SELECTION } from '@src/def';
 const injectedScatterplot = injectedValue('scatterplot');
 const injectedHistogram = injectedValue('histogram');
 
-describe('connect and disconnect', () => {
+describe('connect edges', () => {
   runQuery(
     'connect chart-1 and filter-1',
     `edge:connect:${injectedValue('chart-1')}:${injectedValue('filter-1')}`,
@@ -60,7 +60,9 @@ describe('connect and disconnect', () => {
       },
     },
   );
+});
 
+describe('disconnect edges', () => {
   runQuery(
     'disconnect chart-1 and filter-1',
     `edge:disconnect:${injectedValue('chart-1')}:${injectedValue('filter-1')}`,

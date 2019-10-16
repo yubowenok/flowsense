@@ -1,12 +1,13 @@
 import { runQuery, injectedValue } from '../util';
 import { DEFAULT_CHART_TYPE, ALL_COLUMNS, SERIES_CHART_TYPE } from '@src/def';
 
-describe('charts', () => {
-  const injectedMpg = injectedValue('mpg');
-  const injectedHorsepower = injectedValue('horsepower');
-  const injectedScatterplot = injectedValue('scatterplot');
-  const injectedChart = injectedValue('chart-1');
+const injectedMpg = injectedValue('mpg');
+const injectedHorsepower = injectedValue('horsepower');
+const injectedOrigin = injectedValue('origin');
+const injectedScatterplot = injectedValue('scatterplot');
+const injectedChart = injectedValue('chart-1');
 
+describe('charts', () => {
   runQuery(
     'show the cars',
     `target:${DEFAULT_CHART_TYPE}`,
@@ -186,6 +187,18 @@ describe('charts', () => {
       target: [
         { id: injectedScatterplot, isCreate: true },
       ],
+    },
+  );
+
+  runQuery(
+    'list origin',
+    `target:${DEFAULT_CHART_TYPE};columns:${injectedOrigin}`,
+    {
+      target: [{
+        id: DEFAULT_CHART_TYPE,
+        isCreate: true,
+      }],
+      columns: [injectedOrigin],
     },
   );
 });

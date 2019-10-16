@@ -1,7 +1,7 @@
 (rule $ConnectToken ($TOKEN) (FilterTokenFn lemma connect r_connect))
 (rule $ConnectPhrase ($ConnectToken) (ConstantFn "connect"))
 
-(rule $DisconnectToken ($TOKEN) (FilterTokenFn lemma disconnect separate r_disconnect))
+(rule $DisconnectToken ($TOKEN) (FilterTokenFn lemma disconnect separate r_disconnect r_remove))
 (rule $DisconnectPhrase ($DisconnectToken) (ConstantFn "disconnect"))
 
 (rule $Connect ($ConnectPhrase $TwoNodes) (ConcatFn ":"))
