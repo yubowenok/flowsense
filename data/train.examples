@@ -87,3 +87,9 @@
   (utterance "r_union r_node_type_1 and r_node_type_2")
   (targetValue (string "set:union:r_node_type_1:r_node_type_2"))
 )
+
+# Parse linker arguments as sources rather than nodes group
+(example
+  (utterance "r_link by r_column_1 from r_node_type_1 and r_node_type_2")
+  (targetValue (string "link:r_column_1;source:r_node_type_1:r_node_type_2"))
+)

@@ -1,13 +1,13 @@
 import { runQuery, injectedValue } from '../util';
 import { LINK_OF, DEFAULT_SOURCE, SELECTION } from '@src/def';
 
-describe('constant extraction', () => {
-  const injectedName = injectedValue('name');
-  const injectedOrigin = injectedValue('origin');
-  const injectedChart = injectedValue('chart-1');
-  const injectedFilter = injectedValue('filter-1');
-  const injectedScatterplot = injectedValue('scatterplot');
+const injectedName = injectedValue('name');
+const injectedOrigin = injectedValue('origin');
+const injectedChart = injectedValue('chart-1');
+const injectedFilter = injectedValue('filter-1');
+const injectedScatterplot = injectedValue('scatterplot');
 
+describe('constant extraction', () => {
   runQuery(
     'link the cars by name',
     `link:${injectedName}`,
@@ -63,6 +63,21 @@ describe('constant extraction', () => {
       },
       source: [
         { id: injectedChart },
+      ],
+    },
+    'node label immediately followed by node type',
+  );
+
+  runQuery(
+    'link by name from chart-1 and the scatterplot',
+    `link:${injectedName};source:${injectedChart}:${injectedScatterplot}`,
+    {
+      link: {
+        extractColumn: injectedName,
+      },
+      source: [
+        { id: injectedChart },
+        { id: injectedScatterplot },
       ],
     },
     'node label immediately followed by node type',
