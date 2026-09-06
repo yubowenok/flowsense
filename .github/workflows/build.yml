@@ -2,7 +2,7 @@ name: build
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
 
 # The grammar/parser tests need a running SEMPRE (1.4 GB of Stanford jars and models) and the similarity
