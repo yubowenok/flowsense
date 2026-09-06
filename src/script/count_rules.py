@@ -14,4 +14,4 @@ for filename in os.listdir('.'):
     if re.match(r'^\s*\(\s*rule.*', line):
       count += 1
 
-print count, 'rules'
+print(count, 'rules')

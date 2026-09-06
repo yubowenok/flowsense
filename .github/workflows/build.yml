@@ -1,0 +1,24 @@
+name: build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# The grammar/parser tests need a running SEMPRE (1.4 GB of Stanford jars and models) and the similarity
+# server; they are run locally via tests/run.sh. CI checks that the TypeScript builds and the Python compiles.
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: corepack enable
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 -m py_compile src/script/similarity.py src/script/count_rules.py src/script/count_variables.py

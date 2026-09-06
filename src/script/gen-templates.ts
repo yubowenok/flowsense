@@ -1,5 +1,5 @@
 import fs from 'fs';
-import glob from 'glob';
+import { globSync } from 'glob';
 import { injectTestValues } from '../../tests/grammar/util';
 
 const templates: string[] = [];
@@ -36,7 +36,7 @@ const normalizeTemplate = (template: string): string => {
   return template;
 };
 
-glob('tests/**/*.test.ts', (err, files) => {
+((files: string[]) => {
   for (const filepath of files) {
     const f = fs.readFileSync(filepath).toString();
     for (const line of f.split('\n')) {
@@ -48,4 +48,4 @@ glob('tests/**/*.test.ts', (err, files) => {
       fs.writeFileSync('data/templates.json', JSON.stringify(templates, undefined, 2), 'utf8');
     }
   }
-});
+})(globSync('tests/**/*.test.ts'));

@@ -18,7 +18,7 @@ for filename in os.listdir('.'):
           variables.add(token)
 
 for i, variable in enumerate(variables):
-  print '$' + variable,
-print '\n----------'
+  print('$' + variable, end=' ')
+print('\n----------')
 
-print len(variables), 'variables'
+print(len(variables), 'variables')

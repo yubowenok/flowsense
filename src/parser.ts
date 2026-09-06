@@ -1,10 +1,24 @@
-import request, { RequestCallback } from 'request';
 import { Response, Request, NextFunction } from 'express';
 import _ from 'lodash';
 
 import { SEMPRE_URL, SIMILARITY_URL } from './env';
 import { parseQueryValue, QueryValue } from './query-value';
 import * as def from './def';
+
+export interface HttpResponse {
+  body: string;
+}
+export type HttpCallback = (err: Error | null, res: HttpResponse) => void;
+
+/**
+ * Minimal GET helper (replaces the deprecated `request` package): resolves the response body as text.
+ */
+const httpGet = (url: string, callback: HttpCallback) => {
+  fetch(url).then(res => res.text()).then(
+    body => callback(null, { body }),
+    err => callback(err, { body: '' }),
+  );
+};
 
 export interface SempreResult {
   success: boolean;
@@ -157,7 +171,7 @@ export const sanitizeQuery = (html: string): Promise<string> => {
         };
         _.each(def.SPECIAL_MARKER_VERBS, (verbs: string[], marker: string) => {
           verbAsyncCount++;
-          request.get(`${SIMILARITY_URL}/${token}/${verbs.join(',')}`, (err, res) => {
+          httpGet(`${SIMILARITY_URL}/${token}/${verbs.join(',')}`, (err, res) => {
             if (err) {
               return reject(err);
             }
@@ -174,7 +188,7 @@ export const sanitizeQuery = (html: string): Promise<string> => {
       // Remove a stop noun if it is not close to any meaningful nouns.
       if (isProbablyStopNoun(token, posTag)) {
         addRequest();
-        request.get(`${SIMILARITY_URL}/${token}/${def.SPECIAL_NOUNS.join(',')}`, (err, res) => {
+        httpGet(`${SIMILARITY_URL}/${token}/${def.SPECIAL_NOUNS.join(',')}`, (err, res) => {
           if (err) {
             return reject(err);
           }
@@ -266,8 +280,8 @@ export const parse = (req: Request, res: Response, next: NextFunction) => {
  * The query is sanitized as URL before sent.
  * [Note] Be careful that sempre server is single threaded. If multiple requests are sent concurrently it will break!
  */
-export const sendQuery = (query: string, callback: RequestCallback) => {
+export const sendQuery = (query: string, callback: HttpCallback) => {
   // Replace all spaces by plus signs, as URL does not accept spaces.
   const urlQuery = query.replace(/\s+/g, '+');
-  request.get(`${SEMPRE_URL}?q=${urlQuery}`, callback);
+  httpGet(`${SEMPRE_URL}?q=${urlQuery}`, callback);
 };

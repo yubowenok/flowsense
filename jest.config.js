@@ -1,24 +1,15 @@
 module.exports = {
-	verbose: true,
-	globals: {
-		'ts-jest': {
-			tsConfigFile: 'tsconfig.json',
-		},
-	},
-	moduleFileExtensions: [
-		'ts',
-		'js',
-	],
-	transform: {
-		'^.+\\.(ts|tsx)$': 'ts-jest',
-	},
-	testMatch: [
-		'<rootDir>/tests/**/*.test.(ts|js)',
-  ],
+  verbose: true,
+  testEnvironment: 'node',
+  watchman: false,
+  moduleFileExtensions: ['ts', 'js'],
+  transform: {
+    '^.+\\.ts$': ['ts-jest', { tsconfig: 'tsconfig.json' }],
+  },
+  testMatch: ['<rootDir>/tests/**/*.test.ts'],
   moduleNameMapper: {
-		// Jest tests must use @src alias, while src code may use @/* as src/*.
-		'^@src(.*)$': '<rootDir>/src$1',
-	},
-	testEnvironment: 'node',
-	setupTestFrameworkScriptFile: '<rootDir>/tests/config.ts',
+    // Jest tests must use @src alias, while src code may use @/* as src/*.
+    '^@src(.*)$': '<rootDir>/src$1',
+  },
+  setupFilesAfterEnv: ['<rootDir>/tests/config.ts'],
 };

@@ -10,7 +10,7 @@ if (fs.existsSync('.env')) {
 
 if (envFile) {
   console.log(`Using env file "${envFile}"`);
-  dotenv.config({path: envFile});
+  dotenv.config({ path: envFile, quiet: true });
 }
 
 export const SEMPRE_URL = process.env.SEMPRE_URL || 'http://localhost:8400/sempre';
