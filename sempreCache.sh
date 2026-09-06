@@ -10,6 +10,6 @@ fi
 if [ ! -f 'lib/fig.jar' ]
 then
   echo 'lib and fig not prepared. re-pull dependencies...'
-  ./pull-dependencies core corenlp
+  ./pull-dependencies core corenlp jaxb
 fi
 

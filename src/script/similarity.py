@@ -2,9 +2,10 @@
 Runs a simple HTTP server that computes the maximum wup similarity between any pair of words
 from two comma-separated word lists X and Y.
 Usage: http://localhost:7473/{X[0],X[1],...}/{Y[0],Y[1],...}
+Requires Python 3 and the packages in requirements.txt.
 """
 import nltk
-nltk.download('wordnet')
+nltk.download('wordnet', quiet=True)
 
 from nltk.corpus import wordnet as wn
 from flask import Flask, jsonify
@@ -33,7 +34,9 @@ def similarity(x_sets, y_sets, x, y):
     for y_word in y_sets:
       if y_has_self and y_word.name().find(y) != 0: continue
       if x_word.pos() != y_word.pos(): continue
-      wup = max(wup, wn.wup_similarity(x_word, y_word))
+      wup_score = wn.wup_similarity(x_word, y_word)
+      if wup_score is not None:  # None when the synsets share no path
+        wup = max(wup, wup_score)
       #lch = max(lch, wn.lch_similarity(x_word, y_word))
   return {
     'wup': wup,
@@ -46,10 +49,10 @@ class Similarity(Resource):
     split_X, split_Y = X.split(','), Y.split(',')
     for x in split_X:
       x_sets = synsets(x)
-      if x_sets == None: continue
+      if not x_sets: continue
       for y in split_Y:
         y_sets = synsets(y)
-        if y_sets == None: continue
+        if not y_sets: continue
         result = similarity(x_sets, y_sets, x, y)
         wup = max(wup, result['wup'])
         lch = max(lch, result['lch'])
@@ -57,7 +60,7 @@ class Similarity(Resource):
       'wup': wup,
       'lch': lch,
     }
-    print X, Y, final_result
+    print(X, Y, final_result)
     return jsonify(final_result)
 
 api.add_resource(Similarity, '/<X>/<Y>')

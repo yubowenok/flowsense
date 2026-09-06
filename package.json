@@ -16,7 +16,7 @@
     "test": "jest --detectOpenHandles",
     "watch-test": "jest --watch",
     "gen-templates": "npm run build && node dist/src/script/gen-templates.js",
-    "similarity-server": "python src/script/similarity.py"
+    "similarity-server": "python3 src/script/similarity.py"
   },
   "dependencies": {
     "@types/cors": "^2.8.4",

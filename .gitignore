@@ -18,3 +18,7 @@ tests/grammar/debug.test.ts
 .env*
 
 *.log
+
+# python virtualenv and bytecode (similarity server)
+.venv/
+__pycache__/

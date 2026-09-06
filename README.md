@@ -15,7 +15,7 @@ This content of this repository is structured as:
 
 Run the installation script:
 - ``yarn install`` (for setting up backend API)
-- ``pip install --user -r requirements.txt`` (for setting up python backend API)
+- ``pip3 install -r requirements.txt`` (for setting up the Python 3 backend API)
 
 Install SEMPRE from [here](https://github.com/yubowenok/sempre).
 Note that this is a forked repository from the [original SEMPRE repository](https://github.com/percyliang/sempre) for extended parsing utility.
@@ -25,7 +25,7 @@ Note that this is a forked repository from the [original SEMPRE repository](http
 
 ## Running FlowSense
 - Run the backend API node server: ``yarn start``
-- Run the backend API python server: ``python src/script/similarity.py``
+- Run the backend API python server: ``python3 src/script/similarity.py``
 - Run SEMPRE: ``cd sempre && ../runSempre`` (SEMPRE should be run from the ``./sempre`` directory)
 
 To verify that SEMPRE is working in the background, go to ``localhost:8400/sempre`` for SEMPRE web interface and try some queries there.
